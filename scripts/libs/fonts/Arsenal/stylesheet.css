@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'Arsenal';
+    src: local('Arsenal Italic'), local('Arsenal-Italic'),
+        url('Arsenal-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arsenal';
+    src: local('Arsenal Bold'), local('Arsenal-Bold'),
+        url('Arsenal-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arsenal';
+    src: local('Arsenal Bold Italic'), local('Arsenal-BoldItalic'),
+        url('Arsenal-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arsenal';
+    src: local('Arsenal Regular'), local('Arsenal-Regular'),
+        url('Arsenal-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

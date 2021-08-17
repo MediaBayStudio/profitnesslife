@@ -1,0 +1,132 @@
+
+@import '../assets/colors';
+@import '../assets/mixins';
+@import '../assets/variables';
+// Класс добавляется при вызове попапов и мобильного меню
+body.no-scroll {
+  overflow: hidden;
+
+  .hdr.fixed {
+    overflow-y: scroll;
+  }
+}
+
+// Обертка для всего контента
+// фиксит горизонтальную прокрутку на некоторых iOS
+#page-wrapper {
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-flow: column;
+}
+
+// img.lazy {
+//   background: url('../img/img-placeholder.svg') center/cover no-repeat;
+// }
+
+// a[href="#"] {
+//   opacity: .5;
+//   pointer-events: none;
+// }
+
+/* loader */
+// Лоадер в основном для форм
+
+.loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .5s, visibility .5s;
+  // background: $color;
+
+  &__circle {
+    margin: auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    animation: spin .5s linear infinite;
+    // border-top-color: $color;
+    // border-left-color: $color;
+  }
+}
+
+.loader_white {
+
+  // background: $color;
+  >.loader__circle {
+    // border-top-color: $color;
+    // border-left-color: $color;
+  }
+}
+
+.loading>.loader {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* loader */
+
+// Поле contact form 7 honeypot
+.cf7-form-field {
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0;
+  position: absolute;
+}
+
+// Блок с прокруткой, который показывается на всю ширину и высоту страницы страницы
+// нужен для незаметного overflow:hidden у body
+// при вызове мобильного меню или попапов
+#fake-scrollbar {
+  display: none;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  z-index: 9999;
+
+  &.active {
+    display: block;
+  }
+}
+
+// Блокирование текущей ссылки в меню
+// .nav__list-item {
+//   &.current {
+//     cursor: not-allowed;
+//     > .nav__link {
+//       pointer-events: none;
+//       > .nav__link-text {
+//         border-bottom: 1px solid;
+//       }
+//     }
+//   }
+// }
+
+// Общие стили для секций
+.sect {
+  &_bg {}
+
+  &-title {}
+
+  &-descr {}
+}
+
+// Скрытие стандартных сообщений от contact form 7
+div.wpcf7-response-output,
+span.wpcf7-not-valid-tip,
+.screen-reader-response {
+  display: none !important;
+}

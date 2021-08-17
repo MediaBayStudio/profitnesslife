@@ -1,0 +1,73 @@
+.hdr__burger {
+  display: inline-flex;
+  transition: opacity .15s linear;
+  background: 0 0;
+  border: 0;
+  overflow: visible;
+  transition: transform .5s;
+  z-index: 3;
+  font-size: 5.145px; // Для контроля размеров
+
+  &-box {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 4.2em;
+    height: 2.835em;
+    position: relative;
+    pointer-events: none;
+  }
+
+  &-inner {
+    display: block;
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    top: 8.625px;
+    background: $black;
+    transition: transform 0.075s 0.15s cubic-bezier(0.55, 0.055, 0.675, 0.19), background-color 0s 0.075s linear;
+
+    &::after,
+    &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: linear-gradient(to top, $black, $black) right/100% no-repeat;
+      border-radius: inherit;
+    }
+
+    &::after {
+      bottom: -1.25em; // 6px
+      transition: bottom 0.075s 0.075s ease-in, transform 0.075s 0s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+
+    &::before {
+      top: -1.2em; // 6px
+      background-position: left;
+      transition: top 0.075s 0.075s ease-in, transform 0.075s 0s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+  }
+
+  &.active {
+    .hdr__burger-inner {
+      transform: rotate(90deg);
+      background-color: transparent !important;
+      transition: transform 0.075s 0s cubic-bezier(0.215, 0.61, 0.355, 1), background-color 0s 0.15s linear;
+
+      &::before {
+        top: 0;
+        transform: rotate(-45deg);
+        background-size: 100%;
+        transition: top 0.075s 0.1s ease-out, transform 0.075s 0.15s cubic-bezier(0.215, 0.61, 0.355, 1);
+      }
+
+      &::after {
+        bottom: 0;
+        transform: rotate(45deg);
+        background-size: 100%;
+        transition: bottom 0.075s 0.1s ease-out, transform 0.075s 0.15s cubic-bezier(0.215, 0.61, 0.355, 1);
+      }
+    }
+  }
+}

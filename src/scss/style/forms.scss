@@ -1,0 +1,138 @@
+
+@import '../assets/colors';
+@import '../assets/mixins';
+@import '../assets/variables';
+
+// Сообщение об ошибке заполнения поля
+label.invalid {
+  position: absolute;
+  left: 0;
+  bottom: -20px;
+  font: normal 10px/150% sans-serif;
+  // color: $error;
+}
+
+// Если ошибка, то можно подчеркнуть поле
+.field__inp.invalid,
+.field__textarea.invalid {
+  // border-bottom-color: $error;
+}
+
+// Рассчет размера нужен для ограничения ширины блока
+// чтобы сообщение об ошибке вставало корректно
+$checkbox_size: 13px;
+$checkbox_margin_right: 10px;
+$checkbox_text_width: calc(100% - #{$checkbox_size + $checkbox_margin_right});
+// $checkbox_border_radius: 0;
+
+.check {
+  display: flex;
+  cursor: pointer;
+
+  &_tick { // Чекбокс с галочкой
+    align-items: flex-start;
+    max-width: 250px;
+    flex-wrap: wrap;
+    font: 12px/140% Montserrat;
+
+    >.check__text {
+      width: $checkbox_text_width;
+    }
+
+    >.check__inp {
+      margin: 4px $checkbox_margin_right 0 0;
+      width: $checkbox_size;
+      height: $checkbox_size;
+      background: transparent url('../img/check.svg') center/0 border-box no-repeat;
+      transition: background .25s;
+      pointer-events: none;
+
+      &:checked {
+        // background-color: $green;
+        background-size: 100%;
+      }
+    }
+  }
+
+  &_fill { // Чекбокс с заполнением цветом
+    align-items: center;
+
+    >.check__text {}
+
+    >.check__inp {
+      margin: 0 10px 0 0;
+      width: 10px;
+      height: 10px;
+      // box-shadow: inset 0 0 0 10px $white;
+      // background: $green;
+      border-radius: 2px;
+      transition: box-shadow .5s;
+
+      &:checked {
+        // box-shadow: inset 0 0 0 2px $white;
+      }
+    }
+  }
+
+  >label.invalid {
+    position: static;
+    margin: 4px 0 -4px $checkbox_size + $checkbox_margin_right;
+    max-width: $checkbox_text_width;
+    order: 10;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  &__inp {
+    appearance: none;
+    display: inline-flex;
+    border: 1px solid;
+    flex-shrink: 0;
+  }
+
+  &__text,
+  &__link {
+    display: inline-block;
+  }
+}
+
+.field {
+  display: inline-block;
+  font: 16px/140% Montserrat;
+  position: relative;
+
+  &__textarea,
+  &__inp {
+    width: 100%;
+    height: 25px;
+    border: 0;
+    padding: 0;
+    background: 0 0;
+    font: inherit;
+    // color: $black;
+    border-bottom: 1px solid;
+    transition: border-bottom-color .5s;
+
+    &:focus,
+    &.filled {
+      // &:focus.valid,
+      // &.filled.valid { 
+      // border-bottom-color: $black;
+
+      ~.field__text {
+        top: -16px;
+        font-size: 11.5px;
+      }
+    }
+  }
+
+  &__text {
+    position: absolute;
+    left: 0;
+    top: 0;
+    // color: $grey;
+    transition: top .25s, font-size .25s;
+  }
+}
