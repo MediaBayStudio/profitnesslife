@@ -15,3 +15,9 @@
   На размерах экранов от 320 до 575, нижний отступ будет
   уменьшаться от 0 до -100.
 */
+.post-type-recipe #titlediv > .inside,
+.post-type-recipe #minor-publishing-actions,
+.post-type-dish #titlediv > .inside,
+.post-type-dish #minor-publishing-actions {
+  display: none;
+}

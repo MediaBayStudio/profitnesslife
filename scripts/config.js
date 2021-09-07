@@ -71,7 +71,7 @@ const config = {
     parts: path.join(paths.theme, (wordpress ? 'template-parts': 'layouts')),
     components: path.join(paths.theme, 'components'),
     sections: path.join(paths.theme, 'sections'),
-    scss: path.join(paths.theme, 'scss'),
+    scss: path.join(paths.theme, 'css'),
     fonts: path.join(paths.theme, 'fonts'),
     js: path.join(paths.theme, 'js'),
     json: paths.theme,

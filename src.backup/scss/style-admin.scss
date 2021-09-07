@@ -1,0 +1,23 @@
+
+@import 'assets/colors';
+@import 'assets/mixins';
+@import 'assets/variables';
+
+// Страница редактирования продукта
+.post-type-product,
+.post-type-dish {
+  
+  // Ссылка на запись
+  #titlediv > .inside,
+  // Блок с кнопкой "просмотреть"
+  #minor-publishing-actions {
+    display: none;
+  }
+}
+
+// Страница редактирование приема пищи
+.post-type-dish {
+  .acf-field-611bd3f02251a {
+    display: none !important;
+  }
+}

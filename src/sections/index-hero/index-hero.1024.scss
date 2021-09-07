@@ -1,3 +1,15 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-hero {
+  &__pic {}
+
+  &__img {}
+
+  &__title {}
+
+  &__descr {}
+
+  &__btn {}
+}

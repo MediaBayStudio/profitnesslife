@@ -4,7 +4,28 @@
     $site_url,
     $logo_url,
     $template_directory_uri;
-    $page_style = $GLOBALS['page_script_name'] ?>
+
+    if ( is_front_page() ) {
+      $script_name = 'script-index';
+      $style_name = 'style-index';
+    } else if ( is_404() ) {
+      $script_name = 'script-404';
+      $style_name = 'style-404';
+    } else if ( is_single() ) {
+      $script_name = 'script-single';
+      $style_name = 'style-single';
+    } else {
+      if ( $GLOBALS['current_template'] ) {
+        $script_name = 'script-' . $GLOBALS['current_template'];
+        $style_name = 'style-' . $GLOBALS['current_template'];
+      } else {
+        $script_name = '';
+        $style_name = '';
+      } 
+    }
+
+    $GLOBALS['page_script_name'] = $script_name;
+    $GLOBALS['page_style_name'] = $style_name ?>
 <!DOCTYPE html>
 <html <?php language_attributes() ?>>
 <head>
@@ -14,23 +35,23 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <!-- styles preload -->
   <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/style.css">
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/style-<?php echo $page_style ?>.css" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/style-<?php echo $page_style ?>.576.css" media="(min-width:575.98px)" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/style-<?php echo $page_style ?>.768.css" media="(min-width:767.98px)" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/style-<?php echo $page_style ?>.1024.css" media="(min-width:1023.98px)" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/style-<?php echo $page_style ?>.1280.css" media="(min-width:1279.98px)" />
+	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.css" />
+	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.576.css" media="(min-width:575.98px)" />
+	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.768.css" media="(min-width:767.98px)" />
+	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.1024.css" media="(min-width:1023.98px)" />
+	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.1280.css" media="(min-width:1279.98px)" />
   <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/hover.css" media="(hover) and (min-width:1024px)">
   <!-- fonts preload --> <?php
 	$fonts = [
-		'NotoSans-Bold.woff',
-		'NotoSans-Regular.woff',
-		'Roboto-Regular.woff',
-		'Roboto-Medium.woff',
-		'Roboto-Bold.woff'
+		'NotoSans-Bold.woff' => 'woff',
+		'NotoSans-Regular.woff' => 'woff',
+		'Roboto-Regular.woff' => 'woff',
+		'Roboto-Medium.woff' => 'woff',
+		'Roboto-Bold.woff' => 'woff'
 	];
-	foreach ( $fonts as $font ) : ?>
+	foreach ( $fonts as $font => $font_type ) : ?>
 
-	<link rel="preload" href="<?php echo $template_directory_uri . '/fonts/' . $font ?>" as="font" type="font/woff" crossorigin="anonymous" /> <?php
+	<link rel="preload" href="<?php echo $template_directory_uri . '/fonts/' . $font ?>" as="font" type="font/<?php echo $font_type ?>" crossorigin="anonymous" /> <?php
 	endforeach ?>
   <!-- other preload --> <?php
   echo PHP_EOL;
@@ -39,6 +60,7 @@
   }
 
   $preload[] = $logo_url;
+  $preload[] = $template_directory_uri . '/img/icon-burger.svg';
 
   if ( $preload ) {
     foreach ( $preload as $item ) {
@@ -58,13 +80,15 @@
     <!-- <noindex> -->Для полноценного использования сайта включите JavaScript в настройках вашего браузера.<!-- </noindex> -->
   </noscript>
   <div id="page-wrapper">
-  <header class="hdr container"> <?php 
-  wp_nav_menu( [
-    'theme_location'  => 'header_menu',
-    'container'       => 'nav',
-    'container_class' => 'hdr__nav',
-    'menu_class'      => 'hdr__nav-list',
-    'items_wrap'      => '<ul class="%2$s">%3$s</ul>'
-  ] ) ?> <?php
-    require 'template-parts/mobile-menu.php' ?>
-  </header>
+    <header class="hdr container">
+      <a href="<?php echo $site_url ?>" class="hdr__logo"><img src="<?php echo $logo_url ?>" alt="#" class="hdr__logo-img"></a> <?php 
+      wp_nav_menu( [
+        'theme_location'  => 'header_menu',
+        'container'       => 'nav',
+        'container_class' => 'hdr__nav',
+        'menu_class'      => 'hdr__nav-list',
+        'items_wrap'      => '<ul class="%2$s">%3$s</ul>'
+      ] ) ?>
+      <button type="button" class="hdr__burger"></button> <?php
+      require 'template-parts/mobile-menu.php' ?>
+    </header>

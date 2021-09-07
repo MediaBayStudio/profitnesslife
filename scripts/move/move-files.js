@@ -3,6 +3,8 @@ let { src, dest } = require('gulp'),
   // path = require('path'),
   path = require('path').posix,
   flatten = require('gulp-flatten'),
+  imagemin = require('gulp-imagemin'),
+  webp = require('gulp-webp'),
   wordpress = config.wordpress,
   flexibleWordpress = config.flexibleWordpress,
   htmlmin = require('gulp-html-minifier'),
@@ -49,6 +51,15 @@ let { src, dest } = require('gulp'),
     src(path.join(config.src.img, '**', '*'), { allowEmpty: true })
       .pipe(dest(config.dest.img))
       .pipe(dest(path.join('dist', 'img')));
+
+    src(path.join(config.src.img, '**', '*.+(jpg|jpeg|png)'), { allowEmpty: true })
+      .pipe(webp())
+      .pipe(dest(config.dest.img));
+
+    src(path.join(config.src.img, '**', '*.+(jpg|jpeg|png)'), { allowEmpty: true })
+      .pipe(imagemin())
+      .pipe(dest(config.dest.img));
+
     cb();
   },
   moveFavicons = function(cb) {

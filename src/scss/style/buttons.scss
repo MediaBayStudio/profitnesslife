@@ -1,15 +1,16 @@
-
 @import '../assets/colors';
 @import '../assets/mixins';
 @import '../assets/variables';
+
 .btn {
-  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 500 14px/150% $roboto;
+  border-radius: 30px;
 }
 
-.btn_blue {
-
-}
-
-.btn_ol {
-
+.btn-green {
+  background: $accentGreen;
+  color: $white;
 }

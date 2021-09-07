@@ -17,10 +17,15 @@ let { src, dest } = require('gulp'),
       componentsSrc = path.join(config.src.js, 'components');
 
       // if (flexibleWordpress) {
-        src(path.join(config.src.blocks, '**', '*.js'))
+        src(path.join(config.src.components, '**', '*.js'))
           .pipe(include()).on('error', console.log)
-          .pipe(dest(config.dest.blocks))
-          .pipe(dest(path.join('dist', 'blocks')));
+          .pipe(dest(config.dest.components))
+          .pipe(dest(path.join('dist', 'components')));
+
+          src(path.join(config.src.sections, '**', '*.js'))
+          .pipe(include()).on('error', console.log)
+          .pipe(dest(config.dest.sections))
+          .pipe(dest(path.join('dist', 'sections')));
 
         src(path.join(componentsSrc, '*.js'))
           .pipe(include()).on('error', console.log)
@@ -49,7 +54,7 @@ let { src, dest } = require('gulp'),
                     blocks = pagesInfoContent[pageName];
 
                   cnt += 'document.addEventListener(\'DOMContentLoaded\', function() {\n';
-                  cnt += blocks.reduce((prev, next) => prev + '\n//=include ' + path.relative(config.src.js, path.join(config.src.blocks, next, next + '.js')) + '\n', '');
+                  cnt += blocks.reduce((prev, next) => prev + '\n//=include ' + path.relative(config.src.js, path.join(config.src.sections, next, next + '.js')) + '\n', '');
                   cnt += '\n});'
 
                   createFile(scriptSRC, cnt);

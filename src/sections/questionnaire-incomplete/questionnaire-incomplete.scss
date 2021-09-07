@@ -1,3 +1,202 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.account-page-wrapper {
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 100%;
+}
+
+.account-page-sections,
+.side-menu {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+
+.account-page-sections {
+  z-index: 1;
+}
+
+.questionnaire-incomplete-section {
+  padding-top: 70px;
+  grid-row: 1;
+  grid-column: 1;
+  background: $white;
+  &__title {
+    margin: 0 0 20px;
+    text-align: center;
+  }
+
+  &__descr {
+    margin: 0 0 40px;
+    text-align: center;
+  }
+
+  &__form {}
+}
+
+.questionnaire-form {
+  font: 14px/140% $roboto;
+
+  &__top {
+    margin: 0 0 30px;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-between;
+    font-weight: 500;
+  }
+
+  &__back {
+    display: flex;
+    align-items: center;
+    color: $coral;
+
+    &.disabled {
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    &::before {
+      content: '';
+      margin: 0 10px 0 0;
+      width: 12px;
+      height: 16px;
+      background: url('../img/icon-arrow.svg') center/contain no-repeat;
+    }
+  }
+
+  &__count {
+    color: $accentGreen;
+  }
+
+  &__count-current {}
+
+  &__count-total {}
+
+  &__progress {
+    margin: 10px 0 0 0;
+    width: 100%;
+    height: 15px;
+    background: #daeabc;
+    border-radius: 35px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__progress-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% / 10);
+    height: 100%;
+    background: $accentGreen;
+    border-radius: 35px;
+    transition: width .5s;
+    will-change: width;
+  }
+
+  &__step {}
+
+  &__step-title {
+    font: 500 20px/150% $roboto;
+  }
+
+  &-step-descr {
+    margin: 10px 0 0;
+  }
+
+  // Верхний отступ регулируется у элементов внутри блока
+  &__step-fields {
+    display: flex;
+    flex-flow: wrap;
+  }
+
+  &__radio-card {
+    margin: 20px 20px 0 0;
+    padding: 12px 25px 20px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    text-align: center;
+    width: calc((100% - 20px) / 2);
+    background: $white;
+    box-shadow: 4px 4px 15px rgba(147, 167, 181, 0.15);
+    border-radius: 20px;
+
+    &:nth-child(2n) {
+      margin-right: 0;
+    }
+  }
+
+  &__radio-card-img {
+    margin: 0 0 10px;
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+  }
+
+  &__radio-card-input {
+    display: none;
+  }
+
+  &__radio-card-text {}
+
+  &__radio {
+    margin: 20px 0 0 0;
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+  }
+
+  &__radio-input {
+    display: none;
+  }
+
+  &__radio-pseudo-input {
+    margin: 0 15px 0 0;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #E0E0E0;
+    border-radius: 50%;
+  }
+
+  &__radio-text {
+    font-weight: 500;
+  }
+
+  &__radio-descr {
+    margin: 10px 0 0 0;
+    padding-left: 39px;
+    width: 100%;
+    color: #555555;
+  }
+
+  &__field {
+    margin: 20px 0 0;
+    display: inline-flex;
+    flex-flow: column;
+    width: 100%;
+    position: relative;
+  }
+
+  &__field-text {
+    margin: 0 0 8px;
+    font: 500 20px/150% $roboto;
+  }
+
+  &__field-input {
+    padding: 5px 20px 5px 0;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  &__field-units {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+}

@@ -1,1 +1,863 @@
-var mask,lazy,menu,burger,hdr,overlay,body,fakeScrollbar,mobileMenu,browser={isOpera:!!window.opr&&!!opr.addons||!!window.opera||0<=navigator.userAgent.indexOf(" OPR/"),isFirefox:"undefined"!=typeof InstallTrigger,isSafari:/constructor/i.test(window.HTMLElement)||"[object SafariRemoteNotification]"===(!window.safari||"undefined"!=typeof safari&&safari.pushNotification).toString(),isIE:!!document.documentMode,isEdge:!document.documentMode&&!!window.StyleMedia,isChrome:!!window.chrome&&!!window.chrome.webstore,isYandex:!!window.yandex,isMac:0<=window.navigator.platform.toUpperCase().indexOf("MAC")},SLIDER={hasSlickClass:function(e){return e.hasClass("slick-slider")},unslick:function(e){e.slick("unslick")},createArrow:function(e,t){return'<button type="button" class="arrow arrow_'+(e=(-1===e.indexOf("prev")?"next ":"prev ")+e)+'">'+t+"</button>"}},windowFuncs={load:[],resize:[],scroll:[],call:function(e){for(var t=windowFuncs[e.type]||e,n=t.length-1;0<=n;n--)t[n]()}},q=function(e,t){return(t=t||body).querySelector(e)},qa=function(e,t,n){return t=t||body,n?Array.prototype.slice.call(t.querySelectorAll(e)):t.querySelectorAll(e)},id=function(e){return document.getElementById(e)},setVh=function(){var e=.01*window.innerHeight;document.documentElement.style.setProperty("--vh",e+"px")},media=function(e){return window.matchMedia(e).matches},scrollToTarget=function(e,t){var n,i,r,o,a;e.preventDefault(),_=this===window?e.target:this,(t=(t=!(t=0==t?body:t||_.getAttribute("data-scroll-target"))&&"A"===_.tagName?q(_.getAttribute("href")):t).constructor===String?q(t):t)&&(menu&&menu.close(),n=window.pageYOffset,e=getComputedStyle(t),i=t.getBoundingClientRect().top-+e.paddingTop.slice(0,-2)-+e.marginTop.slice(0,-2),r=null,o=.35,a=function(e){e-=r=null===r?e:r,e=i<0?Math.max(n-e/o,n+i):Math.min(n+e/o,n+i);window.scrollTo(0,e),e!=n+i&&requestAnimationFrame(a)},requestAnimationFrame(a))},pageScroll=function(e){fakeScrollbar.classList.toggle("active",e),body.classList.toggle("no-scroll",e),body.style.paddingRight=e?fakeScrollbar.offsetWidth-fakeScrollbar.clientWidth+"px":""},sticky=function(e,t,n){e="string"==typeof e?q(e):e,n=n||"fixed",t=t||"bottom";var i=e.getBoundingClientRect()[t]+pageYOffset,r=e.cloneNode(!0),o=e.parentElement,a=function(){!e.classList.contains(n)&&pageYOffset>=i&&(o.appendChild(o.replaceChild(r,e)),e.classList.add(n),window.removeEventListener("scroll",a),window.addEventListener("scroll",s))},s=function(){e.classList.contains(n)&&pageYOffset<=i&&(o.replaceChild(e,r),e.classList.remove(n),window.removeEventListener("scroll",s),window.addEventListener("scroll",a))};r.classList.add("clone"),a(),window.addEventListener("scroll",a)};document.addEventListener("DOMContentLoaded",function(){for(var e in body=document.body,function(){mask=function(){var e="+7(___)___-__-__",t=0,n=e.replace(/\D/g,""),i=this.value.replace(/\D/g,"");n.length>=i.length&&(i=n),this.value=e.replace(/./g,function(e){return/[_\d]/.test(e)&&t<i.length?i.charAt(t++):t>=i.length?"":e}),"blur"===event.type?2===this.value.length&&(this.value="",this.classList.remove("filled")):(n=this.value.length,(e=this).focus(),e.setSelectionRange?e.setSelectionRange(n,n):e.createTextRange&&((e=e.createTextRange()).collapse(!0),e.moveEnd("character",n),e.moveStart("character",n),e.select()))};for(var e=qa("[name=tel]"),t=0;t<e.length;t++)e[t].addEventListener("input",mask),e[t].addEventListener("focus",mask),e[t].addEventListener("blur",mask)}(),function(){function e(e){function u(e){var t,n={},i=v,r=function(e){var t,n=e.elements,i={};for(t in m){var r=n[t];r&&(i[t]=r.value)}return i}(i);for(t in r){var o=m[t],a=i[t],s=r[t],l=o.or,c=i[l];if(o&&(a.hasAttribute("required")||!0===o.required)){var d=a.type,o=o.pattern;if(("checkbox"===d||"radio"===d)&&!a.checked||""===s){if(!l||!c){n[t]=h[t].required;continue}if(""===c.value){n[t]=h[t].required;continue}}"cehckbox"!==d&&"radio"!==d&&o&&""!==s&&!1===o.test(s)?n[t]=h[t].pattern:f(a)}}0==Object.keys(n).length?(i.removeEventListener("change",u),i.removeEventListener("input",u),v.validatie=!0):(i.addEventListener("change",u),i.addEventListener("input",u),function(e,t){var n=e.elements,i;for(i in t){var r=t[i],o='<label class="'+p+'">'+r+"</label>",a=n[i],s=a.nextElementSibling;if(s&&s.classList.contains(p)){if(s.textContent!==r)s.textContent=r;continue}else a.insertAdjacentHTML("afterend",o);a.classList.add(p)}}(i,n),v.validatie=!1)}function f(e){var t=e.nextElementSibling;e.classList.remove(p),t&&t.classList.contains(p)&&t.parentElement.removeChild(t)}var v=e.form,t=e.formBtn,l=e.uploadFilesBlock,p="invalid",m=(e.filesInput,{name:{required:!0},tel:{required:!0,pattern:/\+7\([0-9]{3}\)[0-9]{3}\-[0-9]{2}\-[0-9]{2}/,or:"email"},email:{required:!0,pattern:/^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z])+$/,or:"tel"},msg:{required:!0,pattern:/[^\<\>\[\]%\&'`]+$/},policy:{required:!0}}),h={tel:{required:"Введите ваш телефон или E-mail",pattern:"Укажите верный телефон"},name:{required:"Введите ваше имя"},email:{required:"Введите ваш E-mail или телефон",pattern:"Введите верный E-mail"},msg:{required:"Введите ваше сообщение",pattern:"Введены недопустимые символы"},policy:{required:"Согласитель с политикой обработки персональных данных"}};v.setAttribute("novalidate",""),v.validatie=!1,t.addEventListener("click",function(){u(),!1===v.validatie?event.preventDefault():v.classList.add("loading")}),document.wpcf7mailsent||(document.addEventListener("wpcf7mailsent",function(e){var t=q("#"+e.detail.id+">form");if("wpcf7mailsent"===e.type){for(var n=t.elements,i=0;i<n.length;i++)f(n[i]),n[i].classList.remove("filled");t.reset(),l&&(l.innerHTML="")}t.classList.remove("loading"),setTimeout(function(){t.classList.remove("sent")},3e3)}),document.wpcf7mailsent=!0),v.addEventListener("input",function(){var e=event.target,t=e.type,n=e.files,i=e.classList,r=e.value;if("text"===t||"email"===t||"tel"===t||"number"===t||"TEXTAREA"===e.tagName)""===r?i.remove("filled"):i.add("filled");else if("file"===t){for(var o="",a=0,s=n.length;a<s;a++)o+='<span class="uploadedfiles__file"><span class="uploadedfiles__file-text">'+n[a].name+"</span></span>";l.innerHTML=o}})}for(var t=[id("contacts-form")],n=t.length-1;0<=n;n--)t[n]&&e({form:t[n],formBtn:q(".btn",t[n])||q('.btn[form="'+t[n].id+'"]'),uploadFilesBlock:q(".uploadedfiles",t[n]),filesInput:q('input[type="file"]',t[n])})}(),mobileMenu=function(e){function t(){z?(i.isOpened=z=!1,r.addEventListener("click",g),o.removeEventListener("click",w),c||pageScroll(!1),sticky(hdr)):(i.isOpened=z=!0,r.removeEventListener("click",g),o.addEventListener("click",w))}function n(){if(_){for(var e in C=null,_)media(e)&&(C=e);C!==O&&function(){if(C){for(var e in _[C])A[e]=_[C][e];O=C}else{for(var t in M)A[t]=M[t];O=null}i&&(x(),k())}()}i||k()}var i,a,r,o,s,l,c,d,u,f,v,p,m=function(e,t){for(var n=[e,t],i=["transform","transition"],r=["translate3d("+e+", 0px, 0px)","transform "+t],o=n.length-1;0<=o;o--)0!==n[o]&&(""===n[o]?n[o]="":n[o]=r[o],a.style[i[o]]=n[o])},h=function(e){return e.constructor===String?q(e):e},g=function(){z||(i.hasAttribute("style")&&(i.removeAttribute("style"),i.offsetHeight),i.classList.add("active"),r.classList.add("active"),a.scrollTop=0,v||(m("0px",".5s"),Z=a.offsetWidth),c||pageScroll(!0))},w=function(e,t){var n;z&&(n=e&&e.target,(t||!e||"keyup"===e.type&&27===e.keyCode||n===i||n===o)&&(i.classList.remove("active"),r.classList.remove("active"),v||m(f,".5s")))},y=function(e){R&&(e=e.touches[0]||window.e.touches[0],F=N=!1,I=B=e.clientX,D=e.clientY,s=Date.now(),a.addEventListener("touchend",E),a.addEventListener("touchmove",L),m(0,""))},L=function(e){var t;R&&(t=e.touches[0]||window.e.touches[0],e=+a.style.transform.match(T)[0],Y=B-t.clientX,B=t.clientX,H=D-t.clientY,D=t.clientY,F||N||(t=Math.abs(H),Math.abs(Y),7<t||0===Y?N=!0:t<7&&(F=!0)),F&&m(u&&B<I||d&&I<B?"0px":e-Y+"px",0))},E=function(e){p=I-B;var t=Math.abs(p);l=Date.now(),1<t&&F&&((u&&p<0||d&&0<p)&&(.5*Z<=t||l-s<300?w(e,!0):g(e,!(z=!1))),R=!1),i.removeEventListener("touchend",E),i.removeEventListener("touchmove",L)},b=function(e){v?"opacity"===e.propertyName&&t():"transform"===e.propertyName&&t(),R=!0},k=function(){i=h(e.menu),a=h(e.menuCnt),r=h(e.openBtn),o=h(e.closeBtn),c=A.allowPageScroll,d=A.toRight,u=A.toLeft,f=u?"100%":d?"-100%":0,v=A.fade,S("add"),v?d=u=!1:(m(f,0),i.addEventListener("touchstart",y)),i.isOpened=!1},S=function(e){r[e+"EventListener"]("click",g),i[e+"EventListener"]("click",w),i[e+"EventListener"]("transitionend",b),document[e+"EventListener"]("keyup",w)},x=function(){z&&w(),v?d=u=!1:(m("",""),i.removeEventListener("touchstart",y)),S("remove"),o=r=a=i=null},A=JSON.parse(JSON.stringify(e)),M=JSON.parse(JSON.stringify(e)),_=e.responsive,C=null,O=null,T=(pageYOffset,/([-0-9.]+(?=px))/),F=!1,N=!1,R=!1,z=!1,B=0,Y=0,D=0,H=0,I=0,Z=0;if(e.menu)return n(),windowFuncs.resize.push(n),{options:A,menu:i,menuCnt:a,openBtn:r,closeBtn:o,open:g,close:w,destroy:x,opened:z}},NodeList.prototype.forEach||(NodeList.prototype.forEach=Array.prototype.forEach),HTMLCollection.prototype.forEach||(HTMLCollection.prototype.forEach=Array.prototype.forEach),fakeScrollbar=id("fake-scrollbar"),lazy=new lazyload({clearSrc:!0,clearMedia:!0}),window.svg4everybody&&svg4everybody(),windowFuncs.resize.push(setVh),windowFuncs){var t;"call"===e||0<(t=windowFuncs[e]).length&&(windowFuncs.call(t),window.addEventListener(e,windowFuncs.call))}});
+var browser = {
+    // Opera 8.0+
+    isOpera: (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0,
+    // Firefox 1.0+
+    isFirefox: typeof InstallTrigger !== 'undefined',
+    // Safari 3.0+ "[object HTMLElementConstructor]"
+    isSafari: /constructor/i.test(window.HTMLElement) || (function(p) {
+      return p.toString() === "[object SafariRemoteNotification]";
+    })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification)),
+    // Internet Explorer 6-11
+    isIE: /*@cc_on!@*/ false || !!document.documentMode,
+    // Edge 20+
+    isEdge: !( /*@cc_on!@*/ false || !!document.documentMode) && !!window.StyleMedia,
+    // Chrome 1+
+    isChrome: !!window.chrome && !!window.chrome.webstore,
+    isYandex: !!window.yandex,
+    isMac: window.navigator.platform.toUpperCase().indexOf('MAC') >= 0
+  },
+  // Размреы экранов для медиазапросов
+  // mediaQueries = {
+  //   's': '(min-width:575.98px)',
+  //   'm': '(min-width:767.98px)',
+  //   'lg': '(min-width:1023.98px)',
+  //   'xl': '(min-width:1439.98px)'
+  // },
+  SLIDER = {
+    // nextArrow: '<button type="button" class="arrow"></button>',
+    // prevArrow: '<button type="button" class="arrow"></button>',
+    dot: '<button type="button" class="dot"></button>',
+    hasSlickClass: function($el) {
+      return $el.hasClass('slick-slider');
+    },
+    unslick: function($el) {
+      $el.slick('unslick');
+    },
+    createArrow: function(className, inside) {
+      className = (className.indexOf('prev') === -1 ? 'next ' : 'prev ') + className;
+      return '<button type="button" class="arrow arrow_' + className + '">' + inside + '</button>';
+    },
+    // setImages: function(slides) {
+    //   for (let i = 0, len = slides.length; i < len; i++) {
+    //     let img = q('img', slides[i]);
+    //     // Если элемент найден и он без display:none
+    //     if (img && img.offsetParent) {
+    //       img.src = img.getAttribute('data-lazy') || img.getAttribute('data-src');
+    //     }
+    //   }
+    // }
+  },
+  /*
+Объединение слушателей для window на события 'load', 'resize', 'scroll'
+Все слушатели на окно следует задавать через него, например:
+  window.resize.push(functionName)
+Все ф-ии, добавленные в [] window.resize, будут заданы одним слушателем
+*/
+  windowFuncs = {
+    load: [],
+    resize: [],
+    scroll: [],
+    call: function(event) {
+      let funcs = windowFuncs[event.type] || event;
+      for (let i = funcs.length - 1; i >= 0; i--) {
+        console.log(funcs[i].name);
+        funcs[i]();
+      }
+    }
+  },
+
+  mask, // ф-я маски телефонов в поля ввода (в файле telMask.js)
+  lazy,
+  menu,
+  burger,
+  hdr,
+  overlay,
+  body,
+  fakeScrollbar,
+  // Сокращение записи querySelector
+  q = function(selector, element) {
+    element = element || body;
+    return element.querySelector(selector);
+  },
+  // Сокращение записи querySelectorAll + перевод в массив
+  qa = function(selectors, element, toArray) {
+    element = element || body;
+    return toArray ? Array.prototype.slice.call(element.querySelectorAll(selectors)) : element.querySelectorAll(selectors);
+  },
+  // Сокращение записи getElementById
+  id = function(selector) {
+    return document.getElementById(selector);
+  },
+  // Фикс 100% высоты экрана для моб. браузеров
+  setVh = function() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+  },
+  // Сокращение записи window.matchMedia('query').matches
+  media = function(media) {
+    return window.matchMedia(media).matches;
+  },
+  // Функция создания мобильного меню
+  mobileMenu,
+  // Прокрутка до элемента при помощи requestAnimationFrame
+  scrollToTarget = function(e, target) {
+    e.preventDefault();
+
+    if (this === window) {
+      _ = e.target;
+    } else {
+      _ = this;
+    }
+
+    if (target == 0) {
+      target = body;
+    } else {
+      target = target || _.getAttribute('data-scroll-target');
+    }
+
+    if (!target && _.tagName === 'A') {
+      target = q(_.getAttribute('href'));
+    }
+
+    if (target.constructor === String) {
+      target = q(target);
+    }
+
+    if (!target) {
+      console.warn('Scroll target not found');
+      return;
+    }
+
+    menu && menu.close();
+
+    let wndwY = window.pageYOffset,
+      targetStyles = getComputedStyle(target),
+      targetTop = target.getBoundingClientRect().top - +(targetStyles.paddingTop).slice(0, -2) - +(targetStyles.marginTop).slice(0, -2),
+      start = null,
+      V = .35,
+      step = function(time) {
+        if (start === null) {
+          start = time;
+        }
+        let progress = time - start,
+          r = (targetTop < 0 ? Math.max(wndwY - progress / V, wndwY + targetTop) : Math.min(wndwY + progress / V, wndwY + targetTop));
+
+        window.scrollTo(0, r);
+
+        if (r != wndwY + targetTop) {
+          requestAnimationFrame(step);
+        }
+      }
+
+    requestAnimationFrame(step);
+  },
+  // Функция запрета/разрешения прокрутки страницы
+  pageScroll = function(disallow) {
+    fakeScrollbar.classList.toggle('active', disallow);
+    body.classList.toggle('no-scroll', disallow);
+    body.style.paddingRight = disallow ? fakeScrollbar.offsetWidth - fakeScrollbar.clientWidth + 'px' : '';
+  },
+  // Функция липкого элемента средствами js
+  sticky = function($el, fixThresholdDir, className) {
+    $el = typeof $el === 'string' ? q($el) : $el;
+    className = className || 'fixed';
+    fixThresholdDir = fixThresholdDir || 'bottom';
+
+    let fixThreshold = $el.getBoundingClientRect()[fixThresholdDir] + pageYOffset,
+      $elClone = $el.cloneNode(true),
+      $elParent = $el.parentElement,
+      fixElement = function() {
+        if (!$el.classList.contains(className) && pageYOffset >= fixThreshold) {
+          $elParent.appendChild($elParent.replaceChild($elClone, $el));
+          $el.classList.add(className);
+
+          window.removeEventListener('scroll', fixElement);
+          window.addEventListener('scroll', unfixElement);
+        }
+      },
+      unfixElement = function() {
+        if ($el.classList.contains(className) && pageYOffset <= fixThreshold) {
+          $elParent.replaceChild($el, $elClone);
+          $el.classList.remove(className);
+
+          window.removeEventListener('scroll', unfixElement);
+          window.addEventListener('scroll', fixElement);
+        }
+      };
+
+    $elClone.classList.add('clone');
+    fixElement();
+    window.addEventListener('scroll', fixElement);
+  };
+
+document.addEventListener('DOMContentLoaded', function() {
+  body = document.body;
+
+  ;(function() {
+    let setCursorPosition = function(pos, inputElement) {
+      inputElement.focus();
+      if (inputElement.setSelectionRange) {
+        inputElement.setSelectionRange(pos, pos);
+      } else if (inputElement.createTextRange) {
+        let range = inputElement.createTextRange();
+  
+        range.collapse(true);
+        range.moveEnd('character', pos);
+        range.moveStart('character', pos);
+        range.select();
+      }
+    };
+  
+    mask = function() {
+      let pattern = '+7(___)___-__-__',
+        i = 0,
+        def = pattern.replace(/\D/g, ''),
+        val = this.value.replace(/\D/g, '');
+  
+      if (def.length >= val.length) {
+        val = def;
+      }
+  
+      this.value = pattern.replace(/./g, function(match) {
+        return /[_\d]/.test(match) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : match;
+      });
+  
+      if (event.type === 'blur') {
+        if (this.value.length === 2) {
+          this.value = '';
+          this.classList.remove('filled');
+        }
+      } else {
+        setCursorPosition(this.value.length, this);
+      }
+    };
+  
+    let input = qa('[name=tel]');
+  
+    for (let i = 0; i < input.length; i++) {
+      input[i].addEventListener('input', mask);
+      input[i].addEventListener('focus', mask);
+      input[i].addEventListener('blur', mask);
+    }
+  
+  })();
+    ;
+    (function() {
+      // Массив форм, на которые будет добавлена валидация
+      let $forms = [
+        id('contacts-form')
+      ];
+    
+      let formValidator = function(params) {
+        let $form = params.form,
+          $formBtn = params.formBtn,
+          $uploadFilesBlock = params.uploadFilesBlock,
+          errorsClass = 'invalid',
+          $filesInput = params.filesInput,
+          // Правила проверки форм, аналогично jquery.validate
+          rules = {
+            name: {
+              required: true
+            },
+            tel: {
+              required: true,
+              pattern: /\+7\([0-9]{3}\)[0-9]{3}\-[0-9]{2}\-[0-9]{2}/,
+              or: 'email'
+            },
+            email: {
+              required: true,
+              pattern: /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z])+$/,
+              or: 'tel'
+            },
+            msg: {
+              required: true,
+              pattern: /[^\<\>\[\]%\&'`]+$/
+            },
+            policy: {
+              required: true
+            }
+          },
+          messages = {
+            tel: {
+              required: 'Введите ваш телефон или E-mail',
+              pattern: 'Укажите верный телефон'
+            },
+            name: {
+              required: 'Введите ваше имя',
+            },
+            email: {
+              required: 'Введите ваш E-mail или телефон',
+              pattern: 'Введите верный E-mail'
+            },
+            msg: {
+              required: 'Введите ваше сообщение',
+              pattern: 'Введены недопустимые символы'
+            },
+            policy: {
+              required: 'Согласитель с политикой обработки персональных данных'
+            }
+          },
+          /*
+            Функция получения значения полей у текущей формы.
+            Ищет только те элементы формы, именя которых указаны в rules.
+            Возвращает объект: 
+            {название-поля: значение-поля}
+            Например:
+            {'user-email': 'mail@mail.ru'}
+          */
+          getFormData = function($form) {
+            let formElements = $form.elements,
+              values = {};
+    
+            for (let rule in rules) {
+              let formElement = formElements[rule];
+    
+              if (formElement) {
+                values[rule] = formElement.value;
+              }
+            }
+    
+            return values;
+          },
+          /*
+            Функция проверки правильности заполнения формы.
+          */
+          validationForm = function(event) {
+            let errors = {},
+              thisForm = $form,
+              values = getFormData(thisForm);
+    
+            for (let elementName in values) {
+              let rule = rules[elementName],
+                $formElement = thisForm[elementName],
+                elementValue = values[elementName],
+                or = rule.or,
+                $orFormElement = thisForm[or];
+    
+              if (rule) {
+                if ($formElement.hasAttribute('required') || rule.required === true) {
+                  let elementType = $formElement.type,
+                    pattern = rule.pattern;
+    
+                  // Если элемент не чекнут или пустой
+                  if (((elementType === 'checkbox' || elementType === 'radio') && !$formElement.checked) ||
+                    elementValue === '') {
+    
+                    if (or && $orFormElement) {
+                      if ($orFormElement.value === '') {
+                        errors[elementName] = messages[elementName].required;
+                        continue;
+                      }
+                    } else {
+                      errors[elementName] = messages[elementName].required;
+                      continue;
+                    }
+                  }
+    
+                  // Если текстовый элемент, у которого есть щаблон для заполнения
+                  if (elementType !== 'cehckbox' && elementType !== 'radio' && pattern) {
+                    if (elementValue !== '' && pattern.test(elementValue) === false) {
+                      errors[elementName] = messages[elementName].pattern;
+                      continue;
+                    }
+                  }
+    
+                  hideError($formElement);
+                }
+              }
+            }
+    
+            if (Object.keys(errors).length == 0) {
+              thisForm.removeEventListener('change', validationForm);
+              thisForm.removeEventListener('input', validationForm);
+              $form.validatie = true;
+            } else {
+              thisForm.addEventListener('change', validationForm);
+              thisForm.addEventListener('input', validationForm);
+              showErrors(thisForm, errors);
+              $form.validatie = false;
+            }
+    
+          },
+          showErrors = function($form, errors) {
+            let $formElements = $form.elements;
+    
+            for (let elementName in errors) {
+              let errorText = errors[elementName],
+                $errorElement = `<label class="${errorsClass}">${errorText}</label>`,
+                $formElement = $formElements[elementName],
+                $nextElement = $formElement.nextElementSibling;
+    
+              if ($nextElement && $nextElement.classList.contains(errorsClass)) {
+                if ($nextElement.textContent !== errorText) {
+                  $nextElement.textContent = errorText;
+                }
+                continue;
+              } else {
+                $formElement.insertAdjacentHTML('afterend', $errorElement);
+              }
+    
+              $formElement.classList.add(errorsClass);
+            }
+    
+          },
+          hideError = function($formElement) {
+            let $nextElement = $formElement.nextElementSibling;
+            $formElement.classList.remove(errorsClass);
+            if ($nextElement && $nextElement.classList.contains(errorsClass)) {
+              $nextElement.parentElement.removeChild($nextElement);
+            }
+          },
+          submitHandler = function(event) {
+            let $form = q('#' + event.detail.id + '>form'),
+              eventType = event.type;
+    
+            if (eventType === 'wpcf7mailsent') {
+              let $formElements = $form.elements;
+    
+              for (let i = 0; i < $formElements.length; i++) {
+                hideError($formElements[i]);
+                $formElements[i].classList.remove('filled');
+              }
+    
+              $form.reset();
+              if ($uploadFilesBlock) {
+                $uploadFilesBlock.innerHTML = '';
+              }
+              // if ($form === $quizForm) {
+              //   id('quiz').resetQuiz();
+              // }
+              console.log('отправлено');
+            }
+            /* else if (eventType === 'wpcf7mailfailed') {
+                    console.log('отправка не удалась');
+                  }*/
+    
+            $form.classList.remove('loading');
+    
+            setTimeout(function(){
+              $form.classList.remove('sent');
+            }, 3000);
+    
+            // thanksPopup.openPopup();
+            // thanksPopupTimer = setTimeout(function() {
+            //   thanksPopup.closePopup();
+            // }, 3000);
+    
+    
+          },
+          toggleInputsClass = function() {
+            let $input = event.target,
+              type = $input.type,
+              files = $input.files,
+              classList = $input.classList,
+              value = $input.value;
+    
+            if (type === 'text' || type === 'email' || type === 'tel' || type === 'number' || $input.tagName === 'TEXTAREA') {
+              if (value === '') {
+                classList.remove('filled');
+              } else {
+                classList.add('filled');
+              }
+            } else if (type === 'file') {
+              // $input.filesArray = [];
+    
+              let uploadedFiles = '';
+              for (let i = 0, len = files.length; i < len; i++) {
+                // $input.filesArray[i] = files[i];
+                uploadedFiles += '<span class="uploadedfiles__file"><span class="uploadedfiles__file-text">' + files[i].name + '</span></span>';
+              }
+              $uploadFilesBlock.innerHTML = uploadedFiles;
+            }
+          };
+    
+        $form.setAttribute('novalidate', '');
+        $form.validatie = false;
+        $formBtn.addEventListener('click', function() {
+          validationForm();
+          if ($form.validatie === false) {
+            event.preventDefault();
+          } else {
+            $form.classList.add('loading');
+          }
+        });
+        if (!document.wpcf7mailsent) {
+          document.addEventListener('wpcf7mailsent', submitHandler);
+          document.wpcf7mailsent = true;
+        }
+        $form.addEventListener('input', toggleInputsClass);
+      };
+    
+      for (var i = $forms.length - 1; i >= 0; i--) {
+        if ($forms[i]) {
+          formValidator({
+            form: $forms[i],
+            formBtn: q('.btn', $forms[i]) || q('.btn[form="' + $forms[i].id + '"]'),
+            uploadFilesBlock: q('.uploadedfiles', $forms[i]),
+            filesInput: q('input[type="file"]', $forms[i])
+          });
+        }
+      }
+    })();
+
+  mobileMenu = function(_) {
+    let setMenuStyles = function(trf, trs) {
+        let args = [trf, trs],
+          props = ['transform', 'transition'],
+          values = ['translate3d(' + trf + ', 0px, 0px)', 'transform ' + trs];
+  
+        for (let i = args.length - 1; i >= 0; i--) {
+          if (args[i] !== 0) {
+            if (args[i] === '') {
+              args[i] = '';
+            } else {
+              args[i] = values[i];
+            }
+            menuCnt.style[props[i]] = args[i];
+          }
+        }
+      },
+      checkForString = function(variable) {
+        return variable.constructor === String ? q(variable) : variable;
+      },
+      openMenu = function() {
+        if (!opened) {
+          if (menu.hasAttribute('style')) {
+            menu.removeAttribute('style');
+            menu.offsetHeight;
+          }
+          menu.classList.add('active');
+          openBtn.classList.add('active');
+          menuCnt.scrollTop = 0;
+  
+          if (!fade) {
+            setMenuStyles('0px', '.5s');
+            menuWidth = menuCnt.offsetWidth;
+          }
+          if (!allowPageScroll) {
+            pageScroll(true);
+          }
+        }
+      },
+      closeMenu = function(e, forSwipe) {
+        if (opened) {
+          let target = e && e.target;
+          // Если меню открыто и произошел свайп или нет события (закрыто вызовом функции close()) или есть евент и его св-ва
+          if (forSwipe || !e || (e.type === 'keyup' && e.keyCode === 27 || target === menu || target === closeBtn)) {
+            menu.classList.remove('active');
+            openBtn.classList.remove('active');
+  
+            if (!fade) {
+              setMenuStyles(initialTransformX, '.5s');
+            }
+          }
+        }
+      },
+      swipeStart = function(e) {
+        if (allowSwipe) {
+          let evt = e.touches[0] || window.e.touches[0];
+  
+          isSwipe = isScroll = false;
+          posInitX = posX1 = evt.clientX;
+          posInitY = posY1 = evt.clientY;
+          swipeStartTime = Date.now();
+  
+          menuCnt.addEventListener('touchend', swipeEnd);
+          menuCnt.addEventListener('touchmove', swipeAction);
+          setMenuStyles(0, '');
+        }
+      },
+      swipeAction = function(e) {
+        if (allowSwipe) {
+          let evt = e.touches[0] || window.e.touches[0],
+            style = menuCnt.style.transform,
+            transform = +style.match(trfRegExp)[0];
+  
+          posX2 = posX1 - evt.clientX;
+          posX1 = evt.clientX;
+  
+          posY2 = posY1 - evt.clientY;
+          posY1 = evt.clientY;
+  
+          // Если еще не определено свайп или скролл (двигаемся в бок или вверх/вниз)
+          if (!isSwipe && !isScroll) {
+            let posY = Math.abs(posY2),
+              posX = Math.abs(posX2);
+  
+            if (posY > 7 || posX2 === 0) {
+              isScroll = true;
+            } else if (posY < 7) {
+              isSwipe = true;
+            }
+          }
+  
+          if (isSwipe) {
+            // Если двигаемся влево или вправо при уже открытом меню, фиксируем позицию
+            if ((toLeft && posInitX > posX1) || (toRight && posInitX < posX1)) {
+              setMenuStyles('0px', 0);
+              return;
+            }
+            setMenuStyles(transform - posX2 + 'px', 0);
+          }
+        }
+      },
+      swipeEnd = function(e) {
+        posFinal = posInitX - posX1;
+  
+        let absPosFinal = Math.abs(posFinal);
+  
+        swipeEndTime = Date.now();
+  
+        if (absPosFinal > 1 && isSwipe) {
+          if (toLeft && posFinal < 0 || toRight && posFinal > 0) {
+            if (absPosFinal >= menuWidth * swipeThreshold || swipeEndTime - swipeStartTime < 300) {
+              closeMenu(e, true);
+            } else {
+              opened = false;
+              openMenu(e, true);
+            }
+          }
+          allowSwipe = false;
+        }
+  
+        menu.removeEventListener('touchend', swipeEnd);
+        menu.removeEventListener('touchmove', swipeAction);
+  
+      },
+      transitionEnd = function(e) {
+        if (fade) {
+          if (e.propertyName === 'opacity') {
+            transitionEndEvents();
+          }
+        } else {
+          if (e.propertyName === 'transform') {
+            transitionEndEvents();
+          }
+        } 
+        allowSwipe = true;
+      },
+      transitionEndEvents = function() {
+        if (opened) {
+          menu.isOpened = opened = false;
+          openBtn.addEventListener('click', openMenu);
+          closeBtn.removeEventListener('click', closeMenu);
+          if (!allowPageScroll) {
+            pageScroll(false);
+          }
+          console.log('sticky hdr');
+          sticky(hdr);
+        } else {
+          menu.isOpened = opened = true;
+          openBtn.removeEventListener('click', openMenu);
+          closeBtn.addEventListener('click', closeMenu);
+        }
+      },
+      init = function() {
+        menu = checkForString(_.menu);
+        menuCnt = checkForString(_.menuCnt);
+        openBtn = checkForString(_.openBtn);
+        closeBtn = checkForString(_.closeBtn);
+        allowPageScroll = options.allowPageScroll;
+        toRight = options.toRight;
+        toLeft = options.toLeft;
+        initialTransformX = toLeft ? '100%' : toRight ? '-100%' : 0;
+        fade = options.fade;
+  
+        setListeners('add');
+  
+        if (fade) {
+          toRight = toLeft = false;
+        } else {
+          setMenuStyles(initialTransformX, 0);
+          menu.addEventListener('touchstart', swipeStart);
+        }
+        menu.isOpened = false;
+      },
+      setListeners = function(action) {
+        openBtn[action + 'EventListener']('click', openMenu);
+        menu[action + 'EventListener']('click', closeMenu);
+        menu[action + 'EventListener']('transitionend', transitionEnd);
+        document[action + 'EventListener']('keyup', closeMenu);
+      },
+      destroy = function() {
+        if (opened) {
+          closeMenu();
+        }
+  
+        if (fade) {
+          toRight = toLeft = false;
+        } else {
+          setMenuStyles('', '');
+          menu.removeEventListener('touchstart', swipeStart);
+        }
+  
+        setListeners('remove');
+        menu = null;
+        menuCnt = null;
+        openBtn = null;
+        closeBtn = null;
+      },
+      applyMediaParams = function() {
+        // console.log('applyMediaParams');
+        if (targetMediaQuery) {
+          // console.log('set ' + targetMediaQuery + ' params');
+          for (let option in responsive[targetMediaQuery]) {
+            options[option] = responsive[targetMediaQuery][option];
+          }
+          currentMediaQuery = targetMediaQuery;
+        } else { // set initial params
+          for (let option in initialOptions) {
+            options[option] = initialOptions[option];
+          }
+          currentMediaQuery = null;
+        }
+        if (menu) {
+          destroy();
+          init();
+        }
+      },
+      checkMedia = function() {
+        if (responsive) {
+          targetMediaQuery = null;
+          for (let mediaQuery in responsive) {
+            if (media(mediaQuery)) {
+              targetMediaQuery = mediaQuery;
+            }
+          }
+          if (targetMediaQuery !== currentMediaQuery) {
+            applyMediaParams();
+          }
+        }
+        if (!menu) {
+          init();
+        }
+      },
+      options = JSON.parse(JSON.stringify(_)),
+      initialOptions = JSON.parse(JSON.stringify(_)),
+      responsive = _.responsive,
+      targetMediaQuery = null,
+      currentMediaQuery = null,
+      menu,
+      menuCnt,
+      openBtn,
+      closeBtn,
+      swipeStartTime,
+      swipeEndTime,
+      allowPageScroll,
+      swipeThreshold = 0.5,
+      toRight,
+      toLeft,
+      initialTransformX,
+      fade,
+      startPageY = pageYOffset,
+      trfRegExp = /([-0-9.]+(?=px))/,
+      isSwipe = false,
+      isScroll = false,
+      allowSwipe = false,
+      opened = false,
+      posX1 = 0,
+      posX2 = 0,
+      posY1 = 0,
+      posY2 = 0,
+      posInitX = 0,
+      posInitY = 0,
+      posFinal = 0,
+      menuWidth = 0;
+  
+    if (_.menu) {
+      // Элементы не изменяются через responsive
+      checkMedia();
+  
+      windowFuncs.resize.push(checkMedia);
+  
+      // Если разрешена прокрутка, то закрываем при прокрутке
+      // if (allowPageScroll) {
+      //   windowFuncs.scroll.push(closeMenu);
+      // }
+  
+      return {
+        options: options,
+        menu: menu,
+        menuCnt: menuCnt,
+        openBtn: openBtn,
+        closeBtn: closeBtn,
+        open: openMenu,
+        close: closeMenu,
+        destroy: destroy,
+        opened: opened
+      };
+    }
+  };
+
+  // В основном для IE
+  if (!NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+  }
+
+  if (!HTMLCollection.prototype.forEach) {
+    HTMLCollection.prototype.forEach = Array.prototype.forEach;
+  }
+
+  fakeScrollbar = id('fake-scrollbar');
+
+  // burger = q('.hdr__burger');
+
+  // hdr = q('.hdr');
+
+  // menu = mobileMenu({
+  //   menu: q('.menu'),
+  //   menuCnt: q('.menu__cnt'),
+  //   openBtn: burger,
+  //   closeBtn: burger,
+  //   toRight: true,
+  //   fade: false,
+  //   allowPageScroll: false
+  // });
+
+  // let navLinks = qa('.nav-link, .hdr__callback');
+
+  // for (let i = 0, len = navLinks.length; i < len; i++) {
+  // navLinks[i].addEventListener('click', scrollToTarget);
+  // }
+
+  // sticky(hdr);
+
+  // thanksPopup = new Popup('.thanks', {
+  // closeButtons: '.thanks__close'
+  // });
+
+  // Инициализация lazyload
+  lazy = new lazyload({
+    clearSrc: true,
+    clearMedia: true
+  });
+
+  window.svg4everybody && svg4everybody();
+
+  // Добавление расчета vh на ресайз окна
+  windowFuncs.resize.push(setVh);
+
+  // Сбор событий resize, load, scroll и установка на window
+  for (let eventType in windowFuncs) {
+    if (eventType !== 'call') {
+      let funcsArray = windowFuncs[eventType];
+      if (funcsArray.length > 0) {
+        windowFuncs.call(funcsArray);
+        window.addEventListener(eventType, windowFuncs.call);
+      }
+    }
+  }
+
+  // настройки grab курсора на всех слайдерах
+  // let slickLists = $('.slick-list.draggable');
+
+  // slickLists.on('mousedown', function() {
+  //   $(this).addClass('grabbing');
+  // }).on('beforeChange', function() {
+  //   $(this).removeClass('grabbing');
+  // });
+
+  // $(document).on('mouseup', function() {
+  //   slickLists.removeClass('grabbing');
+  // });
+});

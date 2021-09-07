@@ -1,7 +1,7 @@
-
 @import '../assets/colors';
 @import '../assets/mixins';
 @import '../assets/variables';
+
 // Класс добавляется при вызове попапов и мобильного меню
 body.no-scroll {
   overflow: hidden;
@@ -9,6 +9,15 @@ body.no-scroll {
   .hdr.fixed {
     overflow-y: scroll;
   }
+}
+
+body {
+  font: 14px/150% $roboto;
+  color: $black;
+}
+
+.account-page-wrapper {
+  position: relative;
 }
 
 // Обертка для всего контента
@@ -117,9 +126,18 @@ body.no-scroll {
 
 // Общие стили для секций
 .sect {
-  &_bg {}
+  padding-top: 35px;
+  padding-bottom: 35px;
+  &-h1 {
+    font: 700 24px/130% $notoSans;
+  }
 
-  &-title {}
+  &-bg {}
+
+  &-title {
+    margin: 0 0 20px;
+    font: bold 24px/130% $notoSans;
+  }
 
   &-descr {}
 }
@@ -129,4 +147,40 @@ div.wpcf7-response-output,
 span.wpcf7-not-valid-tip,
 .screen-reader-response {
   display: none !important;
+}
+
+
+@media (min-width:767.98px) {
+  body {
+
+    &.page-template-account,
+    &.page-template-chat,
+    &.page-template-plan-diet,
+    &.page-template-training-program,
+    &.page-template-questionnaire {
+      >#page-wrapper {
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 0;
+          display: block;
+          width: 64%;
+          height: 100%;
+          background: $light;
+          border-radius: 30px 0px 0px 30px;
+          pointer-events: none;
+          z-index: -1;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width:1023.98px) {
+  .account-page-wrapper {
+    display: flex;
+  }
 }

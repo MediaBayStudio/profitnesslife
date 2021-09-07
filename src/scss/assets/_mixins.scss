@@ -27,14 +27,14 @@
   $minPxs: str-slice($pxs, 0, $arrow - 1);
   $maxPxs: str-slice($pxs, $arrow + 2, -1);
 
-  $minus: '';
+  $end: '';
   $start: '';
 
   @if $minus {
-    $minus: ') * -1';
+    $end: ') * -1';
     $start: '(';
   }
 
-  @return calc(#{$start}(100vw - #{$minScreenWidth}px)/(#{$maxScreenWidth} - #{$minScreenWidth})*(#{$maxPxs} - #{$minPxs}) + #{$minPxs}px#{$minus});
+  @return calc(#{$start}(100vw - #{$minScreenWidth}px)/(#{$maxScreenWidth} - #{$minScreenWidth})*(#{$maxPxs} - #{$minPxs}) + #{$minPxs}px#{$end});
 }
 

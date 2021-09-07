@@ -1,29 +1,29 @@
-
 @import '../assets/colors';
 @import '../assets/mixins';
 @import '../assets/variables';
+
 .dots {
+  margin: 20px 0 0;
   display: flex;
   justify-content: center;
   > li {
     &:nth-last-child(n+2) {
-      margin-right: 14px;
+      margin-right: 8px;
     }
   }
 }
 
 li.slick-active > .dot {
-  cursor: default;
-  transform: scale(2);
-  // background: $red;
+  background: $accentGreen;
+  pointer-events: none;
 }
 
 .dots .dot {
-  width: 6px;
-  height: 6px;
-  // background: $light;
+  width: 8px;
+  height: 8px;
+  background: transparentize($accentGreen, .7);
   border-radius: 50%;
-  transition: transform .35s, color .35s
+  transition: background .35s
 }
 
 .slick {

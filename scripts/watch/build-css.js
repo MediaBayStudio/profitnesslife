@@ -168,7 +168,7 @@ var { src, dest } = require('gulp'),
                     cnt = assets.reduce((prev, next) => prev + '@import \'' + path.relative(config.src.scss, next) + '\';\n', '');
 
 
-                  cnt += blocks.reduce((prev, next) => prev + '@import \'' + path.relative(config.src.scss, path.join(config.src.blocks, next, next + suffix)) + '\';\n', '');
+                  cnt += blocks.reduce((prev, next) => prev + '@import \'' + path.relative(config.src.scss, path.join(config.src.sections, next, next + suffix)) + '\';\n', '');
 
                   createFile(filepath, cnt);
                 });

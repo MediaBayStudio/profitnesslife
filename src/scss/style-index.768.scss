@@ -1,4 +1,8 @@
-
 @import 'assets/colors';
 @import 'assets/mixins';
 @import 'assets/variables';
+@import '../sections/header/header.768';
+@import '../sections/mobile-menu/mobile-menu.768';
+@import '../sections/index-hero/index-hero.768';
+@import '../sections/index-features/index-features.768';
+@import '../sections/footer/footer.768';

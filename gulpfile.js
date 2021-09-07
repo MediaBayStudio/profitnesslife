@@ -18,6 +18,7 @@ let { src, dest, watch, series, parallel, task } = require('gulp'),
   flexibleWordpress = config.flexibleWordpress,
 
   createBlock = require('./scripts/start/create-block.js'),
+  createSection = require('./scripts/start/create-section.js'),
   createFile = require('./scripts/start/create-file.js'),
 
   removeLogging = require('gulp-remove-logging'),
@@ -50,8 +51,7 @@ let { src, dest, watch, series, parallel, task } = require('gulp'),
     cb();
   },
 
-  moveSource = require('./scripts/move/move-src.js'),
-  { moveImages, moveFonts, moveFavicons, moveJSON, moveBlocks, moveSections, movePHP, moveHTML } = require('./scripts/move/move-files.js'),
+  moveSource = require('./scripts/move/move-src.js'), { moveImages, moveFonts, moveFavicons, moveJSON, moveBlocks, moveSections, movePHP, moveHTML } = require('./scripts/move/move-files.js'),
   moveJs = require('./scripts/move/move-js.js'),
 
   buildJs = require('./scripts/watch/build-js.js'),
@@ -67,6 +67,14 @@ task('createblock', function(cb) {
   let newPath = argv.src;
   if (newPath.constructor !== Boolean) {
     createBlock(newPath);
+  }
+  cb();
+});
+
+task('createsection', function(cb) {
+  let newPath = argv.src;
+  if (newPath.constructor !== Boolean) {
+    createSection(newPath);
   }
   cb();
 });
@@ -122,25 +130,28 @@ task('createpage', createPage);
 task('default', function(done) {
   // moveSource(); // Перемещаем исходный код
   if (wordpress) {
-    if (flexibleWordpress) {
-      watch(path.join(config.src.blocks, '**', '*.js'), buildJs);
-      watch(path.join(config.src.js, 'components', '*.js'), buildJs);
-      watch(path.join(config.src.js, 'script.js'), buildJs);
+    watch(path.join(config.src.components, '**', '*.js'), buildJs);
+    watch(path.join(config.src.sections, '**', '*.js'), buildJs);
+    watch(path.join(config.src.js, 'components', '*.js'), buildJs);
+    watch(path.join(config.src.js, 'script.js'), buildJs);
+    watch(path.join(config.src.js, 'script-admin.js'), buildJs);
 
-      watch(path.join(config.src.path, 'style.scss'), buildCss);
-      watch(path.join(config.src.blocks, '**', '*.scss'), buildCss);
-      // watch(config.src.scss + '**/*.scss', buildCss);
-      watch(path.join(config.src.scss, '**', '!(style-)*.scss'), buildCss);
+    watch(path.join(config.src.path, 'style.scss'), buildCss);
+    watch(path.join(config.src.scss, 'style-admin.scss'), buildCss);
+    watch(path.join(config.src.components, '**', '*.scss'), buildCss);
+    watch(path.join(config.src.sections, '**', '*.scss'), buildCss);
+    // watch(config.src.scss + '**/*.scss', buildCss);
+    watch(path.join(config.src.scss, '**', '!(style-)*.scss'), buildCss);
 
-      watch(path.join(config.src.blocks, '**', '*.php'), moveParts);
-      watch(path.join(config.src.path, '*.php'), movePHP);
-      watch(path.join(config.src.inc, '*.php'), movePHP);
+    watch(path.join(config.src.components, '**', '*.php'), moveBlocks);
+    watch(path.join(config.src.sections, '**', '*.php'), moveSections);
+    watch(path.join(config.src.path, '*.php'), movePHP);
+    watch(path.join(config.src.inc, '*.php'), movePHP);
 
-      watch(path.join(config.src.inc, '*.php'), movePHP);
-    } else {
-      watch(path.join(config.src.js, 'components', '*.js'), buildJs) /*.on('unlink', path => removeFiles(path, 'unlink'))*/ ;
-      watch(path.join(config.src.path, '*.html'), moveHTML);
-    }
+    watch(path.join(config.src.inc, '*.php'), movePHP);
+  } else {
+    watch(path.join(config.src.js, 'components', '*.js'), buildJs) /*.on('unlink', path => removeFiles(path, 'unlink'))*/ ;
+    watch(path.join(config.src.path, '*.html'), moveHTML);
   }
 
   console.log(path.join(config.src.img, '**', '*'));

@@ -1,5 +1,5 @@
 <?php
-add_action( 'post_updated', function( $post_ID, $post_after, $post_before ) {
+add_action( 'save_post_page', function( $post_ID, $post ) {
   if ( !function_exists( 'get_field' ) ) {
     return;
   }

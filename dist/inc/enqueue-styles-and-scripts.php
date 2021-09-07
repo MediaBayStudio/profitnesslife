@@ -3,7 +3,7 @@
 // Скрипт и стиль в админку
 add_action( 'admin_enqueue_scripts', function() {
   global $template_directory_uri;
-  wp_enqueue_script( "script-admin", $template_directory_uri . "/js/script-admin.js", [], null );
+  wp_enqueue_script( "script-admin", $template_directory_uri . "/js/script-admin.js", [], null, true );
   wp_enqueue_style( "style-admin", $template_directory_uri . "/style-admin.css", [], null );
 } );
 
@@ -73,7 +73,7 @@ add_action( 'wp_enqueue_scripts', function() {
   // Подключаем скрипты циклом
   
 
-	$scripts = ['script', $script_name];
+	$scripts = ['lazy.min', 'Popup.min', 'slick.min', 'script', $script_name];
 
   $GLOBALS['page_script_name'] = $script_name;
   $GLOBALS['page_style_name'] = $tyle_name;
@@ -97,10 +97,12 @@ add_action( 'wp_enqueue_scripts', function() {
 // Убираем id и type в тегах script, добавляем нужным атрибут defer
   add_filter( 'script_loader_tag',   function( $html, $handle ) {
     switch ( $handle ) {
+      case 'lazy.min':
+      case 'Popup.min':
+      case 'slick.min':
       case 'script':
       case $GLOBALS['page_script_name']:
       case 'contact-form-7':
-      #!!!defer_scripts
         $html = str_replace( ' src', ' defer src', $html );
         break;
     }

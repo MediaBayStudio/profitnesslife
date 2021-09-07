@@ -36,6 +36,38 @@ add_filter( 'site_transient_update_plugins', function( $value ) {
   return $value;
 } );
 
+
+// Редирект на страницу входа, если не авторизованный пользователь попал на другие внутренние страницы
+add_action( 'wp', function() {
+  global $site_url, $post;
+  
+  if ( !is_user_logged_in() ) {
+    switch ( $post->post_name ) {
+      case 'questionnaire':
+      case 'training-program':
+      case 'diet-plan':
+      case 'chat':
+        wp_redirect( $site_url . '/account', 301 );
+        exit;
+    }
+  }
+} );
+
+// Enable the option show in rest
+add_filter( 'acf/rest_api/field_settings/show_in_rest', '__return_true' );
+
+// Enable the option edit in rest
+add_filter( 'acf/rest_api/field_settings/edit_in_rest', '__return_true' );
+
+// Роли для пользователей
+add_filter( 'editable_roles', function( $all_roles ) {
+  unset( $all_roles['subscriber'], $all_roles['author'], $all_roles['editor'] );
+  return $all_roles;
+} );
+
+
+
+// Определение slug шаблона, нужно для подключения нужных стилей и скриптов к страницам
 add_filter( 'template_include', function( $template ) {
   global $post;
   
@@ -55,6 +87,8 @@ add_filter( 'template_include', function( $template ) {
   $GLOBALS['sections'] = get_field( 'sections', $page_template_id );
   return $template;
 } );
+
+
 // Создание <picture> для img
 require $template_directory . '/inc/create-picture.php';
 
@@ -88,8 +122,13 @@ require $template_directory . '/inc/php-path-join.php';
 
 if ( is_super_admin() || is_admin_bar_showing() ) {
 
+  // Создание новых колонок в админке
+  require $template_directory . '/inc/manage-posts-columns.php';
+
 	// Функция формирования стилей для страницы при сохранении страницы
 	require $template_directory . '/inc/build-styles.php';
+
+  // require $template_directory . '/inc/ajax-recipe.php';
 
 	// Функция формирования скриптов для страницы при сохранении страницы
 	require $template_directory . '/inc/build-scripts.php';
@@ -102,6 +141,4 @@ if ( is_super_admin() || is_admin_bar_showing() ) {
 
 	// Удаление лишних пунктов из меню админ-панели и прочие настройки админ-панели
 	require $template_directory . '/inc/admin-menu-actions.php';
-
-
 }

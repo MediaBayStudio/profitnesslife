@@ -15,3 +15,21 @@ Version: 1.0
 @import 'scss/style/popups';
 @import 'scss/style/forms';
 @import 'scss/style/sliders';
+
+@import 'sections/side-menu/side-menu';
+
+@media (min-width:575.98px) {
+  @import 'sections/side-menu/side-menu.576';
+}
+
+@media (min-width:767.98px) {
+  @import 'sections/side-menu/side-menu.768';
+}
+
+@media (min-width:1023.98px) {
+  @import 'sections/side-menu/side-menu.1024';
+}
+
+@media (min-width:1279.98px) {
+  @import 'sections/side-menu/side-menu.1280';
+}
