@@ -37,7 +37,8 @@
               responsive: [{
                 breakpoint: 575.98,
                 settings: {
-                  slidesToShow: 2
+                  slidesToShow: 2,
+                  slidesToScroll: 2
                 }
               }]
             });

@@ -1,3 +1,31 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-chat {
+  display: flex;
+  align-items: center;
+
+  &__text {
+    max-width: 370px;
+  }
+
+  &__title {}
+
+  &__descr {}
+
+  &__list {}
+
+  &__list-item {}
+
+  &__link {}
+
+  &__link-img {}
+
+  &__pic {
+    max-width: 100%;
+    margin: 0 0 0 auto;
+  }
+
+  &__img {}
+}

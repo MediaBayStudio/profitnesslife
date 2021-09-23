@@ -1,3 +1,26 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-payment {
+  margin: $sectionVerticalPadding768 0;
+  &__title {}
+
+  &__list {
+
+    &.slick-slider {
+      +.index-payment__nav {}
+    }
+  }
+
+  &__method {
+    padding: 45px 0;
+    &:not(:last-child) {}
+  }
+
+  &__method-img {}
+
+  &__method-text {}
+
+  &__nav {}
+}

@@ -1,3 +1,84 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.menu {
+  width: 100%;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  max-height: 100vh;
+  max-height: calc(var(--vh, 1vh) * 100);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .5s, visibility .5s;
+  background: rgba(255, 255, 255, .75);
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &__cnt {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    background: #fff;
+  }
+
+  &__hdr {
+    margin: 0 0 30px;
+    padding: 20px 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &__logo {
+    margin: 0 auto 0 0;
+  }
+
+  &__logo-img {
+    width: 140px;
+    height: 21px;
+    object-fit: contain;
+  }
+
+  &__nav {
+    &-list {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      text-align: center;
+      font: 500 22px/1.4 $roboto;
+    }
+    &-li {
+      margin: 0 0 15px;
+    }
+  }
+
+  &__close {}
+
+  &__close-svg {
+    pointer-events: none;
+  }
+
+  &__close-path {}
+
+  &__login {
+    margin: 15px auto 0;
+    padding: 11px 19px;
+  }
+
+  &__img {
+    margin: 50px auto;
+    width: 220px;
+    height: 150px;
+    object-fit: contain;
+  }
+}

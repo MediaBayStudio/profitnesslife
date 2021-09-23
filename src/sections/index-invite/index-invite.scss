@@ -1,3 +1,31 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-invite {
+  margin: $sectionVerticalPadding320 0;
+  background: linear-gradient(283deg, #B0BBA7 -77%, #F3F2EE 80%);
+
+  &__pic {
+    margin: 0 0 20px;
+    max-width: 375px;
+    display: block;
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &__text {}
+
+  &__title {}
+
+  &__descr {}
+
+  &__btn {
+    margin: 12px 0 0 0;
+    padding: 11px 45px;
+  }
+}

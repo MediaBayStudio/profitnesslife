@@ -1,1 +1,1 @@
-@charset "UTF-8";.hdr{padding-top:20px;padding-bottom:20px;display:flex;align-items:center}.hdr__nav{display:none}.hdr__burger{margin:0 0 0 auto;width:24px;height:13px;background:url(../img/icon-burger.svg) center/contain no-repeat}
+@charset "UTF-8";.hdr{padding-top:20px;padding-bottom:20px;display:flex;align-items:center}.hdr__login,.hdr__nav{display:none}.hdr__burger{margin:0 0 0 auto;width:24px;height:13px;background:url(../img/icon-burger.svg) center/contain no-repeat}

@@ -1,3 +1,136 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-team {
+  &__title {}
+
+  &__team {
+    display: flex;
+    .slick-list {
+      overflow: hidden;
+    }
+  }
+
+  &__person {
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+
+  &__person-pic {
+    margin: 0 0 20px;
+    display: block;
+    max-width: 375px;
+  }
+
+  &__person-img {
+  }
+
+  &__person-info {}
+
+  &__person-name {
+    font: bold 20px/130% $notoSans;
+  }
+
+  &__person-role {
+    margin: 10px 0 0;
+    font: 500 16px/140% $roboto;
+    color: $coral;
+  }
+
+  &__person-prop {
+    margin: 20px 0 0;
+    display: flex;
+    flex-flow: column;
+    background: linear-gradient(286deg, rgba(243, 224, 215, 0.9) 9%, #F6EFE9 97%);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: max-height .5s;
+    &.active {
+      .index-team__person-prop-title {
+        &::before {
+          transform: translateY(-50%) rotate(-45deg);
+        }
+        &::after {
+          transform: translateY(-50%) rotate(45deg);
+        }
+      }
+    }
+  }
+
+  &__person-prop-title {
+    padding: 10px 12px 10px 20px;
+    font: 500 14px/150% $roboto;
+    position: relative;
+    cursor: pointer;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 8px;
+      height: 1px;
+      border-bottom: 1px solid;
+      transition: transform .5s;
+      pointer-events: none;
+    }
+
+    &::before {
+      right: 20px;
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    &::after {
+      right: 15px;
+      transform: translateY(-50%) rotate(-45deg);
+    }
+
+  }
+
+  &__person-prop-list {
+    padding: 0 12px 10px 20px;
+  }
+
+  &__person-prop-list-item {
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: -10px;
+      width: 5px;
+      height: 5px;
+      background: $accentGreen;
+      border-radius: 50%;
+    }
+  }
+
+  &__person-prop-descr {
+    padding: 0 12px 10px 20px;
+  }
+
+  &__person-prop-files {
+    margin: -10px 0 0;
+    padding: 0 12px 10px 20px;
+  }
+
+  &__person-prop-file {
+    margin: 10px 0 0;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__person-prop-file-link {
+  }
+
+  &__person-prop-file-icon {
+    margin: 0 15px 0 0;
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+  }
+
+  &__person-prop-file-title {}
+}

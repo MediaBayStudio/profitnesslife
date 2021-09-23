@@ -1,3 +1,80 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-team {
+  &__title {}
+
+  &__team {
+    position: relative;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 105px;
+    bottom: -5px;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
+  &__prev,
+  &__next {
+
+  }
+
+  &__prev {
+    order: -1;
+  }
+
+  &__next {
+    order: 10;
+  }
+
+  &__dots {
+    margin: 0 30px;
+  }
+
+  &__person {
+    display: flex;
+    align-items: center;
+  }
+
+  &__person-pic {
+    margin: 0 40px 0 0;
+    width: calc(50% - 40px);
+  }
+
+  &__person-img {}
+
+  &__person-info {
+    width: calc(50% + 40px);
+  }
+
+  &__person-name {
+  }
+
+  &__person-role {
+  }
+
+  &__person-prop {}
+
+  &__person-prop-title {}
+
+  &__person-prop-list {}
+
+  &__person-prop-list-item {}
+
+  &__person-prop-descr {}
+
+  &__person-prop-files {}
+
+  &__person-prop-file {}
+
+  &__person-prop-file-link {}
+
+  &__person-prop-file-icon {}
+
+  &__person-prop-file-title {}
+}

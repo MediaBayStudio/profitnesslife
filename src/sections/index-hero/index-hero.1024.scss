@@ -3,13 +3,33 @@
 @import '../../scss/assets/variables';
 
 .index-hero {
-  &__pic {}
+  padding-top: 60px;
+  padding-bottom: 85px;
+  &__pic {
+    width: 550px;
+    height: 430px;
+  }
 
   &__img {}
 
-  &__title {}
+  &__title {
+    margin: 15px 0 0;
+    max-width: 410px;
+  }
 
-  &__descr {}
+  &__descr {
+    margin: 30px 0 0;
+    max-width: 360px;
+    font-size: 22px;
+  }
 
-  &__btn {}
+  &__btn {
+    margin: 40px 0 0;
+    padding: 13px 62px;
+    font-size: 16px;
+  }
+
+  &__marquee {
+    font-size: 22px;
+  }
 }

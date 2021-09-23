@@ -1,3 +1,26 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.ftr {
+  &__logo {}
+
+  &__logo-img {}
+
+  &__tel {}
+
+  &__email {}
+
+  &__nav {
+    &-list {}
+    &-li {}
+  }
+
+  &__copy {}
+
+  &__dev-link {}
+
+  &__dev-logo {}
+
+  &__dev-logo-line {}
+}

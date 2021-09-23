@@ -1,3 +1,23 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-invite {
+  margin: $sectionVerticalPadding1024 0;
+  &__pic {
+    max-width: 550px;
+  }
+
+  &__img {}
+
+  &__text {}
+
+  &__title {}
+
+  &__descr {}
+
+  &__btn {
+    margin: 30px 0 0;
+    padding: 14px 68px;
+  }
+}

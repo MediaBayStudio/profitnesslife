@@ -1,4 +1,26 @@
-
 @import 'assets/colors';
 @import 'assets/mixins';
 @import 'assets/variables';
+
+.ftr__nav-li>.nav-link,
+.hdr__nav-li>.nav-link,
+.ftr__tel,
+.ftr__email {
+  &:hover {
+    color: $accentGreen;
+  }
+}
+
+.btn-ol {
+  &:hover {
+    background: $accentGreen;
+    color: #fff;
+  }
+}
+
+.btn {
+  &:hover {
+    background: transparent;
+    color: $accentGreen;
+  }
+}

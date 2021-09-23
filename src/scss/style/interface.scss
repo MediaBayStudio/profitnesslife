@@ -126,20 +126,23 @@ body {
 
 // Общие стили для секций
 .sect {
-  padding-top: 35px;
-  padding-bottom: 35px;
+  padding-top: $sectionVerticalPadding320;
+  padding-bottom: $sectionVerticalPadding320;
+
   &-h1 {
-    font: 700 24px/130% $notoSans;
+    font: 700 30px/1.3 $notoSans;
   }
 
   &-bg {}
 
   &-title {
     margin: 0 0 20px;
-    font: bold 24px/130% $notoSans;
+    font: bold 24px/1.3 $notoSans;
   }
 
-  &-descr {}
+  &-descr {
+    font: 16px/1.5 $roboto;
+  }
 }
 
 // Скрытие стандартных сообщений от contact form 7
@@ -152,6 +155,7 @@ span.wpcf7-not-valid-tip,
 
 @media (min-width:767.98px) {
   body {
+    font-size: 15px;
 
     &.page-template-account,
     &.page-template-chat,
@@ -177,10 +181,59 @@ span.wpcf7-not-valid-tip,
       }
     }
   }
+
+  .sect {
+    padding-top: $sectionVerticalPadding768;
+    padding-bottom: $sectionVerticalPadding768;
+
+    &-h1 {
+      font-size: 36px;
+    }
+
+    &-title {
+      // margin: 0 0 30px;
+      font-size: 30px;
+    }
+
+    &-descr {
+      font-size: 18px;
+    }
+  }
 }
 
 @media (min-width:1023.98px) {
+  body {
+    font-size: 18px;
+  }
+
   .account-page-wrapper {
     display: flex;
+  }
+
+  .sect {
+    padding-top: $sectionVerticalPadding1024;
+    padding-bottom: $sectionVerticalPadding1024;
+
+    &-h1 {
+      font-size: 44px;
+    }
+
+    &-title {
+      // margin: 0 0 40px;
+      font-size: 36px;
+    }
+
+    &-descr {
+      font-size: 22px;
+    }
+  }
+}
+
+@media (min-width:1279.98px) {
+  .sect {
+    padding-top: $sectionVerticalPadding1280;
+    padding-bottom: $sectionVerticalPadding1280;
+
+    &-title {}
   }
 }

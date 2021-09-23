@@ -35,8 +35,9 @@ var browser = {
     },
     createArrow: function(className, inside) {
       className = (className.indexOf('prev') === -1 ? 'next ' : 'prev ') + className;
-      return '<button type="button" class="arrow arrow_' + className + '">' + inside + '</button>';
+      return '<button type="button" class="arrow arrow-' + className + '">' + inside + '</button>';
     },
+    arrow: '<svg class="arrow__svg" width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.22 17.983a.665.665 0 0 1-.073-.91l.073-.08 6.469-6.034-6.47-6.034a.665.665 0 0 1-.072-.91l.073-.08a.79.79 0 0 1 .976-.067l.084.068 7 6.529c.267.248.29.637.073.91l-.073.08-7 6.528a.789.789 0 0 1-1.06 0Z" fill="currentColor"/></svg>',
     // setImages: function(slides) {
     //   for (let i = 0, len = slides.length; i < len; i++) {
     //     let img = q('img', slides[i]);
@@ -101,7 +102,7 @@ var browser = {
   mobileMenu,
   // Прокрутка до элемента при помощи requestAnimationFrame
   scrollToTarget = function(e, target) {
-    e.preventDefault();
+    e && e.preventDefault();
 
     if (this === window) {
       _ = e.target;

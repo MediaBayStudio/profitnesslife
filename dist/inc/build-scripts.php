@@ -28,7 +28,7 @@ add_action( 'save_post_page', function( $post_ID, $post ) {
 
         $filename = $section_name . '.js';
         
-        $filepath = php_path_join( $template_directory, 'blocks', $section_name, $filename );
+        $filepath = php_path_join( $template_directory, 'sections', $section_name, $filename );
         
         if ( file_exists( $filepath ) ) {
           $cnt .= file_get_contents( $filepath );

@@ -8,10 +8,10 @@
   add_action( 'admin_init', function() {
     $options = [
       'tel'     =>  'Телефон',
-      'address' =>  'Адрес',
+      // 'address' =>  'Адрес',
       'email'   =>  'E-mail',
-      'coords'  =>  'Координаты маркера на карте',
-      'zoom'    =>  'Увеличение карты'
+      // 'coords'  =>  'Координаты маркера на карте',
+      // 'zoom'    =>  'Увеличение карты'
     ];
 
     foreach ($options as $id => $name) {

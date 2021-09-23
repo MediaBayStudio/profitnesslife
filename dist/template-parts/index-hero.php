@@ -5,5 +5,8 @@
   </picture>
   <h1 class="index-hero__title sect-h1"><?php echo $section['title'] ?></h1>
   <p class="index-hero__descr"><?php echo $section['descr'] ?></p>
-  <button type="button" class="btn btn-green index-hero__btn">Хочу начать!</button>
+  <button type="button" class="btn btn-green index-hero__btn">Хочу начать!</button> <?php
+  $start_date = mb_strtoupper( 'старт ' . $section['date'] ) . '&nbsp;&bull;&nbsp;' ?>
+  <span class="index-hero__marquee" id="marquee" data-date="<?php echo $start_date ?>">
+  </span>
 </section>

@@ -21,7 +21,10 @@ if ( is_user_logged_in() ) { ?>
 		</section>
 	</section> <?php
 } else {
-	rcl_include_template( 'form-sign.php' );
+	echo '<div class="container">';
+	require 'components/form-sign.php';
+	echo '</div>';
+	// rcl_include_template( 'form-sign.php' );
 }
 
 get_footer();

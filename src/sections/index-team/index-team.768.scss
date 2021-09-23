@@ -1,3 +1,55 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-team {
+  &__title {
+    margin: 0 0 40px;
+  }
+
+  &__team {}
+
+  &__nav {
+    bottom: -40px;
+    left: 50%;
+  }
+
+  &__person {}
+
+  &__person-pic {}
+
+  &__person-img {}
+
+  &__person-info {}
+
+  &__person-name {
+    font-size: 24px;
+  }
+
+  &__person-role {
+    margin: 15px 0 0;
+    font-size: 18px;
+  }
+
+  &__person-prop {}
+
+  &__person-prop-title {
+    font-size: 16px;
+  }
+
+  &__person-prop-list {}
+
+  &__person-prop-list-item {}
+
+  &__person-prop-descr {}
+
+  &__person-prop-files {}
+
+  &__person-prop-file {}
+
+  &__person-prop-file-link {}
+
+  &__person-prop-file-icon {}
+
+  &__person-prop-file-title {}
+}

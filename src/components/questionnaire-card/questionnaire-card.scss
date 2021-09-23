@@ -1,3 +1,99 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+
+.questionnaire-card {
+  margin: 20px 0 0 0;
+  padding: 10px;
+  background: $white;
+  box-shadow: 4px 4px 15px rgba(147, 167, 181, 0.15);
+  border-radius: 20px;
+  transition: box-shadow .5s;
+  will-change: box-shadow;
+
+  &__img {
+    margin: 0 0 10px;
+  }
+
+  &__title {
+    font-weight: 500;
+  }
+
+  &__descr {
+    color: #555;
+  }
+
+  &__radio-input {
+    display: none;
+
+    &:checked {
+      +.questionnaire-card__label {
+        box-shadow: 4px 4px 15px rgba(133, 185, 33, 0.3);
+      }
+    }
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  &__checkbox-input {}
+
+  &__checkbox-pseudo-input {}
+
+  &__checkbox-text {}
+
+  &__checkboxes {}
+
+  &__checkbox {}
+
+  &__checkbox-title {}
+}
+
+.questionnaire-card-target,
+.questionnaire-card-sex,
+.questionnaire-card-children,
+.questionnaire-card-training-experience,
+.questionnaire-card-body-parts {
+  width: calc((100% - 20px) / 2);
+
+  &:nth-child(odd) {
+    margin-right: 20px;
+  }
+
+  > .questionnaire-card__label {
+    flex-flow: column;
+  }
+}
+
+.questionnaire-card-activity {
+  padding: 20px;
+
+  > .questionnaire-card__label {
+    align-items: flex-start;
+    flex-flow: column;
+    text-align: left;
+  }
+
+  .questionnaire-card__title {
+    margin: 0 0 10px;
+  }
+}
+
+.questionnaire-card-place {
+  width: 100%;
+
+  > .questionnaire-card__label {
+    flex-flow: column;
+  }
+}
+
+.questionnaire-card-body-parts {
+  > .questionnaire-card__label {
+    flex-flow: wrap;
+  }
+}

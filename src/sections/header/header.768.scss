@@ -15,8 +15,14 @@
   }
 
   &__nav {
+    &-list {}
+
+    &-li {
+      &:not(:last-child) {}
+    }
   }
 
-  &__burger {
-  }
+  &__burger {}
+
+  &__login {}
 }

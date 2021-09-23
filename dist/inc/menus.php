@@ -5,7 +5,7 @@
       'header_menu' =>  'Меню в шапке сайта',
       'side_menu' =>  'Боковое меню на сайте',
       // 'mobile_menu' =>  'Мобильное меню на сайте',
-      // 'footer_menu' =>  'Меню в подвале сайта'
+      'footer_menu' =>  'Меню в подвале сайта'
     ] );
   } );
 
@@ -51,12 +51,12 @@ add_filter( 'wp_nav_menu_items', function( $items, $args ) {
       case 'hdr__nav':
         $li_class = 'hdr__nav-li';
         break;
-      // case 'ftr__nav':
-      //   $li_class = 'ftr__nav-li';
-      //   break;
-      // case 'menu__nav':
-      //   $li_class = 'menu__nav-li';
-      //   break;
+      case 'ftr__nav':
+        $li_class = 'ftr__nav-li';
+        break;
+      case 'menu__nav':
+        $li_class = 'menu__nav-li';
+        break;
       default:
         $li_class = 'nav__li';
         break;

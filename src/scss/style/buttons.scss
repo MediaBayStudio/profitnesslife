@@ -13,4 +13,18 @@
 .btn-green {
   background: $accentGreen;
   color: $white;
+  border: 1px solid;
+  transition: color .5s, background .5s;
+}
+
+.btn-ol {
+  color: $accentGreen;
+  border: 1px solid;
+  transition: background .5s;
+}
+
+@media (min-width: 1023.98px) {
+  .btn {
+    font-size: 16px;
+  }
 }

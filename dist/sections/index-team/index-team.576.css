@@ -1,1 +1,1 @@
-@charset "UTF-8";
+@charset "UTF-8";.index-team__team{position:relative}.index-team__nav{display:flex;align-items:center;position:absolute;left:105px;bottom:-5px;transform:translateX(-50%);z-index:1}.index-team__prev{order:-1}.index-team__next{order:10}.index-team__dots{margin:0 30px}.index-team__person{display:flex;align-items:center}.index-team__person-pic{margin:0 40px 0 0;width:calc(50% - 40px)}.index-team__person-info{width:calc(50% + 40px)}

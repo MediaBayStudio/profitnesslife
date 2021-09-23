@@ -1,22 +1,24 @@
 <?php
 
 $image_sizes = [
-  'desktop' => 1200,
-  'laptop' => 980,
-  'tablet' => 740,
-  'mobile' => 576,
+  // 'desktop' => 1200,
+  // 'laptop' => 980,
+  // 'tablet' => 740,
+  // 'mobile' => 576,
   // 'author_articles' => [300, 400],
-  'thumb' => 400,
+  // 'thumb' => 400,
 ];
 
-foreach ( $image_sizes as $size_name => $width ) {
-  if ( is_array( $width ) ) {
-    $height = $width[1];
-    $width = $width[0];
-  } else {
-    $height = 0;
+if ( $image_sizes ) {
+  foreach ( $image_sizes as $size_name => $width ) {
+    if ( is_array( $width ) ) {
+      $height = $width[1];
+      $width = $width[0];
+    } else {
+      $height = 0;
+    }
+    add_image_size( $size_name, $width, $height, true );
   }
-  add_image_size( $size_name, $width, $height, true );
 }
 
 add_action( 'wp_generate_attachment_metadata', function ( $image_meta, $img_id ) {
@@ -28,18 +30,20 @@ add_action( 'wp_generate_attachment_metadata', function ( $image_meta, $img_id )
 
   $upload_dir = preg_replace( '/.*uploads/', '', $dirname );
 
-  foreach ( $image_sizes as $size_name => $width ) {
-    $file = image_get_intermediate_size( $img_id, $size_name );
-    $file_webp = str_replace( ['.jpg', '.jpeg', '.png'], '', $file['file'] );
-    $file_webp_name = $file_webp . '.webp';
-    $webp_path = $upload_dir . DIRECTORY_SEPARATOR . $file_webp_name;
+  if ( $image_sizes ) {
+    foreach ( $image_sizes as $size_name => $width ) {
+      $file = image_get_intermediate_size( $img_id, $size_name );
+      $file_webp = str_replace( ['.jpg', '.jpeg', '.png'], '', $file['file'] );
+      $file_webp_name = $file_webp . '.webp';
+      $webp_path = $upload_dir . DIRECTORY_SEPARATOR . $file_webp_name;
 
-    $cwebp = '/usr/local/bin/cwebp -q 90 ' . $file['file'] . ' -o ' . $file_webp_name;
+      $cwebp = '/usr/local/bin/cwebp -q 90 ' . $file['file'] . ' -o ' . $file_webp_name;
 
-    update_post_meta( $img_id, $size_name . '_webp', $webp_path );
+      update_post_meta( $img_id, $size_name . '_webp', $webp_path );
 
-    chdir( $dirname );
-    exec( $cwebp );
+      chdir( $dirname );
+      exec( $cwebp );
+    }
   }
 
   $webp_name = $img_pathinfo['filename'] . '.webp';
@@ -63,6 +67,8 @@ add_action( 'delete_attachment', function( $img_id, $img ) {
   $dirname = $img_pathinfo['dirname'];
   $img_meta = get_post_meta( $img_id );
 
+  // file_put_contents( get_home_path() . '/file.txt' );
+
   foreach ( $img_meta as $size_name => $filename ) {
     $webp_path = $upload_basedir . '/' . $filename[0];
     $webp_path = wp_normalize_path( $webp_path );
@@ -74,7 +80,7 @@ add_action( 'delete_attachment', function( $img_id, $img ) {
 }, 10, 2 );
 
 
-function minifyImg( $src, $dest = null, $quality = 90 ) {
+function minifyImg( $src, $dest = null, $quality = 9 ) {
   if ( is_null( $dest ) ) {
     $dest = $src;
   }
@@ -94,6 +100,7 @@ function minifyImg( $src, $dest = null, $quality = 90 ) {
   if ( $is_jpg ) {
     imagejpeg( $image, $dest, $quality );
   } else if ( $is_png ) {
+    imagesavealpha( $image, true);
     imagepng( $image, $dest, $quality );
   }
 

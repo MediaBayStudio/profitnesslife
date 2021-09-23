@@ -1,6 +1,6 @@
 <section class="index-features container sect"<?php echo $section_id ?>>
   <h2 class="index-features__title sect-title"><?php echo $section['title'] ?></h2>
-  <p class="index-features__descr"><?php echo $section['descr'] ?></p>
+  <p class="index-features__descr sect-descr"><?php echo $section['descr'] ?></p>
   <ul class="index-features__features"> <?php
     foreach ( $section['features'] as $feature ) : ?>
     <li class="index-features__feature">

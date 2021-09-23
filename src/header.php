@@ -5,9 +5,16 @@
     $logo_url,
     $template_directory_uri;
 
+    if ( !$preload ) {
+      $preload = get_field( 'preload' );
+    }
+
     if ( is_front_page() ) {
       $script_name = 'script-index';
       $style_name = 'style-index';
+
+      // $preload[] = $GLOBALS['sections'][0]
+
     } else if ( is_404() ) {
       $script_name = 'script-404';
       $style_name = 'style-404';
@@ -55,9 +62,6 @@
 	endforeach ?>
   <!-- other preload --> <?php
   echo PHP_EOL;
-  if ( !$preload ) {
-    $preload = get_field( 'preload' );
-  }
 
   $preload[] = $logo_url;
   $preload[] = $template_directory_uri . '/img/icon-burger.svg';
@@ -89,6 +93,7 @@
         'menu_class'      => 'hdr__nav-list',
         'items_wrap'      => '<ul class="%2$s">%3$s</ul>'
       ] ) ?>
-      <button type="button" class="hdr__burger"></button> <?php
+      <button type="button" class="hdr__burger"></button>
+      <button type="button" class="hdr__login btn btn-ol">Личный кабинет</button> <?php
       require 'template-parts/mobile-menu.php' ?>
     </header>

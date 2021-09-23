@@ -1,1 +1,1 @@
-@charset "UTF-8";
+@charset "UTF-8";.index-payment{overflow:hidden}.index-payment__list{margin:auto;max-width:375px;display:flex}.index-payment__list.slick-slider+.index-payment__nav{display:flex;align-items:center;justify-content:center}.index-payment__method{flex-shrink:0;padding:20px;display:flex;align-items:center;justify-content:center;text-align:center;box-shadow:4px 4px 15px rgba(147,167,181,.15);border-radius:30px;background:#fff}.index-payment__method:not(:last-child){margin:0 20px 0 0}.index-payment__nav{display:none}
