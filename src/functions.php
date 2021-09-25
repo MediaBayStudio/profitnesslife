@@ -137,6 +137,9 @@ add_filter( 'template_include', function( $template ) {
 
 require $template_directory . '/inc/questionnaire-send.php';
 
+// Получение и обновление инстаграм постов
+require $template_directory . '/inc/instagram-posts.php';
+
 // Создание <picture> для img
 require $template_directory . '/inc/create-picture.php';
 

@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
     (function() {
       // Массив форм, на которые будет добавлена валидация
       let $forms = [
-        id('contacts-form')
+        id('index-form')
       ];
     
       let formValidator = function(params) {

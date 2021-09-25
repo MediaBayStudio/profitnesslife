@@ -72,6 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 })();
 
+//=include ../sections/index-invite/index-invite.js
+
 ;
 (function() {
   let teamSlider = q('.index-team__team'),
@@ -189,6 +191,8 @@ document.addEventListener('DOMContentLoaded', function() {
   } // endif teamBlock
 })();
 
+//=include ../sections/index-form/index-form.js
+
 ;
 (function() {
   let paymentSlider = q('.index-payment__list'),
@@ -252,6 +256,170 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 
 //=include ../sections/index-chat/index-chat.js
+
+;
+(function() {
+  let instagramSlider = q('.index-instagram__posts'),
+    slidesSelector = '.instagram-post';
+
+  // lazyload ?
+
+  if (instagramSlider) {
+    let initInstagramSlider = function() {
+      console.log('initInstagramSlider');
+      let buildInstagramSlider = function() {
+        console.log('buildInstagramSlider');
+        let $slider = $(instagramSlider),
+          slides = qa(slidesSelector, instagramSlider);
+
+        if (media('(min-width:1279.98px)') && slides.length < 5) {
+          if (SLIDER.hasSlickClass($slider)) {
+            SLIDER.unslick($slider);
+          }
+        } else if (media('(min-width:767.98px)') && slides.length < 4) {
+          if (SLIDER.hasSlickClass($slider)) {
+            SLIDER.unslick($slider);
+          }
+        } else if (media('(min-width:575.98px)') && slides.length < 3) {
+          if (SLIDER.hasSlickClass($slider)) {
+            SLIDER.unslick($slider);
+          }
+        } else {
+          if (SLIDER.hasSlickClass($slider)) {
+            return;
+          }
+          if (slides.length && slides.length > 1) {
+            $slider.slick({
+              slide: slidesSelector,
+              infinite: false,
+              arrows: false,
+              centerMode: true,
+              centerPadding: 'calc((100vw - 320px)/ (575 - 320)*(135 - 50) + 50px)',
+              mobileFirst: true,
+              responsive: [{
+                breakpoint: 575.98,
+                settings: {
+                  centerMode: false,
+                  slidesToShow: 2,
+                  slidesToScroll: 2
+                }
+              }, {
+                breakpoint: 767.98,
+                settings: {
+                  centerMode: false,
+                  slidesToShow: 3,
+                  slidesToScroll: 3
+                }
+              }, {
+                breakpoint: 1279.98,
+                settings: {
+                  centerMode: false,
+                  slidesToShow: 4,
+                  slidesToScroll: 4
+                }
+              }]
+            });
+          }
+        }
+      };
+
+      buildInstagramSlider();
+      windowFuncs.resize.push(buildInstagramSlider);
+
+      instagramSlider.removeEventListener('lazyloaded', initInstagramSlider);
+    };
+
+
+    instagramSlider.addEventListener('lazyloaded', initInstagramSlider);
+  }
+})();
+
+;
+(function() {
+  let reviewsSlider = q('.reviews-sect__reviews'),
+    slidesSelector = '.reviews-sect__review';
+
+  // lazyload ?
+
+  if (reviewsSlider) {
+    let changeSwipe = function(e) {
+        let target = e.target,
+          option;
+
+        if (e.type === 'touchend') {
+          option = true;
+        } else {
+          let parent = target.closest('.review__photos');
+          console.log([parent]);
+          if (parent) {
+            let scrollWidth = parent.scrollWidth,
+                clientWidth = parent.clientWidth,
+                scrollLeft = parent.scrollLeft;
+            // Если внутри блока есть прокрутка
+            if (scrollWidth > clientWidth) {
+              // Если прокрутка прокручена до конца
+              // if (scrollLeft + clientWidth === scrollWidth) {
+                // option = true;
+              // } else {
+                option = false;
+              // }
+            } else {
+              option = true;
+            }
+          } else {
+            option = true;
+          }
+        }
+
+        $(reviewsSlider).slick('slickSetOption', 'swipe', option);
+      },
+      initReviewsSlider = function() {
+        console.log('initReviewsSlider');
+        let buildReviewsSlider = function() {
+          console.log('buildReviewsSlider');
+          let $slider = $(reviewsSlider),
+            slides = qa(slidesSelector, reviewsSlider);
+
+          if (SLIDER.hasSlickClass($slider)) {
+            return;
+          }
+          if (slides.length && slides.length > 1) {
+            $slider.slick({
+              appendDots: $('.reviews-sect__nav', reviewsSlider.parentElement),
+              slide: slidesSelector,
+              infinite: false,
+              arrows: false,
+              dots: true,
+              swipe: false,
+              draggable: false,
+              dotsClass: 'reviews-sect__dots dots',
+              customPaging: function() {
+                return SLIDER.dot;
+              }
+            });
+          }
+
+          reviewsSlider.addEventListener('touchstart', changeSwipe);
+          reviewsSlider.addEventListener('touchend', changeSwipe);
+          // $slider.on('afterChange', function() {
+          //   qa('.review__photos', reviewsSlider).forEach(el => el.scrollLeft = 0);
+          //   $slider.slick('slickSetOption', 'swipe', true);
+          // });
+
+          // reviewsSlider.addEventListener('touchstart', disallowSwipe);
+          // reviewsSlider.addEventListener('touchend', allowSwipe);
+        }
+
+        buildReviewsSlider();
+        windowFuncs.resize.push(buildReviewsSlider);
+
+        reviewsSlider.removeEventListener('lazyloaded', initReviewsSlider);
+      };
+
+
+    reviewsSlider.addEventListener('lazyloaded', initReviewsSlider);
+  }
+})();
 
 //=include ../sections/footer/footer.js
 

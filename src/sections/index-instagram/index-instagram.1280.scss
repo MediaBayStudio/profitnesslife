@@ -1,3 +1,39 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-instagram {
+  &__title {}
+
+  &__main-link {}
+
+  &__posts {
+
+  }
+
+  &__post {
+    width: 260px;
+    height: 260px;
+  }
+
+  &__links {
+    display: flex;
+    flex-flow: wrap;
+  }
+
+  &__link {
+    &:not(:last-child) {
+      margin-right: 30px;
+    }
+  }
+}
+
+.instagram-post {
+  &__img {}
+
+  &__overlay {}
+
+  &__likes {}
+
+  &__comments {}
+}

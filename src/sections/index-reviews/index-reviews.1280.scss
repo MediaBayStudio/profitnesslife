@@ -1,3 +1,54 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.reviews-sect {
+  &__title {}
+
+  &__reviews {}
+
+  &__review {}
+}
+
+.review {
+  &__author {}
+
+  &__author-pic {}
+
+  &__author-img {}
+
+  &__author-text {}
+
+  &__author-name {}
+
+  &__author-insta {}
+
+  &__photos {}
+
+  &__before-pic,
+  &__after-pic {
+    width: 280px;
+    height: 345px;
+  }
+
+  &__before {}
+
+  &__before-pic {}
+
+  &__before-img {}
+
+  &__before-weight {}
+
+  &__after {}
+
+  &__after-pic {}
+
+  &__after-img {}
+
+  &__after-weight {}
+
+  &__text {
+    margin: 0 95px 0 0;
+    max-width: 470px;
+  }
+}

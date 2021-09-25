@@ -48,12 +48,19 @@ add_action( 'wp_generate_attachment_metadata', function ( $image_meta, $img_id )
 
   $webp_name = $img_pathinfo['filename'] . '.webp';
   $webp_path = $upload_dir . '/' . $webp_name;
+  $webp_quality = '90';
 
-  $cwebp = '/usr/local/bin/cwebp -q 90 ' . $img_pathinfo['basename'] . ' -o ' . $webp_name;
+  if ( stripos( $webp_name, 'review' ) !== false ) {
+    $webp_quality = '100';
+  }
+
+  $cwebp = '/usr/local/bin/cwebp -q ' . $webp_quality . ' ' . $img_pathinfo['basename'] . ' -o ' . $webp_name;
 
   chdir( $dirname );
   exec( $cwebp );
-  minifyImg( $img_path );
+  if ( stripos( $webp_name, 'review' ) === false ) {
+    minifyImg( $img_path );
+  }
   update_post_meta( $img_id, 'webp', $webp_path );
 
   return $image_meta;

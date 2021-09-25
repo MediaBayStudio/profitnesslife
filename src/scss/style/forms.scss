@@ -8,7 +8,7 @@ label.invalid {
   left: 0;
   bottom: -20px;
   font: normal 10px/150% sans-serif;
-  // color: $error;
+  color: $coral;
 }
 
 // Если ошибка, то можно подчеркнуть поле
@@ -130,8 +130,8 @@ label.invalid {
 
 // Рассчет размера нужен для ограничения ширины блока
 // чтобы сообщение об ошибке вставало корректно
-$checkbox_size: 13px;
-$checkbox_margin_right: 10px;
+$checkbox_size: 15px;
+$checkbox_margin_right: 5px;
 $checkbox_text_width: calc(100% - #{$checkbox_size + $checkbox_margin_right});
 // $checkbox_border_radius: 0;
 
@@ -144,23 +144,48 @@ $checkbox_text_width: calc(100% - #{$checkbox_size + $checkbox_margin_right});
     align-items: flex-start;
     max-width: 250px;
     flex-wrap: wrap;
-    font: 12px/140% Montserrat;
+    font: 12px/140% $roboto;
+    color: #A6A6A6;
 
     >.check__text {
       width: $checkbox_text_width;
     }
 
-    >.check__inp {
-      margin: 4px $checkbox_margin_right 0 0;
+    >.check__pseudo-inp {
+      margin: 0 $checkbox_margin_right 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: $checkbox_size;
       height: $checkbox_size;
-      background: transparent url('../img/check.svg') center/0 border-box no-repeat;
-      transition: background .25s;
-      pointer-events: none;
+      border: 1px solid $accentGreen;
+      border-radius: 3px;
+      transition: background .5s;
+      &::after {
+        content: '';
+        margin: 2px 0 0 1px;
+        height: 5px;
+        width: 9px;
+        border-left: 1px solid #fff;
+        border-bottom: 1px solid #fff;
+        transform: rotate(-45deg);
+        transform-origin: left;
+        opacity: 0;
+        transition: opacity .5s;
+        pointer-events: none;
+      }
+    }
+
+    >.check__inp {
+      display: none;
 
       &:checked {
-        // background-color: $green;
-        background-size: 100%;
+        +.check__pseudo-inp {
+          background: $accentGreen;
+          &::after {
+            opacity: 1;
+          }
+        }
       }
     }
   }
@@ -208,12 +233,17 @@ $checkbox_text_width: calc(100% - #{$checkbox_size + $checkbox_margin_right});
   &__link {
     display: inline-block;
   }
+
+  &__link {
+    text-decoration: underline;
+  }
 }
 
 .field {
   display: inline-block;
   font: 14px/1 $roboto;
   position: relative;
+  color: #A6A6A6;
 
   &__textarea,
   &__inp {

@@ -1,3 +1,30 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-instagram {
+  &__title {}
+
+  &__main-link {}
+
+  &__posts {
+    >.slick-list {
+      margin: 0;
+      overflow: hidden;
+    }
+  }
+
+  &__post {
+    height: 248px;
+  }
+}
+
+.instagram-post {
+  &__img {}
+
+  &__overlay {}
+
+  &__likes {}
+
+  &__comments {}
+}

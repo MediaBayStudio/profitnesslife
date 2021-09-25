@@ -8,8 +8,9 @@
   add_action( 'admin_init', function() {
     $options = [
       'tel'     =>  'Телефон',
-      // 'address' =>  'Адрес',
       'email'   =>  'E-mail',
+      'instagram_last_update'     =>  'Последнее обновление отзывов Instagram',
+      // 'address' =>  'Адрес',
       // 'coords'  =>  'Координаты маркера на карте',
       // 'zoom'    =>  'Увеличение карты'
     ];

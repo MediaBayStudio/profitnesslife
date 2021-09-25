@@ -1,34 +1,63 @@
 <?php
 
 add_action('init', function () {
-	// return;
-	// register_post_type( 'product', [
-	//   'label'  => null,
-	//   'labels' => [
-	//     'name'               => 'Продукты',
-	//     'singular_name'      => 'Продукты',
-	//     'add_new'            => 'Добавить',
-	//     'add_new_item'       => 'Добавление',
-	//     'edit_item'          => 'Редактирование',
-	//     'new_item'           => 'Новый ',
-	//     'view_item'          => 'Смотреть',
-	//     'search_items'       => 'Искать',
-	//     'not_found'          => 'Не найдено',
-	//     'not_found_in_trash' => 'Не найдено в корзине',
-	//     'parent_item_colon'  => '',
-	//     'menu_name'          => 'Продукты',
-	//   ],
-	//   'description'         => '',
-	//   'public'              => true,
-	//   'show_in_menu'        => null,
-	//   'show_in_rest'        => true,
-	//   'rest_controller_class' => 'WP_REST_Posts_Controller',
-	//   'menu_position'       => null,
-	//   'menu_icon'           => null,
-	//   'hierarchical'        => false,
-	//   'supports'            => [ 'title', 'thumbnail' ],
-	//   'taxonomies'          => [ 'product_category' ]
-	// ] );
+
+	
+	register_post_type('review', [
+		'label' => null,
+		'labels' => [
+			'name' => 'Отзывы',
+			'singular_name' => 'Отзыв',
+			'add_new' => 'Добавить',
+			'add_new_item' => 'Добавление',
+			'edit_item' => 'Редактирование',
+			'new_item' => 'Новый ',
+			'view_item' => 'Смотреть',
+			'search_items' => 'Искать',
+			'not_found' => 'Не найдено',
+			'not_found_in_trash' => 'Не найдено в корзине',
+			'parent_item_colon' => '',
+			'menu_name' => 'Отзывы',
+		],
+		'description' => '',
+		'public' => true,
+		'show_in_menu' => null,
+		'show_in_rest' => true,
+		'rest_controller_class' => 'WP_REST_Posts_Controller',
+		'menu_position' => null,
+		'menu_icon' => null,
+		'hierarchical' => false,
+		'supports' => ['title'],
+		'taxonomies' => [],
+	] );
+
+	register_post_type('instagram_post', [
+		'label' => null,
+		'labels' => [
+			'name' => 'Instagram посты',
+			'singular_name' => 'Instagram пост',
+			'add_new' => 'Добавить',
+			'add_new_item' => 'Добавление',
+			'edit_item' => 'Редактирование',
+			'new_item' => 'Новый ',
+			'view_item' => 'Смотреть',
+			'search_items' => 'Искать',
+			'not_found' => 'Не найдено',
+			'not_found_in_trash' => 'Не найдено в корзине',
+			'parent_item_colon' => '',
+			'menu_name' => 'Instagram посты',
+		],
+		'description' => '',
+		'public' => true,
+		'show_in_menu' => null,
+		'show_in_rest' => true,
+		'rest_controller_class' => 'WP_REST_Posts_Controller',
+		'menu_position' => null,
+		'menu_icon' => null,
+		'hierarchical' => false,
+		'supports' => ['title'],
+		'taxonomies' => [],
+	] );
 
 	register_post_type('dish', [
 		'label' => null,
@@ -56,7 +85,7 @@ add_action('init', function () {
 		'hierarchical' => false,
 		'supports' => ['title'],
 		'taxonomies' => ['dish_category', 'dish_type', 'dish_ingredients'],
-	]);
+	] );
 
 	register_taxonomy('dish_category', ['dish'], [
 		'label' => '',
@@ -78,7 +107,7 @@ add_action('init', function () {
 		'meta_box_cb' => false,
 		'show_in_rest' => true,
 		'rest_controller_class' => 'WP_REST_Posts_Controller',
-	]);
+	] );
 
 	register_taxonomy('dish_type', ['dish'], [
 		'label' => '',
@@ -100,7 +129,7 @@ add_action('init', function () {
 		'meta_box_cb' => false,
 		'show_in_rest' => true,
 		'rest_controller_class' => 'WP_REST_Posts_Controller',
-	]);
+	] );
 
 	register_taxonomy('dish_ingredients', ['dish'], [
 		'label' => '',
@@ -122,7 +151,7 @@ add_action('init', function () {
 		'meta_box_cb' => false,
 		'show_in_rest' => true,
 		'rest_controller_class' => 'WP_REST_Posts_Controller',
-	]);
+	] );
 
 	// register_post_type( 'recipe', [
 	//   'label'  => null,

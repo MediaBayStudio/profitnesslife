@@ -24,3 +24,21 @@
     color: $accentGreen;
   }
 }
+
+.instagram-post {
+  &:hover {
+    border-color: $coral;
+  }
+}
+
+.index-instagram__main-link {
+  &:hover {
+    border-bottom-color: $coral;
+  }
+}
+
+.index-instagram__link {
+  &:hover {
+    color: $coral;
+  }
+}
