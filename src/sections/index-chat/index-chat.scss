@@ -23,11 +23,12 @@
 
   &__link-img {}
 
-  &__pic {
+  // &__pic {}
+
+  &__img {
     margin: 10px 0 0;
     display: block;
     max-width: 375px;
+    width: 100%;
   }
-
-  &__img {}
 }

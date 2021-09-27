@@ -94,6 +94,7 @@
         'items_wrap'      => '<ul class="%2$s">%3$s</ul>'
       ] ) ?>
       <button type="button" class="hdr__burger"></button>
-      <button type="button" class="hdr__login btn btn-ol">Личный кабинет</button> <?php
+      <!-- <button type="button" class="hdr__login btn btn-ol">Личный кабинет</button> -->
+      <a href="<?php echo $site_url ?>/account" class="hdr__login btn btn-ol">Личный кабинет</a> <?php
       require 'template-parts/mobile-menu.php' ?>
     </header>

@@ -14,9 +14,11 @@
     margin: 0 0 50px;
   }
 
-  &__pic {}
+  // &__pic {}
 
-  &__img {}
+  &__img {
+    max-width: 480px;
+  }
 }
 
 .index-form {

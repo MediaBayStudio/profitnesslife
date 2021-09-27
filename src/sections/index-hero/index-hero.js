@@ -4,7 +4,7 @@
     marqueeText = marquee.getAttribute('data-date'),
     marqueeCnt = '';
 
-  for (let i = 70; i >= 0; i--) {
+  for (let i = 100; i >= 0; i--) {
     marqueeCnt += marqueeText;
   }
 

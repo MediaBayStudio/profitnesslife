@@ -14,9 +14,11 @@
 
   &__descr {}
 
-  &__pic {}
+  // &__pic {}
 
-  &__img {}
+  &__img {
+    max-width: 360px;
+  }
 }
 
 .index-form {

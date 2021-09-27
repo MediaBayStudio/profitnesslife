@@ -1,3 +1,56 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-interface {
+  &__title {}
+
+  &__screens {}
+
+  &__screens-tabs {
+    margin: 0 0 20px;
+  }
+
+  &__screens-tab {
+    padding: 15px 40px;
+    &.active {}
+  }
+
+  &__screen {
+    padding: 70px 80px;
+    &.acitve {}
+  }
+}
+
+.nutrition-screen,
+.training-screen,
+.support-screen,
+.progress-screen {
+  &__pic {}
+
+  &__img {}
+}
+
+.nutrition-screen {
+  &__pic {}
+
+  &__img {}
+}
+
+.training-screen {
+  &__pic {}
+
+  &__img {}
+}
+
+.support-screen {
+  &__pic {}
+
+  &__img {}
+}
+
+.progress-screen {
+  &__pic {}
+
+  &__img {}
+}

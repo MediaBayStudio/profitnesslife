@@ -1,3 +1,104 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.index-interface {
+  &__title {}
+
+  &__screens {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 100%;
+  }
+
+  &__screens-tabs {
+    grid-row: 1;
+    grid-column: 1;
+    margin: 0 0 15px -20px;
+    padding: 0 20px 5px;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    color: $pistachio;
+  }
+
+  &__screens-tab {
+    padding: 15px 20px;
+    transition: color .5s;
+    &:not(:last-child) {
+      margin: 0 10px 0 0;
+    }
+    &.active {
+      color: $black;
+      transition: color .5s .25s;
+      pointer-events: none;
+    }
+  }
+
+  &__screens-tab-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 25px;
+    background: linear-gradient(275deg, #B0BBA7 -28%, #F3F2EE 98%);
+    transform: translate3d(0, 0, 0);
+    transition: transform .5s, width .5s;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  &__screen {
+    grid-row: 2;
+    grid-column: 1;
+    padding: 25px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(270deg, #B0BBA7 -50%, #F3F2EE 112%);
+    border-radius: 25px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .5s, visibility .5s;
+    &.active {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity .5s .25s, visibility .5s .25s;
+    }
+  }
+}
+
+.nutrition-screen,
+.training-screen,
+.support-screen,
+.progress-screen {
+  &__pic {}
+
+  &__img {}
+}
+
+.nutrition-screen {
+  &__pic {}
+
+  &__img {}
+}
+
+.training-screen {
+  &__pic {}
+
+  &__img {}
+}
+
+.support-screen {
+  &__pic {}
+
+  &__img {}
+}
+
+.progress-screen {
+  &__pic {}
+
+  &__img {}
+}

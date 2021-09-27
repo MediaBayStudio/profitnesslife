@@ -11,9 +11,11 @@
 
   &__descr {}
 
-  &__pic {}
+  // &__pic {}
 
-  &__img {}
+  &__img {
+    max-width: 650px;
+  }
 }
 
 .index-form {

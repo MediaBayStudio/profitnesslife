@@ -12,11 +12,5 @@
     endforeach ?>
     </ul>
   </div>
-  <picture class="index-chat__pic lazy"> <?php
-    $webp = get_post_meta( $section['img']['id'], 'webp' )[0];
-    if ( $webp ) : ?>
-      <source type="image/webp" srcset="#" data-srcset="<?php echo $upload_baseurl . $webp ?>"> <?php
-    endif ?>
-    <img src="#" alt="#" data-src="<?php echo $section['img']['url'] ?>" class="index-chat__img">
-  </picture>
+  <img src="#" alt="image" data-src="<?php echo $template_directory_uri ?>/img/index-chat-img.svg" class="index-chat__img lazy">
 </section>

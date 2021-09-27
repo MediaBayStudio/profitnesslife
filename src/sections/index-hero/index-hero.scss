@@ -7,7 +7,7 @@
     transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-25%, 0, 0);
   }
 }
 
@@ -61,6 +61,7 @@
     pointer-events: none;
     font-size: 14px;
     text-transform: uppercase;
+    transform: translate3d(0, 0, 0);
     &.animating {
       animation: translateLine 80s linear infinite;
     }

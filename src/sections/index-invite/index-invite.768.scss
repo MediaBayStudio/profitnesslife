@@ -6,12 +6,17 @@
   margin: $sectionVerticalPadding768 0;
   display: flex;
   align-items: center;
-  &__pic {
+  // &__pic {
+  //   margin: 0;
+  //   order: 10;
+  // }
+
+  // &__img {}
+
+  &__img {
     margin: 0;
     order: 10;
   }
-
-  &__img {}
 
   &__text {}
 
