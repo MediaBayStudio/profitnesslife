@@ -46,8 +46,15 @@
     }
   }
 
+  &.chat-hero {
+    .account-hero__img {
+      width: 245px;
+      height: 220px;
+    }
+  }
+
   &__img {
-    margin: 0 auto 25px;
+    margin: 0 auto;
     display: block;
   }
 
@@ -67,6 +74,10 @@
     >.btn {
       width: 100%;
       padding: 9px;
+      &:nth-child(2) {
+        margin: 15px 0 0;
+      }
     }
+
   }
 }

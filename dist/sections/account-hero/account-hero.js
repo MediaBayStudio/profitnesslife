@@ -68,7 +68,7 @@
       chart.update();
     };
 
-  updateSvgBar(weightGoalCurrent.textContent / weightGoalTotal.textContent * 100);
+  updateSvgBar(parseInt(weightGoalCurrent.textContent) / parseInt(weightGoalTotal.textContent) * 100);
 
   weightForm['current-weight'].addEventListener('input', function(e) {
     weightForm.submit.classList.toggle('disabled', e.target.value.length <= 1);
@@ -105,9 +105,9 @@
 
         id('current-weight-date').textContent = today;
         id('current-weight-number').textContent = weight + ' кг';
-        weightGoalCurrent.textContent = Math.abs(weight - weightForm.getAttribute('data-target-weight'));
+        weightGoalCurrent.textContent = Math.abs(weight - weightForm.getAttribute('data-target-weight')) + ' /';
 
-        updateSvgBar(weightGoalCurrent.textContent / weightGoalTotal.textContent * 100);
+        updateSvgBar(parseInt(weightGoalCurrent.textContent) / parseInt(weightGoalTotal.textContent) * 100);
 
         console.log(today);
 

@@ -4,7 +4,7 @@
 	Template name: questionnaire
 */
 
-get_header();
+get_header( 'account' );
 
 // $user_id определяется в functions.php
 // $questionnaire_complete определяется в functions.php

@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
       chart.update();
     };
 
-  updateSvgBar(weightGoalCurrent.textContent / weightGoalTotal.textContent * 100);
+  updateSvgBar(parseInt(weightGoalCurrent.textContent) / parseInt(weightGoalTotal.textContent) * 100);
 
   weightForm['current-weight'].addEventListener('input', function(e) {
     weightForm.submit.classList.toggle('disabled', e.target.value.length <= 1);
@@ -111,9 +111,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         id('current-weight-date').textContent = today;
         id('current-weight-number').textContent = weight + ' кг';
-        weightGoalCurrent.textContent = Math.abs(weight - weightForm.getAttribute('data-target-weight'));
+        weightGoalCurrent.textContent = Math.abs(weight - weightForm.getAttribute('data-target-weight')) + ' /';
 
-        updateSvgBar(weightGoalCurrent.textContent / weightGoalTotal.textContent * 100);
+        updateSvgBar(parseInt(weightGoalCurrent.textContent) / parseInt(weightGoalTotal.textContent) * 100);
 
         console.log(today);
 
@@ -177,6 +177,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     weightChart = new Chart(weightChartCtx, {
       type: 'line',
+      defaults: {
+        borderColor: 'red'
+      },
       data: {
         labels: dates,
         datasets: [{
@@ -189,13 +192,33 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       options: {
         scales: {
+          x: {
+            ticks: {
+              color: '#B0BBA7',
+              font: {
+                size: 10,
+                family: 'Roboto'
+              }
+            },
+            grid: {
+              display: false
+            }
+          },
           y: {
+            ticks: {
+              stepSize: 1,
+              color: '#B0BBA7',
+              font: {
+                size: 10,
+                family: 'Roboto'
+              }
+            },
+            grid: {
+              display: false
+            },
             beginAtZero: true,
             min: weights[weights.length - 1] - 2,
-            max: +weights[0] + 1,
-            ticks: {
-              stepSize: 1
-            }
+            max: +weights[0] + 1
           }
         }
       }
@@ -222,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       let data = new FormData(measureForm),
         date = new Date(),
-        today = ('0' + date.getDate()).slice() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+        today = ('0' + date.getDate()).slice(-2) + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
 
       data.append('action', 'measure_send');
       data.append('date', today);

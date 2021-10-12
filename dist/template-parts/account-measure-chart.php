@@ -26,17 +26,17 @@ $measure_timeline_count = $user_data['measure_timeline'] ? count( $user_data['me
       <span class="measure-current__title">Текущие параметры</span>
       <span class="measure-current__date" id="measure-date"><?php echo $measure_date ?></span>
       <table class="measure-current__table">
-        <tr>
-          <td>грудь (см)</td>
-          <td id="measure-chest-value"><?php echo $chest ?></td>
+        <tr class="measure-current__table-row">
+          <td class="measure-current__table-left">грудь (см)</td>
+          <td class="measure-current__table-right" id="measure-chest-value"><?php echo $chest ?></td>
         </tr>
-        <tr>
-          <td>талия (см)</td>
-          <td id="measure-waist-value"><?php echo $waist ?></td>
+        <tr class="measure-current__table-row">
+          <td class="measure-current__table-left">талия (см)</td>
+          <td class="measure-current__table-right" id="measure-waist-value"><?php echo $waist ?></td>
         </tr>
-        <tr>
-          <td>бёдра (см)</td>
-          <td id="measure-hip-value"><?php echo $hip ?></td>
+        <tr class="measure-current__table-row">
+          <td class="measure-current__table-left">бёдра (см)</td>
+          <td class="measure-current__table-right" id="measure-hip-value"><?php echo $hip ?></td>
         </tr>
       </table>
     </div> <?php
@@ -84,25 +84,25 @@ $measure_timeline_count = $user_data['measure_timeline'] ? count( $user_data['me
         <table class="measure-form__data-table">
           <tr>
             <td>
-              <input type="number" name="chest" placeholder="Обхват груди">
+              <input type="number" name="chest" placeholder="Обхват груди" class="measure-form__data-input">
             </td>
             <td>см</td>
           </tr>
           <tr>
             <td>
-              <input type="number" name="waist" placeholder="Обхват талии">
+              <input type="number" name="waist" placeholder="Обхват талии" class="measure-form__data-input">
             </td>
             <td>см</td>
           </tr>
           <tr>
             <td>
-              <input type="number" name="hip" placeholder="Обхват бёдер">
+              <input type="number" name="hip" placeholder="Обхват бёдер" class="measure-form__data-input">
             </td>
             <td>см</td>
           </tr>
         </table>
-        <button name="submit" class="measure-form__btn btn btn-green disabled">Сохранить</button>
       </div>
+      <button name="submit" class="measure-form__btn btn btn-green disabled">Сохранить</button>
     </form>
     <canvas id="measure-chart"></canvas>
   </div>

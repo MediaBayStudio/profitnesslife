@@ -1,3 +1,125 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.measure-sect {
+  padding: 40px 0 0;
+  &__title {
+    margin: 0 0 20px;
+    font: bold 20px/1 $notoSans;
+  }
+
+  &__descr {}
+
+  &__user-data {}
+
+  &__user-current-data {}
+
+  &__form {}
+}
+
+.measure-current {
+  margin: 10px 0 0;
+  padding: 25px 15px 20px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  background: #FDFDFD;
+  box-shadow: 0px 8px 20px rgba(147, 167, 181, 0.15);
+  border-radius: 30px;
+  &__title {
+    font: bold 18px/1 $notoSans;
+  }
+
+  &__date {
+    margin: 10px 0 0;
+    color: $coral;
+  }
+
+  &__table {
+    margin: 20px 0 0;
+    width: 100%;
+    border-spacing: 0 10px;
+    font: 14px/1 $roboto;
+  }
+
+  &__table-left {
+    padding: 0 0 5px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  &__table-right {
+    padding: 0 0 5px;
+    text-align: right;
+    font: bold 24px/1 $notoSans;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  &__table-row {
+    &:last-child {
+      >.measure-current__table-left,
+      >.measure-current__table-right {
+        border-bottom: 0;
+        padding: 0;
+      }
+    }
+  }
+}
+
+.measure-form {
+  margin: 20px 0 0;
+  padding: 25px 15px 20px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  background: #FDFDFD;
+  box-shadow: 0px 8px 20px rgba(147, 167, 181, 0.15);
+  border-radius: 30px;
+  text-align: center;
+
+  &.disabled {
+    .measure-form__data,
+    .measure-form__btn {
+      opacity: 0.5;
+      pointer-events: none;
+    } 
+  }
+
+  &__title {
+    font: bold 18px/1 $notoSans;
+  }
+
+  &__descr {
+    margin: 10px 0 0;
+    color: $coral;
+  }
+
+  &__data {
+    margin: 30px 0 0;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__img {}
+
+  &__data-table {
+    border-spacing: 0 10px;
+    td {
+      padding: 0 0 5px;
+      border-bottom: 1px solid #eee;
+    }
+  }
+
+  &__data-input {
+    border: 0;
+    &::placeholder {
+      color: #555;
+    }
+  }
+
+  &__btn {
+    margin: 30px 0 0;
+    padding: 9px;
+    width: 100%;
+  }
+}

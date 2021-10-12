@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
   //=include components/telMask.js
 
   //=include ../components/account-hero-block/account-hero-block.js
-  
+
   //=include components/validateForms.js
 
   //=include components/menu.js
@@ -35,6 +35,28 @@ document.addEventListener('DOMContentLoaded', function() {
     fade: true,
     allowPageScroll: false
   });
+
+  if (q('.side-menu')) {
+    if (media('(max-width:767.98px)')) {
+      sideMenu = mobileMenu({
+        menu: q('.side-menu'),
+        menuCnt: q('.side-menu__cnt'),
+        openBtn: burger,
+        closeBtn: q('.side-menu__close'),
+        fade: true,
+        allowPageScroll: false
+      });
+      sideMenu.menu.addEventListener('menubeforeopen', function() {
+        let images = qa('.side-menu__pic > source, .side-menu__logout-pic > source', this);
+        for (let i = images.length - 1; i >= 0; i--) {
+          images[i].removeAttribute('media');
+        }
+      });
+      // sideMenu.open();
+    } else {
+      sideMenu && sideMenu.destroy();
+    }
+  }
 
   // let navLinks = qa('.nav-link, .hdr__callback');
 

@@ -14,10 +14,15 @@ body.no-scroll {
 body {
   font: 14px/150% $roboto;
   color: $black;
+  background: #F3F2EE;
 }
 
 .account-page-wrapper {
   position: relative;
+}
+
+.account-page-sections {
+  padding-top: 30px;
 }
 
 // Обертка для всего контента
@@ -155,6 +160,10 @@ span.wpcf7-not-valid-tip,
 
 
 @media (min-width:767.98px) {
+  .account-page-sections {
+    padding-top: 35px;
+  }
+  
   body {
     font-size: 15px;
 
@@ -212,6 +221,7 @@ span.wpcf7-not-valid-tip,
     &.page-template-plan-diet,
     &.page-template-training-program,
     &.page-template-questionnaire {
+      background: $white;
       >#page-wrapper {
 
         &::before {
@@ -228,7 +238,7 @@ span.wpcf7-not-valid-tip,
 
   .account-page-sections {
     margin: 0 0 0 auto;
-    padding: 25px 0 0;
+    padding: 10px 0 0;
     width: 630px;
   }
 
@@ -268,7 +278,8 @@ span.wpcf7-not-valid-tip,
   }
 
   .account-page-sections {
-    width: 745px;    
+    width: 745px;
+    padding: 15px 0 0;
   }
 
   .sect {

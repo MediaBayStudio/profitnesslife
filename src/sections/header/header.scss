@@ -11,6 +11,7 @@
   &__logo {}
 
   &__nav,
+  &__logout,
   &__login {
     display: none;
   }
@@ -21,4 +22,8 @@
     height: 13px;
     background: url('../img/icon-burger.svg') center/contain no-repeat;
   }
+}
+
+.hdr-account {
+  background: $white;
 }

@@ -3,20 +3,132 @@
 @import '../../scss/assets/variables';
 
 .side-menu {
-  display: none;
+  width: 100%;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  max-height: 100vh;
+  max-height: calc(var(--vh, 1vh) * 100);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .5s, visibility .5s;
+  background: rgba(255, 255, 255, .75);
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &__cnt {
+    padding: 20px;
+    height: 100%;
+    // display: flex;
+    // flex-flow: column;
+    // align-items: center;
+    background: $white;
+  }
+
+  &__hdr {
+    padding: 0 0 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &__close {
+    margin: 0 0 0 auto;
+    width: 21px;
+    height: 20px;
+    position: relative;
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 22px;
+      height: 1px;
+      background: currentColor;
+      pointer-events: none;
+    }
+
+    &::before {
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      transform: rotate(-45deg);
+    }
+  }
   &__nav {
   }
 
-  &__nav-list {}
+  &__nav-list {
+    max-width: 450px;
+  }
 
   &__nav-li {
+    margin: 10px 0 0;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    >.nav-link {
+      padding: 0 0 0 20px + 32px + 18px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
     &.disabled {
       filter: grayscale(1);
       pointer-events: none;
     }
+    &.current {
+      color: $white;
+      background: $accentGreen;
+      border-radius: 30px;
+      box-shadow: 4px 4px 15px rgba(133, 185, 33, 0.3);
+      pointer-events: none;
+    }
   }
 
-  &__pic {}
+  &__pic {
+    width: 32px;
+    height: 32px;
+  }
 
-  &__img {}
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &__logout {
+    margin: 30px 0 0 0;
+    padding: 0 0 0 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    flex-flow: row-reverse;
+  }
+
+  &__logout-pic {
+    margin: 0 0 0 10px;
+    width: 18px;
+    height: 17px;
+  }
+
+  &__logout-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }

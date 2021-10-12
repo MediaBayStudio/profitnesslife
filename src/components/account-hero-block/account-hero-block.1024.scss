@@ -4,6 +4,16 @@
 
 .account-hero {
   margin: 0 0 $sectionVerticalPadding1024;
+  &.chat-hero {
+    .account-hero__title {
+    }
+    .account-hero__text {
+    }
+    .account-hero__img {
+      margin: 30px 0 0;
+    }
+  }
+
   &__img {}
 
   &__text {}

@@ -124,6 +124,16 @@ add_action( 'wp', function() {
     $questionnaire_show,
     $questionnaire_complete;
 
+  switch ( $post->post_name ) {
+    case 'questionnaire':
+    case 'training-program':
+    case 'diet-plan':
+    case 'chat':
+    case 'account':
+      $GLOBALS['is_account_page'] = true;
+      break;
+  }
+
   // if ( is_super_admin() ) {
   //   switch ( $post->post_name ) {
   //     case 'questionnaire':

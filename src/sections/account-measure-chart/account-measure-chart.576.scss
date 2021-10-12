@@ -1,3 +1,37 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.measure-sect {
+  &__title {}
+
+  &__descr {}
+
+  &__user-data {}
+
+  &__user-current-data {}
+
+  &__form {}
+}
+
+.measure-current {
+  &__title {}
+
+  &__date {}
+
+  &__table {}
+}
+
+.measure-form {
+  &__title {}
+
+  &__descr {}
+
+  &__data {}
+
+  &__img {}
+
+  &__data-table {}
+
+  &__btn {}
+}

@@ -20,6 +20,7 @@ mobileMenu = function(_) {
     },
     openMenu = function() {
       if (!opened) {
+        dispatchEvent('menubeforeopen', menu);
         if (menu.hasAttribute('style')) {
           menu.removeAttribute('style');
           menu.offsetHeight;

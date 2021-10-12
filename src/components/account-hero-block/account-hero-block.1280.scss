@@ -3,6 +3,17 @@
 @import '../../scss/assets/variables';
 
 .account-hero {
+  &.chat-hero {
+    .account-hero__title {
+    }
+    .account-hero__text {
+    }
+    .account-hero__img {
+      margin: 0;
+      width: 280px;
+      height: 250px;
+    }
+  }
   &__img {}
 
   &__text {}

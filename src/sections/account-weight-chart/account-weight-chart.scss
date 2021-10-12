@@ -1,3 +1,39 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.weight-chart-sect {
+  padding: 40px 0 0;
+
+  &__title {
+    margin: 0 0 20px;
+    font: bold 20px/1 $notoSans;
+  }
+}
+
+.weight-chart {
+  &__tabs {
+    margin: 0 0 15px;
+    display: flex;
+    align-items: center;
+    font: 500 14px/1 $roboto;
+  }
+
+  &__tab {
+    padding: 15px;
+    &.disabled {
+      color: #B0BBA7;
+    }
+    &.active {
+      background: $white;
+      border-radius: 25px;
+    }
+  }
+}
+
+#weight-chart {
+  padding: 15px 10px;
+  background: #FDFDFD;
+  box-shadow: 0px 8px 20px rgba(147, 167, 181, 0.15);
+  border-radius: 30px;
+}

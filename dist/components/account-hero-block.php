@@ -4,6 +4,8 @@ function print_account_hero_section( $args ) {
   global $user_id;
   $defaults = [
     'can_be_hidden' => false,
+    'title_tag' => 'h1',
+    'class' => ''
     // 'title' => '',
     // 'descr' => '',
     // 'img' => [
@@ -23,11 +25,11 @@ function print_account_hero_section( $args ) {
 
   $parsed_args = wp_parse_args( $args, $defaults ) ?>
 
-  <section class="account-hero <?php if ( $parsed_args['can_be_hidden'] ) echo 'account-hero-maybe-close' ?>" data-user-id="<?php echo $user_id ?>">
+  <section class="account-hero<?php echo $parsed_args['class'] ?> <?php if ( $parsed_args['can_be_hidden'] ) echo 'account-hero-maybe-close' ?>" data-user-id="<?php echo $user_id ?>">
     <button type="button" class="account-hero__close" title="Больше не показывать"></button>
-    <img src="<?php echo $parsed_args['img']['url'] ?>" alt="<?php echo $parsed_args['img']['alt'] ?>" width="225" height="166" class="account-hero__img">
+    <img src="<?php echo $parsed_args['img']['url'] ?>" alt="<?php echo $parsed_args['img']['alt'] ?>" class="account-hero__img">
     <div class="account-hero__text">
-      <h1 class="account-hero__title sect-title"><?php echo $args['title'] ?></h1>
+      <<?php echo $parsed_args['title_tag'] ?> class="account-hero__title sect-title"><?php echo $args['title'] ?></<?php echo $parsed_args['title_tag'] ?>>
       <p class="account-hero__descr"><?php echo $args['descr'] ?></p> <?php
       if ( $parsed_args['buttons'] ) : ?>
         <div class="account-hero__btns"> <?php

@@ -5,41 +5,65 @@
 .side-menu {
   display: block;
   width: 100%;
-  position: fixed;
+  height: auto;
+  top: auto;
   bottom: 0;
   left: 0;
-  z-index: 1;
-  background: #fff;
   overflow: hidden;
-  &__nav {
+  opacity: 1;
+  visibility: visible;
+  border-radius: 30px 30px 0 0;
+  box-shadow: 0px 8px 20px rgba(147, 167, 181, 0.15);
+
+  &__cnt {
+    padding: 0;
   }
+
+  &__nav {}
+
   &__nav-list {
+    max-width: 100%;
+    height: 85px;
     display: flex;
     align-items: flex-start;
     text-align: center;
   }
+
   &__nav-li {
+    margin: 0;
     padding: 12px 0;
     width: calc(100% / 5);
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    border-radius: 30px 30px 0 0;
+    height: 100%;
+    justify-content: center;
+
     &.current {
       color: $white;
       background: $accentGreen;
+      border-radius: 30px 30px 0 0;
     }
-    >.nav-link[href$="training-program/"] {
-      font-size: 0;
-      &::after {
-        content: 'Тренировки';
-        font: 15px/150% Roboto,sans-serif;;
+
+    >.nav-link {
+      padding: 50px 0 0 0;
+      justify-content: center;
+      &[href$="training-program/"] {
+        font-size: 0;
+
+        &::after {
+          content: 'Тренировки';
+          font: 15px/150% Roboto, sans-serif;
+        }
       }
     }
   }
+
   &__pic {
-    margin: 0 0 5px;
+    // margin: 0 0 5px;
   }
-  &__img {
+
+  &__img {}
+
+  &__logout,
+  &__hdr {
+    display: none;
   }
 }

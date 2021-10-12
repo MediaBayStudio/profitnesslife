@@ -17,7 +17,7 @@
 
       let data = new FormData(measureForm),
         date = new Date(),
-        today = ('0' + date.getDate()).slice() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+        today = ('0' + date.getDate()).slice(-2) + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
 
       data.append('action', 'measure_send');
       data.append('date', today);

@@ -4,7 +4,7 @@
 	Template name: diet-plan
 */
 
-get_header() ?>
+get_header( 'account' ) ?>
 
 <section class="container account-page-wrapper"> <?php
 	require 'template-parts/side-menu.php' ?>

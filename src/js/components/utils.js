@@ -16,6 +16,12 @@ var browser = {
     isYandex: !!window.yandex,
     isMac: window.navigator.platform.toUpperCase().indexOf('MAC') >= 0
   },
+  dispatchEvent = function(eventName, element) {
+    if (typeof window.CustomEvent === 'function') {
+      let event = new CustomEvent(eventName)
+      element.dispatchEvent(event);
+    }
+  },
   // Размреы экранов для медиазапросов
   // mediaQueries = {
   //   's': '(min-width:575.98px)',
@@ -71,6 +77,7 @@ var browser = {
   mask, // ф-я маски телефонов в поля ввода (в файле telMask.js)
   lazy,
   menu,
+  sideMenu,
   burger,
   hdr,
   overlay,

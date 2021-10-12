@@ -4,7 +4,7 @@
 	Template name: account
 */
 
-get_header();
+get_header( 'account' );
 
 if ( is_user_logged_in() ) { ?>
 	<section class="container account-page-wrapper"> <?php

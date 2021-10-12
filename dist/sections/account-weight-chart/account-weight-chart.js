@@ -47,6 +47,9 @@
 
     weightChart = new Chart(weightChartCtx, {
       type: 'line',
+      defaults: {
+        borderColor: 'red'
+      },
       data: {
         labels: dates,
         datasets: [{
@@ -59,13 +62,33 @@
       },
       options: {
         scales: {
+          x: {
+            ticks: {
+              color: '#B0BBA7',
+              font: {
+                size: 10,
+                family: 'Roboto'
+              }
+            },
+            grid: {
+              display: false
+            }
+          },
           y: {
+            ticks: {
+              stepSize: 1,
+              color: '#B0BBA7',
+              font: {
+                size: 10,
+                family: 'Roboto'
+              }
+            },
+            grid: {
+              display: false
+            },
             beginAtZero: true,
             min: weights[weights.length - 1] - 2,
-            max: +weights[0] + 1,
-            ticks: {
-              stepSize: 1
-            }
+            max: +weights[0] + 1
           }
         }
       }

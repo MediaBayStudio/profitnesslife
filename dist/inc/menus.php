@@ -32,7 +32,7 @@
 
 add_filter( 'wp_nav_menu_items', function( $items, $args ) {
   if ( $args->theme_location === 'side_menu' ) {
-    return preg_replace( '/(<a.*?data-icon="(.*?)">)/', '<picture class="side-menu__pic"><source type="image/svg+xml" srcset="$2" media="(min-width:767.98px)"><img src="#" alt="#" class="side-menu__img"></picture>$1', $items );
+    return preg_replace( '/(<a.*?data-icon="(.*?)">)/', '<picture class="side-menu__pic"><source srcset="$2" media="(min-width:767.98px)"><img src="#" alt="Иконка" data-src="$2" class="side-menu__img"></picture>$1', $items );
   } else {
     return $items;
   }

@@ -1,0 +1,47 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.diet-plan {
+  &__hdr {}
+
+  &__day {}
+
+  &__hdr-date {}
+
+  &__date {}
+
+  &__today {}
+
+  &__calendar-btn {}
+
+  &__calendar {}
+
+  &__list {}
+
+  &__item {}
+
+  &__item-type {}
+
+  &__item-body {}
+
+  &__item-title {}
+
+  &__item-calories {}
+
+  &__item-descr {}
+
+  &__item-igredietns {}
+
+  &__item-igredietns-title {}
+
+  &__item-igredietns-list {}
+
+  &__item-igredietns-li {}
+
+  &__item-recipe {}
+
+  &__item-recipe-title {}
+
+  &__item-recipe-text {}
+}

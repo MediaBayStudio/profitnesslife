@@ -14,6 +14,9 @@
     object-fit: contain;
   }
 
+  &__logout {
+  }
+
   &__nav {
     &-list {}
 
@@ -25,4 +28,22 @@
   &__burger {}
 
   &__login {}
+}
+
+
+.hdr-account {
+  >.hdr__logout {
+    margin: 0 0 0 auto;
+    display: flex;
+    align-items: center;
+    font: 500 14px/1 $roboto;
+  }
+  .hdr__logout-icon {
+    margin: 0 0 0 10px;
+    width: 18px;
+    height: 17px;
+  }
+  >.hdr__burger {
+    display: none;
+  }
 }
