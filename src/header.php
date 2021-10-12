@@ -3,36 +3,52 @@
     $preload,
     $site_url,
     $logo_url,
+    $user,
+    $user_id,
+    $user_data,
+    $current_template,
+    $questionnaire_complete,
     $template_directory_uri;
 
-    if ( !$preload ) {
-      $preload = get_field( 'preload' );
-    }
+  if ( !$preload ) {
+    $preload = get_field( 'preload' );
+  }
 
-    if ( is_front_page() ) {
-      $script_name = 'script-index';
-      $style_name = 'style-index';
+  if ( is_front_page() ) {
+    $script_name = 'script-index';
+    $style_name = 'style-index';
 
-      // $preload[] = $GLOBALS['sections'][0]
+    // $preload[] = $GLOBALS['sections'][0]
+  } else if ( is_404() ) {
+    $script_name = 'script-404';
+    $style_name = 'style-404';
+  } else if ( is_single() ) {
+    $script_name = 'script-single';
+    $style_name = 'style-single';
+  } else {
+    if ( $current_template ) {
+      $script_name = 'script-' . $GLOBALS['current_template'];
+      $style_name = 'style-' . $GLOBALS['current_template'];
 
-    } else if ( is_404() ) {
-      $script_name = 'script-404';
-      $style_name = 'style-404';
-    } else if ( is_single() ) {
-      $script_name = 'script-single';
-      $style_name = 'style-single';
+      // $questionnaire_complete определяется в functions.php
+
+      if ( $current_template === 'questionnaire' ) {
+
+        if ( $questionnaire_complete ) {
+          $preload[] = $template_directory_uri . '/img/questionnaire-hero-img.svg';
+        } else {
+          $preload[] = $template_directory_uri . '/img/questionnaire-start-img.svg';
+        }
+      }
+
     } else {
-      if ( $GLOBALS['current_template'] ) {
-        $script_name = 'script-' . $GLOBALS['current_template'];
-        $style_name = 'style-' . $GLOBALS['current_template'];
-      } else {
-        $script_name = '';
-        $style_name = '';
-      } 
-    }
+      $script_name = '';
+      $style_name = '';
+    } 
+  }
 
-    $GLOBALS['page_script_name'] = $script_name;
-    $GLOBALS['page_style_name'] = $style_name ?>
+  $GLOBALS['page_script_name'] = $script_name;
+  $GLOBALS['page_style_name'] = $style_name ?>
 <!DOCTYPE html>
 <html <?php language_attributes() ?>>
 <head>

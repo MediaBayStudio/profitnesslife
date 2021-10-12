@@ -28,6 +28,7 @@ body {
   overflow-y: auto;
   display: flex;
   flex-flow: column;
+  min-height: 100%;
 }
 
 // img.lazy {
@@ -171,7 +172,7 @@ span.wpcf7-not-valid-tip,
           right: 0;
           top: 0;
           display: block;
-          width: 64%;
+          width: 100%;
           height: 100%;
           background: $light;
           border-radius: 30px 0px 0px 30px;
@@ -202,12 +203,33 @@ span.wpcf7-not-valid-tip,
 }
 
 @media (min-width:1023.98px) {
+
   body {
     font-size: 18px;
+
+    &.page-template-account,
+    &.page-template-chat,
+    &.page-template-plan-diet,
+    &.page-template-training-program,
+    &.page-template-questionnaire {
+      >#page-wrapper {
+
+        &::before {
+          // width: 66.5%;
+          width: responsive('1024->1279', '680->810');
+        }
+      }
+    }
   }
 
   .account-page-wrapper {
     display: flex;
+  }
+
+  .account-page-sections {
+    margin: 0 0 0 auto;
+    padding: 25px 0 0;
+    width: 630px;
   }
 
   .sect {
@@ -230,6 +252,25 @@ span.wpcf7-not-valid-tip,
 }
 
 @media (min-width:1279.98px) {
+   body {
+    &.page-template-account,
+    &.page-template-chat,
+    &.page-template-plan-diet,
+    &.page-template-training-program,
+    &.page-template-questionnaire {
+      >#page-wrapper {
+
+        &::before {
+          width: responsive('1280->2560', '865->1500');
+        }
+      }
+    }
+  }
+
+  .account-page-sections {
+    width: 745px;    
+  }
+
   .sect {
     padding-top: $sectionVerticalPadding1280;
     padding-bottom: $sectionVerticalPadding1280;

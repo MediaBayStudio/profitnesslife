@@ -14,13 +14,30 @@ function questionnaire_card( $args ) {
       // 'height' => 0
     ],
     'radio' => [],
-    'checkbox' => [],
-    'checkboxes' => []
+    'checkbox' => [
+      // 'value' => '',
+      // 'name' => '',
+      // 'id' => '',
+      // 'title' => ''
+    ],
+    'checkboxes' => [
+      // [
+        // 'title' => '',
+        // 'name' => '',
+        // 'value' => ''
+      // ]
+    ]
   ];
 
-  $parsed_args = wp_parse_args( $args, $defaults ) ?>
+  $parsed_args = wp_parse_args( $args, $defaults );
 
-  <div class="questionnaire-card <?php echo $parsed_args['class'] ?>"> <?php
+  $checkbox_without_container = $parsed_args['checkbox'] && $parsed_args['checkbox']['without_container'];
+
+  if ( $checkbox_without_container ) : ?>
+    <label class="questionnaire-card <?php echo $parsed_args['class'] ?>"> <?php
+  else : ?>
+    <div class="questionnaire-card <?php echo $parsed_args['class'] ?>"> <?php
+  endif;
     if ( $parsed_args['img'] ) {
       if ( $parsed_args['lazyload'] ) {
         $img_src = 'src="#" data-src="';
@@ -48,16 +65,32 @@ function questionnaire_card( $args ) {
       </label> <?php
 
     elseif ( $parsed_args['checkbox'] ) :
-      $checkbox_class = $parsed_args['checkbox']['class'] ? ' ' . $parsed_args['checkbox']['class'] : ''?>
-     <label for="<?php echo $parsed_args['checkbox']['id'] ?>" class="questionnaire-card__label"> <?php
-        echo $img_html ?>
-        <input type="checkbox" name="<?php echo $parsed_args['checkbox']['name'] ?>" value="<?php echo $parsed_args['checkbox']['value'] ?>" id="<?php echo $parsed_args['checkbox']['id'] ?>" class="questionnaire-card__checkbox-input<?php echo $checkbox_class ?>">
+      $checkbox_class = $parsed_args['checkbox']['class'] ? ' ' . $parsed_args['checkbox']['class'] : '';
+      if ( !$parsed_args['checkbox']['checkbox_inside'] ) : ?>
+        <input type="checkbox" name="<?php echo $parsed_args['checkbox']['name'] ?>" value="<?php echo $parsed_args['checkbox']['value'] ?>" id="<?php echo $parsed_args['checkbox']['id'] ?>" class="questionnaire-card__checkbox-input<?php echo $checkbox_class ?>"> <?php
+      endif;
+      if ( !$checkbox_without_container ) : ?>
+        <label for="<?php echo $parsed_args['checkbox']['id'] ?>" class="questionnaire-card__label"> <?php
+      endif;
+        if ( $parsed_args['checkbox']['image_first'] ) {
+          echo $img_html;
+        }
+        if ( $parsed_args['checkbox']['checkbox_inside'] ) : ?>
+          <input type="checkbox" name="<?php echo $parsed_args['checkbox']['name'] ?>" value="<?php echo $parsed_args['checkbox']['value'] ?>" id="<?php echo $parsed_args['checkbox']['id'] ?>" class="questionnaire-card__checkbox-input<?php echo $checkbox_class ?>"> <?php
+        endif;
+        if ( !$parsed_args['checkbox']['image_first'] ) {
+          echo $img_html;
+        } ?>
         <span class="questionnaire-card__checkbox-pseudo-input checkbox-pseudo-input"></span>
-        <span class="questionnaire-card__checkbox-text checkbox-text"><?php echo $parsed_args['checkbox']['title'] ?></span>
-      </label> <?php
+        <span class="questionnaire-card__checkbox-text checkbox-text"><?php echo $parsed_args['checkbox']['title'] ?></span> <?php
+        if ( !$checkbox_without_container ) : ?>
+          </label> <?php
+        endif;
 
-    elseif ( $parsed_args['checkboxes'] ) : ?>
+    elseif ( $parsed_args['checkboxes'] ) :
+      echo $img_html ?>
       <div class="questionnaire-card__checkboxes"> <?php
+      $checkbox_class = $parsed_args['checkboxes_class'] ? ' ' . $parsed_args['checkboxes_class'] : '';
         foreach ( $parsed_args['checkboxes'] as $checkbox ) : ?>
           <label class="questionnaire-card__checkbox">
             <input type="checkbox" name="<?php echo $checkbox['name'] ?>" value="<?php echo $checkbox['value'] ?>" class="questionnaire-card__checkbox-input<?php echo $checkbox_class ?>" required>
@@ -66,7 +99,10 @@ function questionnaire_card( $args ) {
           </label> <?php
         endforeach ?>
       </div> <?php
-    endif ?>
-  </div> <?php
-
+    endif;
+  if ( $checkbox_without_container ) : ?>
+    </label> <?php
+  else : ?>
+    </div> <?php
+  endif;
 } ?>

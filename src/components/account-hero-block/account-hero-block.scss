@@ -1,3 +1,72 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.account-hero {
+  $pt: 30px;
+  $pr: 20px;
+  margin: 0 0 $sectionVerticalPadding320;
+  padding: $pt $pr 40px 15px;
+  box-shadow: 0px 8px 20px rgba(147, 167, 181, 0.15);
+  border-radius: 30px;
+  background: #fff;
+
+  &-maybe-close {
+    position: relative;
+    overflow: hidden;
+    transition: opacity .5s, height 1s, padding .25s .4s, margin .5s;
+
+    >.account-hero__close {
+      display: block;
+      width: 21px;
+      height: 21px;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 22px;
+        height: 1px;
+        background: currentColor;
+        pointer-events: none;
+      }
+
+      &::before {
+        transform: rotate(45deg);
+      }
+
+      &::after {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+
+  &__img {
+    margin: 0 auto 25px;
+    display: block;
+  }
+
+  &__close {
+    display: none;
+  }
+
+  &__text {}
+
+  &__title {}
+
+  &__descr {}
+
+  &__btns {
+    margin: 30px 0 0;
+
+    >.btn {
+      width: 100%;
+      padding: 9px;
+    }
+  }
+}

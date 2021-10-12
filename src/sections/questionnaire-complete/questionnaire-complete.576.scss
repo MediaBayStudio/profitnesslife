@@ -1,3 +1,15 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.questionnaire-complete-sect {
+  &__title {}
+
+  &__list {}
+
+  &__li {}
+
+  &__li-left {}
+
+  &__li-right {}
+}

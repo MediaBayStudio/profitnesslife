@@ -1,9 +1,11 @@
 ;
 (function() {
-  let questionnaireForm = id('questionnaire-form');
+  let section = id('questionnaire-incomplete-section'),
+    questionnaireForm = id('questionnaire-form');
 
-  if (questionnaireForm) {
+  if (section && questionnaireForm) {
     let stepSelector = '.questionnaire-form__step',
+      sectionBtn = q('.questionnaire-incomplete-section__btn', section),
       completeBlock = q('.questionnaire-form__complete', questionnaireForm),
       currentStepElement = q('.questionnaire-form__count-current', questionnaireForm),
       backBtn = q('.questionnaire-form__back', questionnaireForm),
@@ -49,6 +51,9 @@
           'required': 'Выберите хоть что-то'
         },
         'fish-products[]': {
+          'required': 'Выберите хоть что-то'
+        },
+        'cereals-products[]': {
           'required': 'Выберите хоть что-то'
         }
       },
@@ -167,7 +172,7 @@
             if (input.type === 'checkbox') {
               if (inputName === 'categories[]') {
                 // Максимум 4 чекбокса
-                let fieldsBlock = input.parentElement,
+                let fieldsBlock = input.parentElement.parentElement,
                   checkedInputs = qa('input:checked', fieldsBlock);
 
                 if (checkedInputs.length > 4) {
@@ -390,7 +395,13 @@
         scrollToTarget('', '.questionnaire-incomplete-section__title');
 
         extraStepCount = 0;
+      },
+      showForm = function() {
+        section.classList.add('show-form');
+        questionnaireForm.classList.remove('hide');
       };
+
+    sectionBtn.addEventListener('click', showForm);
 
     questionnaireForm.addEventListener('submit', submitForm);
 
@@ -493,18 +504,19 @@
 
         showStep(++currentStepNumber);
       } else if (type === 'checkbox') {
-        let checkboxesBlock = input.parentElement.parentElement;
+        let checkboxesBlock = input.parentElement.parentElement,
+          fields = qa('input:not([value="all"])', checkboxesBlock);
 
         if (value === 'all') {
-          let otherFields = qa('input', checkboxesBlock);
-
-          for (let i = otherFields.length - 1; i >= 0; i--) {
-            otherFields[i].checked = input.checked;
+          for (let i = fields.length - 1; i >= 0; i--) {
+            fields[i].checked = input.checked;
           }
         } else {
-          let fieldAll = q('input[value="all"]', checkboxesBlock);
+          let fieldAll = q('input[value="all"]', checkboxesBlock),
+            checkedInputs = qa('input:checked:not([value="all"])', checkboxesBlock);
+
           if (fieldAll) {
-            fieldAll.checked = false;
+            fieldAll.checked = checkedInputs.length === fields.length;
           }
         }
       }

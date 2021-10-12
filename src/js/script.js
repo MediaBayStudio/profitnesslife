@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
   body = document.body;
 
   //=include components/telMask.js
+
+  //=include ../components/account-hero-block/account-hero-block.js
   
   //=include components/validateForms.js
 

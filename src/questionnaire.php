@@ -6,12 +6,12 @@
 
 get_header();
 
-$user_id = get_current_user_id();
+// $user_id определяется в functions.php
+// $questionnaire_complete определяется в functions.php
 
-// Заполнена анкета или нет
-$questionnaire_complete = get_field( 'questionnaire_complete', $user_id ) ?>
+$questionnaire_section_class = $questionnaire_complete ? 'complete' : 'incomplete' ?>
 
-<section class="container account-page-wrapper"> <?php
+<section class="container account-page-wrapper questionnaire-<?php echo $questionnaire_section_class ?>"> <?php
 
 	require 'template-parts/side-menu.php' ?>
 

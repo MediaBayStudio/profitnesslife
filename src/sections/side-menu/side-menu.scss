@@ -9,7 +9,12 @@
 
   &__nav-list {}
 
-  &__nav-li {}
+  &__nav-li {
+    &.disabled {
+      filter: grayscale(1);
+      pointer-events: none;
+    }
+  }
 
   &__pic {}
 

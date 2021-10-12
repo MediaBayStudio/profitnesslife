@@ -1,17 +1,26 @@
 <?php
 // 
 function questionnaire_send() {
+  $user_id = $_POST['user-id'];
   $target = $_POST['target'];
   $sex = $_POST['sex'];
   $current_weight = $_POST['current-weight'];
   $target_weight = $_POST['target-weight'];
   $height = $_POST['height'];
   $age = $_POST['age'];
-  $children = $_POST['children'];
+  // Есть ли дети на грудном вскармливании
+  $children = $_POST['children'] ?: 'children-n';
+  // Стаж тренировок
   $training_experience = $_POST['training-experience'];
+  // Активность
   $activity = $_POST['activity'];
+  // Ограничения в тренировках
   $training_restrictions = $_POST['training-restrictions'];
+  // Место для занятий (дом/зал)
   $place = $_POST['place'];
+  // Инвентарь
+  $inventory = $_POST['inventory'];
+  // На чем хотите сделать акцент в тренировках
   $body_parts = $_POST['body-parts'];
   $products = $_POST['categories'];
   $milk_products = $_POST['milk-products'];
@@ -135,51 +144,17 @@ function questionnaire_send() {
     ]
   ] );
 
-  // $snacks = get_posts( [
-  //   'post_type'   => 'dish',
-  //   'numberposts' => -1,
-  //   'tax_query'   => [
-  //   [
-  //     'taxonomy'  => 'dish_type',
-  //     'field'     => 'slug',
-  //     'terms'     => 'snack'
-  //     ]
-  //   ],
-  //   'meta_query' => [
-  //     [
-  //       'key' => 'calories',
-  //       'value' => [$breakfast_max_calories - 100, $breakfast_max_calories],
-  //       'compare' => 'between',
-  //       'type' => 'numeric'
-  //     ]
-  //   ]
-  // ] );
+  foreach ( $breakfasts as $breakfast ) {
+    $breakfasts_ids[] = $breakfast->ID;
+  }
 
-  // foreach( $breakfasts as $post ) {
-    // $calories = get_field( 'calories', $post );
-    // var_dump( $post->post_title );
-    // var_dump( 'calories ' . $calories );
-  // }
+  foreach ( $lunches as $lunch ) {
+    $lunches_ids[] = $lunch->ID;
+  }
 
-  // var_dump('lunches');
-  // echo '______________________';
-  // var_dump('');
-
-   // foreach( $lunches as $post ) {
-    // $calories = get_field( 'calories', $post );
-    // var_dump( $post->post_title );
-    // var_dump( 'calories ' . $calories );
-  // }
-
-  // var_dump('dinners');
-  // echo '______________________';
-  // var_dump('');
-
-  // foreach( $dinners as $post ) {
-    // $calories = get_field( 'calories', $post );
-    // var_dump( $post->post_title );
-    // var_dump( 'calories ' . $calories );
-  // }
+  foreach ( $dinners as $dinner ) {
+    $dinners_ids[] = $dinner->ID;
+  }
 
   for ( $i = 0; $i < 5; $i++ ) { 
     $breakfast_daily_calories = get_field( 'calories', $breakfasts[ $i ] );
@@ -196,7 +171,7 @@ function questionnaire_send() {
         [
           'taxonomy'  => 'dish_type',
           'field'     => 'slug',
-          'terms'     => 'snack',
+          'terms'     => 'snack_1',
           'orderby' => 'rand'
         ]
       ],
@@ -215,21 +190,21 @@ function questionnaire_send() {
       'post_type'   => 'dish',
       'numberposts' => 1,
       'orderby' => 'rand',
-      'exclude' => $daily_snack_1[0]->post_ID,
+      // 'exclude' => $daily_snack_1[0]->post_ID,
       'tax_query'   => [
         'relation' => 'AND',
         [
           'taxonomy'  => 'dish_type',
           'field'     => 'slug',
-          'terms'     => 'snack',
+          'terms'     => 'snack_2',
           'orderby' => 'rand'
-        ],
+        ]/*,
         [
           'taxonomy'  => 'dish_category',
           'field'     => 'slug',
           'terms'     => 'orehi',
           'operator' => 'NOT IN'
-        ]
+        ]*/
       ],
       'meta_query' => [
         [
@@ -274,7 +249,39 @@ function questionnaire_send() {
   $response['lunch_ccal'] = $lunch_max_calories;
   $response['dinner_ccal'] = $dinner_max_calories;
 
+  $carbohydrates = ($bmr * 0.5) / 4;
+  $proteins = ($bmr * 0.3) / 4;
+  $fats = ($bmr * 0.2) / 9;
+
+  update_field( 'age', $age, $user_id );
+  update_field( 'sex', $sex, $user_id );
+  update_field( 'start_weight', $current_weight, $user_id );
+  update_field( 'target_weight', $target_weight, $user_id );
+  update_field( 'questionnaire_complete', true, $user_id );
+  update_field( 'questionnaire_time', date( 'd.m.Y H:i:s' ), $user_id );
+  update_field( 'training_experience', $training_experience, $user_id );
+  update_field( 'training_restrictions', $training_restrictions, $user_id );
+  update_field( 'place', $place, $user_id );
+  update_field( 'inventory', $inventory, $user_id );
+  update_field( 'body_parts', $body_parts, $user_id );
+  update_field( 'activity', $activity, $user_id );
+  update_field( 'height', $height, $user_id );
+  update_field( 'calories', $bmr, $user_id );
+  update_field( 'carbohydrates', $carbohydrates, $user_id );
+  update_field( 'proteins', $proteins, $user_id );
+  update_field( 'fats', $fats, $user_id );
+  update_field( 'children', $children, $user_id );
+
+  update_field( 'week_1', [
+    'breakfasts' => $breakfasts_ids,
+    'lunches' => $lunches_ids,
+    'dinners' => $dinners_ids
+  ], $user_id );
+
+  update_field( 'questionnaire_show', true, 'user_' . $user_id );
+
   echo json_encode( $response );
+
 
   // $sum_calories = get_field( 'calories', $breakfasts[0] ) + get_field( 'calories', $lunches[0] )  + get_field( 'calories', $dinners[0] );
 

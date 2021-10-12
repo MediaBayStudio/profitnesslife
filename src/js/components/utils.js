@@ -66,7 +66,8 @@ var browser = {
       }
     }
   },
-
+  weightChart,
+  measureChart,
   mask, // ф-я маски телефонов в поля ввода (в файле telMask.js)
   lazy,
   menu,

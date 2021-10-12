@@ -1,0 +1,29 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.account-hero {
+  padding: 30px 30px 30px 25px;
+  margin: 0 0 $sectionVerticalPadding768;
+  &__img {
+    float: right;
+  }
+
+  &__text {
+    max-width: 425px;
+    font-size: 16px;
+  }
+
+  &__title {
+    font-size: 36px;
+  }
+
+  &__descr {}
+
+  &__btns {
+    >.btn {
+      padding: 10px 40px;
+      width: auto;
+    }
+  }
+}

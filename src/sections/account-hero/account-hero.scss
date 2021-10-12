@@ -1,3 +1,74 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.user-data {
+  &__pic {}
+
+  &__img {}
+
+  &__name {}
+
+  &__nutrition-list {}
+
+  &__nutrition-li {}
+
+  &__current-weight {}
+
+  &__current-weight-number {}
+
+  &__weight-goal {}
+
+  &__weight-goal-chart {}
+
+  &__weight-goal-numbers {}
+
+  &__weight-goal-current {}
+
+  &__weight-goal-total {}
+
+  &__weight-form {}
+}
+
+.user-nutrition {
+  &__li-img {}
+
+  &__li-title {}
+}
+
+.weight-form {
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;    
+  }
+  &__title {}
+
+  &__input {}
+
+  &__btn {
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+}
+
+#weight-goal-svg {
+
+}
+
+#weight-goal-svg-bar,
+#weight-goal-svg-bg {
+  stroke-width: 14px;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s linear, opacity .5s;
+}
+
+#weight-goal-svg-bg {
+  stroke: #D9E9BB;
+}
+
+#weight-goal-svg-bar {
+  stroke: $accentGreen;
+  opacity: 0;
+}

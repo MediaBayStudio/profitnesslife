@@ -73,7 +73,7 @@ add_action( 'wp_enqueue_scripts', function() {
   // Подключаем скрипты циклом
   
 
-	$scripts = ['lazy.min', 'Popup.min', 'slick.min', 'script', $script_name];
+	$scripts = ['lazy.min', 'chartjs', 'Popup.min', 'slick.min', 'script', $script_name];
 
   $GLOBALS['page_script_name'] = $script_name;
   $GLOBALS['page_style_name'] = $tyle_name;
@@ -100,6 +100,7 @@ add_action( 'wp_enqueue_scripts', function() {
       case 'lazy.min':
       case 'Popup.min':
       case 'slick.min':
+      case 'chartjs':
       case 'script':
       case $GLOBALS['page_script_name']:
       case 'contact-form-7':

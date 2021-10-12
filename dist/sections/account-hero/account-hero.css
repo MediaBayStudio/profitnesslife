@@ -1,1 +1,1 @@
-@charset "UTF-8";
+@charset "UTF-8";.weight-form.disabled,.weight-form__btn.disabled{opacity:.5;pointer-events:none}#weight-goal-svg-bar,#weight-goal-svg-bg{stroke-width:14px;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,opacity .5s}#weight-goal-svg-bg{stroke:#d9e9bb}#weight-goal-svg-bar{stroke:#85b921;opacity:0}

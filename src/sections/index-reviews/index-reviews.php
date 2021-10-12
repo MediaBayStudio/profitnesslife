@@ -9,7 +9,7 @@
     foreach ( $reviews as $review ) :
       $review_fields = get_fields( $review ) ?>
       <div class="reviews-sect__review review">
-        <a href="https://www.instagram.com/<?php echo $review_fields['author_insta'] ?>" class="review__author">
+        <a href="https://www.instagram.com/<?php echo $review_fields['author_insta'] ?>" target="_blank" class="review__author">
           <picture class="review__author-pic lazy">
             <source type="image/webp" srcset="#" data-srcset="<?php echo $upload_baseurl . get_post_meta( $review_fields['author_img']['ID'] )['webp'][0] ?>"> <?php
               $alt = $review_fields['author_img']['alt'] ?: 'Автор отзыва' ?>
