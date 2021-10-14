@@ -37,7 +37,8 @@
     }
 
     let dates = [],
-      weights = [];
+      weights = [],
+      gridFontSize = media('(max-width:767.98px)') ? 10 : 16;
 
     for (let key in weekData) {
       dates[dates.length] = weekData[key].date.slice(0, -5);
@@ -61,12 +62,17 @@
         }]
       },
       options: {
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
         scales: {
           x: {
             ticks: {
               color: '#B0BBA7',
               font: {
-                size: 10,
+                size: gridFontSize,
                 family: 'Roboto'
               }
             },
@@ -79,7 +85,7 @@
               stepSize: 1,
               color: '#B0BBA7',
               font: {
-                size: 10,
+                size: gridFontSize,
                 family: 'Roboto'
               }
             },

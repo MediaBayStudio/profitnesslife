@@ -65,6 +65,8 @@ if ( $questionnaire_date ) {
   $second_week_end_time = strtotime( '+2 week', $start_marathon_time );
   $third_week_end_time = strtotime( '+3 week', $start_marathon_time );
 
+  $finish_marathon_time = $third_week_end_time;
+
   $weeks_end_dates = [ $first_week_end_time, $second_week_end_time, $third_week_end_time ];
 
   // echo '<p>Старт марафона: ' . date( 'd.m.Y H:i:s', $start_marathon_time ) . '</p>';
@@ -116,82 +118,6 @@ add_filter( 'site_transient_update_plugins', function( $value ) {
 } );
 
 
-// Редиректы
-add_action( 'wp', function() {
-  global 
-    $post,
-    $site_url,
-    $questionnaire_show,
-    $questionnaire_complete;
-
-  switch ( $post->post_name ) {
-    case 'questionnaire':
-    case 'training-program':
-    case 'diet-plan':
-    case 'chat':
-    case 'account':
-      $GLOBALS['is_account_page'] = true;
-      break;
-  }
-
-  // if ( is_super_admin() ) {
-  //   switch ( $post->post_name ) {
-  //     case 'questionnaire':
-  //     case 'training-program':
-  //     case 'diet-plan':
-  //     case 'chat':
-  //     case 'account':
-  //       wp_redirect( $site_url . '/admin' );
-  //       exit;
-  //   }
-  // } 
-
-  // Редирект на страницу входа, если не авторизованный пользователь попал на другие внутренние страницы
-  if ( !is_user_logged_in() && !is_super_admin() ) {
-    switch ( $post->post_name ) {
-      case 'questionnaire':
-      case 'training-program':
-      case 'diet-plan':
-      case 'chat':
-        wp_redirect( $site_url . '/account' );
-        exit;
-    }
-  } else {
-    if ( is_super_admin() ) {
-      return;
-    }
-    // Редирект на страницу заполнения анкеты, если пользовтаель авторизовался и анкета у него не заполнена
-    if ( $post->post_name !== 'questionnaire' && !is_front_page() ) {
-      $user_id = get_current_user_id();
-      if ( !$questionnaire_complete ) {
-        wp_redirect( $site_url . '/questionnaire' );
-        exit;
-      } else {
-        /*
-          Если анкета заполнена,
-          но время показывать не пришло,
-          то со страниц тренировок и плана питания
-          редиректим на личный кабинет
-        */
-        if ( !$questionnaire_show ) {
-          switch ( $post->post_name) {
-            case 'training-program':
-            case 'diet-plan':
-              wp_redirect( $site_url . '/account' );
-              exit;
-          }
-        }
-      }
-    }
-  }
-} );
-
-add_action( 'wp_logout', function() {
-  global $site_url;
-  wp_redirect( $site_url );
-  exit();
-} );
-
 // Enable the option show in rest
 // add_filter( 'acf/rest_api/field_settings/show_in_rest', '__return_true' );
 
@@ -231,11 +157,19 @@ add_filter( 'template_include', function( $template ) {
   return $template;
 } );
 
+// Редиректы пользователей
+require $template_directory . '/inc/redirects.php';
+
+// Функция создания календаря для стр. план питания
+require $template_directory . '/inc/calendar.php';
+
 // Создание главной секции на внутренних страницах личного кабинета
 require $template_directory . '/components/account-hero-block.php';
 
 require $template_directory . '/inc/close-welcome-block.php';
+require $template_directory . '/inc/load-diet-plan.php';
 require $template_directory . '/inc/weight-send.php';
+require $template_directory . '/inc/photo-send.php';
 require $template_directory . '/inc/measure-send.php';
 
 // Создание карточек в анкете

@@ -25,7 +25,9 @@
 
   &__item-body {}
 
-  &__item-title {}
+  &__item-title {
+    max-width: 420px;
+  }
 
   &__item-calories {}
 
@@ -39,9 +41,18 @@
 
   &__item-igredietns-li {}
 
-  &__item-recipe {}
+  &__item-recipe {
+    max-width: 280px;
+  }
 
   &__item-recipe-title {}
 
   &__item-recipe-text {}
+
+  &__item-change {
+    &::before {
+      width: 20px;
+      height: 18px;
+    }
+  }
 }

@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //=include ../sections/account-measure-chart/account-measure-chart.js
 
+//=include ../sections/account-photo-progress/account-photo-progress.js
+
 //=include ../sections/footer/footer.js
 
 });

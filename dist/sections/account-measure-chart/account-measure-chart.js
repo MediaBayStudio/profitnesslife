@@ -2,7 +2,9 @@
 (function() {
   let measureForm = document.forms['measure-form'],
     measureChartCanvas = id('measure-chart'),
-    measureChartCtx = measureChartCanvas.getContext('2d');
+    measureChartCtx = measureChartCanvas.getContext('2d'),
+    gridFontSize = media('(max-width:767.98px)') ? 10 : 16,
+    legendFontSize = media('(max-width:767.98px)') ? 14 : 16;
 
   console.log(measureForm);
   console.log(measureChartCanvas);
@@ -80,30 +82,48 @@
       options: {
         plugins: {
           legend: {
+            // align: 'start',
+            padding: 10,
             labels: {
-              boxWidth: 10,
-              boxHeight: 10,
+              padding: 15,
+              boxWidth: 5,
+              boxHeight: 5,
               usePointStyle: true,
               font: {
-                size: 14,
+                size: legendFontSize,
                 family: 'Roboto'
               }
             }
           }
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: '#B0BBA7',
+              font: {
+                size: gridFontSize,
+                family: 'Roboto'
+              }
+            },
+            grid: {
+              display: false
+            }
+          },
+          y: {
+            ticks: {
+              stepSize: 1,
+              color: '#B0BBA7',
+              font: {
+                size: gridFontSize,
+                family: 'Roboto'
+              }
+            },
+            grid: {
+              display: false
+            }
+          }
         }
       }
-      // options: {
-      //   scales: {
-      //     y: {
-      //       beginAtZero: true,
-      //       min: weights[weights.length - 1] - 2,
-      //       max: +weights[0] + 1,
-      //       ticks: {
-      //         stepSize: 1
-      //       }
-      //     }
-      //   }
-      // }
     });
   }
 

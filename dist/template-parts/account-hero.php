@@ -26,7 +26,7 @@ if ( $user_data['show_msg'] ) {
     <ul class="user-data__nutrition-list">
       <li class="user-data__nutrition-li">
         <img src="#" alt="Иконка калорий" data-src="<?php echo $template_directory_uri ?>/img/icon-calories.svg" class="user-nutrition__li-img lazy">
-        <span class="user-nutrition__li-title"><?php echo round( $user_data['calories'] ) ?> гр</span>
+        <span class="user-nutrition__li-title"><?php echo round( $user_data['calories'] ) ?></span>
         <span>ккал</span>
       </li>
       <li class="user-data__nutrition-li">

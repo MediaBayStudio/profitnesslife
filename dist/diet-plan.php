@@ -10,7 +10,6 @@ get_header( 'account' ) ?>
 	require 'template-parts/side-menu.php' ?>
 
 	<section class="account-page-sections"> <?php
-		echo '<p>Здесь будет план питания</p>';
 		foreach ( $GLOBALS['sections'] as $section ) {
 			if ( $section['is_visible'] ) {
 				$section_id = $section['id'] ? ' id="' . $section['id'] . '"' : '';
@@ -19,4 +18,4 @@ get_header( 'account' ) ?>
 		} ?>
 	</section>
 </section> <?php
-get_footer();
+// get_footer();

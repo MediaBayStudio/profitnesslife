@@ -27,4 +27,4 @@ if ( is_user_logged_in() ) { ?>
 	// rcl_include_template( 'form-sign.php' );
 }
 
-get_footer();
+// get_footer();

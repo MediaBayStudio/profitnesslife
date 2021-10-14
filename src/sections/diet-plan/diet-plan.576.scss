@@ -15,7 +15,31 @@
 
   &__calendar-btn {}
 
-  &__calendar {}
+  &__calendar {
+    table {}
+
+    tbody {}
+
+    tr {}
+
+    td {}
+
+    .calendar-wrp {}
+
+    .calendar-item {}
+
+    .calendar-head {}
+
+    .calendar-day {}
+
+    .last {}
+
+    .event {}
+
+    .calendar-popup {}
+
+    .today {}
+  }
 
   &__list {}
 

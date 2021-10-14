@@ -1,3 +1,143 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.user-data-main {
+  margin: 0 0 30px;
+  width: 100%;
+  padding: 25px;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  grid-template-columns: auto 1fr;
+}
+
+.user-data {
+  &__pic {
+    margin: 0 25px 0 0;
+    width: 110px;
+    height: 110px;
+    grid-row: 1/span 2;
+    grid-column: 1;
+  }
+
+  &__img {}
+
+  &__name {
+    font-size: 20px;
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  &__params {
+    margin: 15px 0 0;
+    grid-row: 2;
+    grid-column: 2;
+    font-size: 16px;
+  }
+
+  &__param {
+    &:not(:last-child) {
+      margin: 0 20px 0 0;
+      padding: 0 20px 0 0;
+    }
+  }
+
+  &__param-value {
+    font-size: 28px;
+  }
+
+  &__param-units {
+    font-size: 20px;
+  }
+
+  &__nutrition-list {
+    margin: 30px 0 0;
+    grid-row: 3;
+    grid-column: 1/span 2;
+  }
+
+  &__nutrition-li {
+    margin: 0;
+    width: calc((100% - 60px) / 4);
+  }
+
+  &__weight {}
+
+  &__current-weight,
+  &__weight-goal {
+    margin: 0 auto 0 0;
+    padding: 25px;
+    width: 165px;
+  }
+
+  &__current-weight {
+  }
+
+  &__current-weight-date {}
+
+  &__current-weight-number {
+    font-size: 28px;
+  }
+
+  &__current-weight-units {
+    font-size: 20px;
+  }
+
+  &__weight-goal {}
+
+  &__weight-goal-chart {}
+
+  &__weight-goal-numbers {
+    bottom: 53px;
+  }
+
+  &__weight-goal-current {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  &__weight-goal-total {
+    font-size: 14px;
+  }
+
+  &__weight-form {
+    margin: 0;
+    padding: 25px;
+    width: 350px;
+  }
+}
+
+.user-nutrition {
+  &__li-img {}
+
+  &__li-title {}
+}
+
+.weight-form {
+  &.disabled {}
+
+  &__title {
+    margin: 0 0 20px;
+  }
+
+  &__input {
+    &::placeholder {}
+  }
+
+  &__btn {
+    width: auto;
+    padding: 9px 44px;
+    &.disabled {}
+  }
+}
+
+#weight-goal-svg {
+  margin: 20px 0 0;
+}
+
+#weight-goal-svg-bar,
+#weight-goal-svg-bg {}
+
+#weight-goal-svg-bg {}
+
+#weight-goal-svg-bar {}

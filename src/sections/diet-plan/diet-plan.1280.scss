@@ -23,7 +23,9 @@
 
   &__item-type {}
 
-  &__item-body {}
+  &__item-body {
+    padding-left: 30px;
+  }
 
   &__item-title {}
 
@@ -39,7 +41,9 @@
 
   &__item-igredietns-li {}
 
-  &__item-recipe {}
+  &__item-recipe {
+    max-width: 340px;
+  }
 
   &__item-recipe-title {}
 

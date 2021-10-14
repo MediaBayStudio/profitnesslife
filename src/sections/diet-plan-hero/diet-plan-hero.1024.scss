@@ -1,3 +1,25 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.diet-plan-hero {
+  .account-hero {
+    &__close {}
+
+    &__img {}
+
+    &__text {}
+
+    &__title {}
+
+    &__descr {
+      max-width: 350px;
+    }
+
+    &__btns {
+      >.btn {
+        padding: 12px 25px;
+      }
+    }
+  }
+}

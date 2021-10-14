@@ -3,7 +3,9 @@
 @import '../../scss/assets/variables';
 
 .weight-chart-sect {
-  &__title {}
+  &__title {
+    margin: 0 0 30px;
+  }
 }
 
 .weight-chart {

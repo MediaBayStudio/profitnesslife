@@ -1,3 +1,23 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.products-cart-hero {
+  .account-hero {
+    &__close {}
+
+    &__img {
+      margin: 0 20px 0 0;
+    }
+
+    &__text {}
+
+    &__title {}
+
+    &__descr {}
+
+    &__btns {
+      >.btn {}
+    }
+  }
+}

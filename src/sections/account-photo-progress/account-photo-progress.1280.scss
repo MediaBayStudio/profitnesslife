@@ -1,3 +1,24 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.photo-progress-sect {
+
+  &__title {}
+}
+
+.photo-progress-slider {
+  margin: 0;
+  padding: 0;
+  width: auto;
+}
+
+.photo-progress-add {}
+
+.photo-progress-form {
+  &::after {}
+}
+
+.photo-progress-pic {}
+
+.photo-progress-img {}

@@ -1,3 +1,27 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.products-cart-hero {
+  .account-hero {
+    &__close {}
+
+    &__img {
+      margin-bottom: 20px;
+    }
+
+    &__text {}
+
+    &__title {
+      font-size: 20px;
+    }
+
+    &__descr {}
+
+    &__btns {
+      >.btn {
+        color: $black;
+      }
+    }
+  }
+}

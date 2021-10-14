@@ -104,6 +104,6 @@ $measure_timeline_count = $user_data['measure_timeline'] ? count( $user_data['me
       </div>
       <button name="submit" class="measure-form__btn btn btn-green disabled">Сохранить</button>
     </form>
-    <canvas id="measure-chart"></canvas>
+    <canvas id="measure-chart" height="260"></canvas>
   </div>
 </section>

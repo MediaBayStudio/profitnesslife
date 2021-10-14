@@ -11,10 +11,10 @@
   }
 }
 
-.btn-ol {
+.btn.btn-ol {
   &:hover {
     background: $accentGreen;
-    color: #fff;
+    color: $white;
   }
 }
 
@@ -63,6 +63,17 @@
       &::after {
         background: #e0e0e0;
       }
+    }
+  }
+}
+
+.photo-progress-form {
+  &:hover {
+    &::before {
+      opacity: 1;
+    }
+    &::after {
+      box-shadow: 4px 4px 15px rgba(133, 185, 33, 0.3);
     }
   }
 }

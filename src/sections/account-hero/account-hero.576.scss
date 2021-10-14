@@ -1,3 +1,81 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.user-data-main {}
+
+.user-data {
+  &__pic {}
+
+  &__img {}
+
+  &__name {}
+
+  &__params {}
+
+  &__param {
+    &:not(:last-child) {}
+  }
+
+  &__param-value {}
+
+  &__param-units {}
+
+  &__nutrition-list {}
+
+  &__nutrition-li {}
+
+  &__weight {}
+
+  &__current-weight,
+  &__weight-goal {}
+
+  &__current-weight {}
+
+  &__current-weight-date {}
+
+  &__current-weight-number {}
+
+  &__current-weight-units {}
+
+  &__weight-goal {}
+
+  &__weight-goal-chart {}
+
+  &__weight-goal-numbers {}
+
+  &__weight-goal-current {}
+
+  &__weight-goal-total {}
+
+  &__weight-form {}
+}
+
+.user-nutrition {
+  &__li-img {}
+
+  &__li-title {}
+}
+
+.weight-form {
+  &.disabled {}
+
+  &__title {}
+
+  &__input {
+    &::placeholder {}
+  }
+
+  &__btn {
+    &.disabled {}
+  }
+}
+
+#weight-goal-svg {}
+
+#weight-goal-svg-bar,
+#weight-goal-svg-bg {}
+
+#weight-goal-svg-bg {}
+
+#weight-goal-svg-bar {}

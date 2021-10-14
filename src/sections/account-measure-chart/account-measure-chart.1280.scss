@@ -15,6 +15,7 @@
 }
 
 .measure-current {
+  width: 230px;
   &__title {}
 
   &__date {}
@@ -23,6 +24,7 @@
 }
 
 .measure-form {
+  width: 495px;
   &__title {}
 
   &__descr {}
@@ -34,4 +36,9 @@
   &__data-table {}
 
   &__btn {}
+}
+
+#measure-chart {
+  margin: 20px 0 0;
+  height: 400px;
 }

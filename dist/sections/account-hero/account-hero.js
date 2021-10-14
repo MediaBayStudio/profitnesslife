@@ -2,6 +2,7 @@
 (function() {
 
   let weightForm = q('.weight-form'),
+    weightChartSect = q('.weight-chart-sect'),
     weightGoalCurrent = id('weight-goal-current'),
     weightGoalTotal = id('weight-goal-total'),
     weightGoalSvgBar = id('weight-goal-svg-bar'),
@@ -34,23 +35,20 @@
         currentWeekButton = q('.weight-chart__tab:nth-child(' + currentWeekNumber + ')'),
         buttonData = currentWeekButton.getAttribute('data-chart');
 
-      console.log(jsonData);
-
       if (buttonData) {
-        let existChartData = JOSN.parse(buttonData);
+        let existChartData = JSON.parse(buttonData);
         existChartData.push(jsonData);
         jsonData = existChartData;
       }
 
       jsonData = JSON.stringify([jsonData]);
 
-      console.log(jsonData);
-
       currentWeekButton.setAttribute('data-chart', jsonData);
 
       if (activeButton) {
         activeButton.classList.remove('active');
       }
+      weightChartSect.classList.remove('hide');
       currentWeekButton.classList.add('active');
 
       if (weightChart.config.data.datasets[0].data.length === 7) {
@@ -104,7 +102,7 @@
         weightForm.classList.add('disabled');
 
         id('current-weight-date').textContent = today;
-        id('current-weight-number').textContent = weight + ' кг';
+        id('current-weight-number').innerHTML = weight + ' <span class="user-data__current-weight-units">кг</span>';
         weightGoalCurrent.textContent = Math.abs(weight - weightForm.getAttribute('data-target-weight')) + ' /';
 
         updateSvgBar(parseInt(weightGoalCurrent.textContent) / parseInt(weightGoalTotal.textContent) * 100);

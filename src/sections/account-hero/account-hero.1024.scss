@@ -1,3 +1,114 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.user-data-main {
+  margin: 0 0 40px;
+}
+
+.user-data {
+  &__pic {}
+
+  &__img {}
+
+  &__name {}
+
+  &__params {}
+
+  &__param {
+    &:not(:last-child) {}
+  }
+
+  &__param-value {}
+
+  &__param-units {}
+
+  &__nutrition-list {
+    justify-content: flex-start;
+  }
+
+  &__nutrition-li {
+    margin: 0 20px 0 0;
+    width: 115px;
+    height: 115px;
+  }
+
+  &__weight {}
+
+  &__current-weight,
+  &__weight-goal {
+    width: 195px;
+    font-size: 20px;
+  }
+
+  &__current-weight {}
+
+  &__current-weight-date {
+    font-size: 16px;
+  }
+
+  &__current-weight-number {
+    margin: 20px 0 0;
+    font-size: 36px;
+  }
+
+  &__current-weight-units {
+    font-size: 28px;
+  }
+
+  &__weight-goal {}
+
+  &__weight-goal-chart {}
+
+  &__weight-goal-numbers {
+    bottom: 58px;
+  }
+
+  &__weight-goal-current {
+    font-size: 24px;
+  }
+
+  &__weight-goal-total {
+    font-size: 16px;
+  }
+
+  &__weight-form {
+    width: 210px;
+  }
+}
+
+.user-nutrition {
+  &__li-img {}
+
+  &__li-title {}
+}
+
+.weight-form {
+  &.disabled {}
+
+  &__title {
+    margin: 0 0 25px;
+    font-size: 20px;
+  }
+
+  &__input {
+    font-size: 16px;
+    &::placeholder {}
+  }
+
+  &__btn {
+    padding: 10px 39px;
+    &.disabled {}
+  }
+}
+
+#weight-goal-svg {
+  transform: scale(1.15);
+}
+
+#weight-goal-svg-bar,
+#weight-goal-svg-bg {}
+
+#weight-goal-svg-bg {}
+
+#weight-goal-svg-bar {}

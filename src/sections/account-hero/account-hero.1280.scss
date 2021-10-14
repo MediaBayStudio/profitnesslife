@@ -1,3 +1,97 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.user-data-main {}
+
+.user-data {
+  &__pic {
+    margin: 0 30px 0 0;
+    width: 125px;
+    max-width: 125px;
+    height: 125px;
+    max-height: 125px;
+  }
+
+  &__img {}
+
+  &__name {}
+
+  &__params {}
+
+  &__param {
+    &:not(:last-child) {
+      margin: 0 25px 0 0;
+      padding: 0 25px 0 0;
+    }
+  }
+
+  &__param-value {
+    font-size: 32px;
+  }
+
+  &__param-units {
+    font-size: 28px;
+  }
+
+  &__nutrition-list {}
+
+  &__nutrition-li {}
+
+  &__weight {}
+
+  &__current-weight,
+  &__weight-goal {
+    width: 230px;
+  }
+
+  &__current-weight {}
+
+  &__current-weight-date {}
+
+  &__current-weight-number {}
+
+  &__current-weight-units {}
+
+  &__weight-goal {}
+
+  &__weight-goal-chart {}
+
+  &__weight-goal-numbers {}
+
+  &__weight-goal-current {}
+
+  &__weight-goal-total {}
+
+  &__weight-form {}
+}
+
+.user-nutrition {
+  &__li-img {}
+
+  &__li-title {}
+}
+
+.weight-form {
+  width: 245px;
+  &.disabled {}
+
+  &__title {}
+
+  &__input {
+    &::placeholder {}
+  }
+
+  &__btn {
+    &.disabled {}
+  }
+}
+
+#weight-goal-svg {}
+
+#weight-goal-svg-bar,
+#weight-goal-svg-bg {}
+
+#weight-goal-svg-bg {}
+
+#weight-goal-svg-bar {}

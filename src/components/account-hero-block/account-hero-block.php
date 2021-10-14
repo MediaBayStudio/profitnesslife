@@ -25,7 +25,7 @@ function print_account_hero_section( $args ) {
 
   $parsed_args = wp_parse_args( $args, $defaults ) ?>
 
-  <section class="account-hero<?php echo $parsed_args['class'] ?> <?php if ( $parsed_args['can_be_hidden'] ) echo 'account-hero-maybe-close' ?>" data-user-id="<?php echo $user_id ?>">
+  <section class="account-hero<?php echo $parsed_args['class'] ?><?php if ( $parsed_args['can_be_hidden'] ) echo 'account-hero-maybe-close' ?>" data-user-id="<?php echo $user_id ?>">
     <button type="button" class="account-hero__close" title="Больше не показывать"></button>
     <img src="<?php echo $parsed_args['img']['url'] ?>" alt="<?php echo $parsed_args['img']['alt'] ?>" class="account-hero__img">
     <div class="account-hero__text">

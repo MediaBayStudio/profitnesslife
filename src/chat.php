@@ -19,4 +19,4 @@ get_header( 'account' ) ?>
 		} ?>
 	</section>
 </section> <?php
-get_footer();
+// get_footer();

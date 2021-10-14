@@ -1,3 +1,109 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.photo-progress-sect {
+  padding: 0 0 40px;
+
+  &__title {
+    margin: 0 0 20px;
+    font: bold 20px/1 $notoSans;
+  }
+}
+
+.photo-progress-slider {
+  display: flex;
+  &:not(.slick-slider) {
+    .photo-progress-slider__nav {
+      display: none;
+    }
+  }
+}
+
+.photo-progress-slider__nav {
+  margin: 20px 0;
+  order: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-progress-slider__dots {
+  margin: 0 30px;
+}
+
+.photo-progress-slider__prev {
+  order: -1;
+}
+
+.photo-progress-slider__next {
+  order: 10;
+}
+
+.photo-progress-slider__next,
+.photo-progress-slider__prev {
+  display: none !important;
+}
+
+.photo-progress-add {
+  position: absolute;
+  top: -15%;
+  left: 0;
+  width: 100%;
+  height: 115%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.photo-progress-form {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  min-height: 180px;
+  border: 1px dashed #C0C0C0;
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+  &::before {
+    content: 'загрузить фото';
+    position: absolute;
+    top: 68%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font: 500 14px/1 $roboto;
+    color: $accentGreen;
+    white-space: nowrap;
+  }
+  &::after {
+    content: '+';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #85B921;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 27px;
+    line-height: 1;
+    transition: box-shadow .5s;
+  }
+}
+
+.photo-progress-pic {
+  margin: 0 0 0 20px;
+  display: block;
+  flex-shrink: 0;
+  width: 130px;
+  min-height: 180px;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.photo-progress-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

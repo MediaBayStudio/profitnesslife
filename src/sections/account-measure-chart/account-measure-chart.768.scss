@@ -3,11 +3,20 @@
 @import '../../scss/assets/variables';
 
 .measure-sect {
-  &__title {}
+  &__title {
+    margin: 0 0 15px;
+    font-size: 24px;
+  }
 
-  &__descr {}
+  &__descr {
+    margin: 0 0 30px;
+    font-size: 16px;
+  }
 
-  &__user-data {}
+  &__user-data {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
   &__user-current-data {}
 
@@ -15,23 +24,76 @@
 }
 
 .measure-current {
-  &__title {}
+  padding: 25px;
+  margin: 0 auto 0 0;
+  width: 225px;
+  &__title {
+    font-size: 20px;
+    line-height: 1.3;
+    text-align: center;
+  }
 
-  &__date {}
+  &__date {
+    font-size: 16px;
+  }
 
-  &__table {}
+  &__table {
+    font-size: 16px;
+    border-spacing: 0 20px;
+  }
+
+  &__table-right {
+    font-weight: 500;
+  }
 }
 
 .measure-form {
-  &__title {}
+  padding: 25px;
+  margin: 0;
+  width: 475px;
+  &__title {
+    font-size: 20px;
+    line-height: 1.3;
+    text-align: center;
+  }
 
-  &__descr {}
+  &__descr {
+    font-size: 16px;
+  }
 
-  &__data {}
+  &__data {
+    margin: 0;
+    position: relative;
+    width: 100%;
+  }
 
-  &__img {}
+  &__img {
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 105px;
+  }
 
-  &__data-table {}
+  &__data-table {
+    margin: 0 0 0 auto;
+    border-spacing: 0 30px;
+    font-size: 16px;
+  }
 
-  &__btn {}
+  &__data-input {
+    width: 230px;
+  }
+
+  &__btn {
+    margin: 0 0 0 auto;
+    width: auto;
+    padding: 9px 44px;
+  }
+}
+
+#measure-chart {
+  margin: 30px 0 0;
+  padding: 30px;
+  height: 390px;
 }

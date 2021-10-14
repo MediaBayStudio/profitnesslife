@@ -1,12 +1,15 @@
 <?php
 $weight_timeline_count = count( $user_data['weight_timeline'] );
-if ( $weight_timeline_count > 1 ) : ?>
-  <section class="weight-chart-sect lazy" data-week="<?php echo $current_week_number ?>" data-src="#">
+if ( $weight_timeline_count > 1 ) {
+  $weight_chart_class = '';
+} else {
+  $weight_chart_class = ' hide';
+}
+#if ( $weight_timeline_count > 1 ) : ?>
+  <section class="weight-chart-sect lazy<?php echo $weight_chart_class ?>" data-week="<?php echo $current_week_number ?>" data-src="#">
     <h2 class="weight-chart-sect__title">График изменения веса</h2>
     <div class="weight-chart">
       <div class="weight-chart__tabs"> <?php
-      // echo( '<p>weight_timeline_count ' . $weight_timeline_count . '</p>' );
-      // echo( '<p>current_week_number ' . $current_week_number . '</p>' );
         /*
           Заполняем массив недель данными,
           чтобы поставить их в дата-атрибут как json
@@ -75,4 +78,4 @@ if ( $weight_timeline_count > 1 ) : ?>
       <canvas id="weight-chart" width="280" height="250" data-initial-weight="<?php echo $user_data['start_weight'] ?>" data-target-weight="<?php echo $user_data['target_weight'] ?>"></canvas>
     </div>
   </section> <?php
-endif ?>
+#endif ?>

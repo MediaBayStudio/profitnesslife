@@ -5,6 +5,10 @@
 .weight-chart-sect {
   padding: 40px 0 0;
 
+  &.hide {
+    display: none;
+  }
+
   &__title {
     margin: 0 0 20px;
     font: bold 20px/1 $notoSans;
