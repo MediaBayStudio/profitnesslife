@@ -1,0 +1,27 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.allower-products-popup {
+  &__cnt {}
+
+  &__close {}
+
+  &__title {}
+
+  .popup {
+    &__text-block {}
+
+    &__text-block-title {}
+
+    &__pic {}
+
+    &__img {}
+
+    &__cnt {}
+
+    &__close {}
+
+    &__title {}
+  }
+}

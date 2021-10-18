@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //=include ../sections/diet-plan/diet-plan.js
 
+//=include ../sections/allowed-products-popup/allowed-products-popup.js
+
+//=include ../sections/nutrition-rules-popup/nutrition-rules-popup.js
+
+//=include ../sections/products-cart-popup/products-cart-popup.js
+
 //=include ../sections/footer/footer.js
 
 });

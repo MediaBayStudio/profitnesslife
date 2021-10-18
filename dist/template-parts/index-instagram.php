@@ -5,26 +5,26 @@
   <a href="https://www.instagram.com/<?php echo $main_insta ?>" target="_blank" class="index-instagram__main-link">&#64;<?php echo $main_insta ?></a>
   <div class="index-instagram__posts instagram-posts lazy" data-src="#"> <?php
 
-    $current_time_ms = time();
+    // $current_time_ms = time();
 
     // Раз в 3 дня
-    $update_period_ms = 3 * 24 * 60 * 60;
+    // $update_period_ms = 3 * 24 * 60 * 60;
 
-    if ( !$last_update_time ) {
-      $instagram_posts = get_instagram_posts( $main_insta );
-      refresh_intsagram_update_date( $current_time_ms );
-    } else {
-      if ( strtotime( $last_update_time ) + $update_period_ms <= $current_time_ms ) {
-        $instagram_posts = get_instagram_posts( $main_insta );
-        refresh_intsagram_update_date( $current_time_ms );
-      } else {
+    // if ( !$last_update_time ) {
+    //   $instagram_posts = get_instagram_posts( $main_insta );
+    //   refresh_intsagram_update_date( $current_time_ms );
+    // } else {
+    //   if ( strtotime( $last_update_time ) + $update_period_ms <= $current_time_ms ) {
+    //     $instagram_posts = get_instagram_posts( $main_insta );
+    //     refresh_intsagram_update_date( $current_time_ms );
+    //   } else {
         $instagram_posts = get_posts( [
           'post_type' => 'instagram_post',
           'numberposts' => 4,
           'order' => 'ASC'
         ] );
-      }
-    }
+      // }
+    // }
 
     if ( $instagram_posts ) {
       foreach ( $instagram_posts as $instagram_post ) : ?>

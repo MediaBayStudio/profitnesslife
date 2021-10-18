@@ -13,6 +13,7 @@
   transition: box-shadow .5s;
   will-change: box-shadow;
   cursor: pointer;
+  user-select: none;
 
   &__img {
     margin: 0 0 10px;

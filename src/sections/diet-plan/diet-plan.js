@@ -3,10 +3,19 @@
     dietPlanList = q('.diet-plan__list'),
     dietPlanDay = q('.diet-plan__day'),
     dietPlanDate = q('.diet-plan__date'),
+    openCalendarBtn = q('.diet-plan__calendar-btn'),
     events = qa('.event', calendar),
     setDataDay = function(days) {
       for (let i = 0, len = days.length; i < len; i++) {
         days[i].setAttribute('data-day', i);
+      }
+    },
+    closeCalendar = function(e) {
+      let target = e.target;
+      
+      if (!target.closest('.diet-plan__calendar')) {
+        calendar.classList.remove('active');
+        document.removeEventListener('click', closeCalendar);
       }
     };
 
@@ -33,6 +42,13 @@
 
   events[0].parentElement.setAttribute('data-week', 1);
   events[1].parentElement.setAttribute('data-week', 3);
+
+  openCalendarBtn.addEventListener('click', function() {
+    calendar.classList.add('active');
+    setTimeout(function() {
+      document.addEventListener('click', closeCalendar);
+    });
+  });
 
   calendar.addEventListener('click', function(e) {
     let target = e.target;

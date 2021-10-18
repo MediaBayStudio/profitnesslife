@@ -1,4 +1,3 @@
-<a href="<?php echo wp_logout_url() ?>">Выход</a>
 <?php
 if ( !$questionnaire_complete ) : ?>
   <section class="questionnaire-incomplete-section" id="questionnaire-incomplete-section">

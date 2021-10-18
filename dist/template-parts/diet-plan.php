@@ -1,11 +1,11 @@
 <?php
   $today_day = date( 'j', $current_time - $start_marathon_time );
-  echo '<p>Время прохождения анкеты: ' . date( 'd.m.Y H:i:s', $questionnaire_dmy_time ) . '</p>';
-  echo '<p>Старт марафона: ' . date( 'd.m.Y H:i:s', $start_marathon_time ) . '</p>';
-  echo '<p>Сейчас: ' . date( 'd.m.Y H:i:s', $current_time ) . '</p>';
-  echo '<p>first_week_end_time: ' . date( 'd.m.Y H:i:s', $first_week_end_time ) . '</p>';
-  echo '<p>second_week_end_time: ' . date( 'd.m.Y H:i:s', $second_week_end_time ) . '</p>';
-  echo '<p>third_week_end_time: ' . date( 'd.m.Y H:i:s', $third_week_end_time ) . '</p>';
+  // echo '<p>Время прохождения анкеты: ' . date( 'd.m.Y H:i:s', $questionnaire_dmy_time ) . '</p>';
+  // echo '<p>Старт марафона: ' . date( 'd.m.Y H:i:s', $start_marathon_time ) . '</p>';
+  // echo '<p>Сейчас: ' . date( 'd.m.Y H:i:s', $current_time ) . '</p>';
+  // echo '<p>first_week_end_time: ' . date( 'd.m.Y H:i:s', $first_week_end_time ) . '</p>';
+  // echo '<p>second_week_end_time: ' . date( 'd.m.Y H:i:s', $second_week_end_time ) . '</p>';
+  // echo '<p>third_week_end_time: ' . date( 'd.m.Y H:i:s', $third_week_end_time ) . '</p>';
  ?>
 
 <section class="diet-plan">
@@ -13,7 +13,7 @@
     <span class="diet-plan__day">День <?php echo $today_day ?></span>
     <div class="diet-plan__hdr-date">
       <span class="diet-plan__date"><span class="diet-plan__today">сегодня, </span><?php echo date( 'd.m.Y' ) ?></span>
-      <div class="diet-plan__calendar-btn">
+      <div class="diet-plan__calendar-btn lazy" data-src="#">
         <div class="diet-plan__calendar"> <?php
           echo Calendar::getInterval( date( 'n.Y', $start_marathon_time ), date( 'n.Y', strtotime( '-1day', $finish_marathon_time ) ), [
             date( 'd.m', $start_marathon_time ) => 'Начало марафона',

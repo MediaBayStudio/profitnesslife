@@ -120,12 +120,47 @@
               dinners += '<span style="display:block">День ' + j + ': ' + response.dinners[key].title + ' (~' + response.dinners[key].calories + ' ккал)</span>';
             }
 
+            completeBlock.insertAdjacentHTML('beforeend', '<button type="button" id="reset" class="btn btn-green" style="width:200px;margin:0 0 20px;">Сбросить анкету</button>');
+            completeBlock.insertAdjacentHTML('beforeend', '<p>Суточная норма калорий: ' + response.bmr + '</p>');
+            completeBlock.insertAdjacentHTML('beforeend', '<p>Исключили продукты: ' + response.categories + '</p>');
+            completeBlock.insertAdjacentHTML('beforeend', '<p>Исключили только на завтраки: ' + response.categories_breakfasts + '</p>');
+            completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на завтрак: ' + response.breakfast_ccal + '</p>');
+            completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на обед: ' + response.lunch_ccal + '</p>');
+            completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на ужин: ' + response.dinner_ccal + '</p>');
             completeBlock.insertAdjacentHTML('beforeend', breakfasts + snack_1 + lunches + snack_2 + dinners);
 
             questionnaireForm.classList.remove('loading');
             questionnaireForm.classList.add('complete');
             console.log(response);
             scrollToTarget('', '.questionnaire-incomplete-section__title');
+
+            id('reset').addEventListener('click', function() {
+              let data = 'action=questionnaire_send&reset=reset',
+                url = siteUrl + '/wp-admin/admin-ajax.php';
+
+              fetch(url, {
+                  method: 'POST',
+                  body: data,
+                  headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                  }
+                })
+                .then(function(response) {
+                  if (response.ok) {
+                    return response.text();
+                  } else {
+                    console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
+                    return '';
+                  }
+                })
+                .then(function(response) {
+                  // console.log(response);
+                  location.reload();
+                })
+                .catch(function(err) {
+                  console.log(err);
+                });
+            });
           })
           .catch(function(err) {
             console.log(err);

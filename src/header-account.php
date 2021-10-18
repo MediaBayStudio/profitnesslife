@@ -8,7 +8,13 @@
     $user_data,
     $current_template,
     $questionnaire_complete,
-    $template_directory_uri;
+    $template_directory_uri,
+    $questionnaire_dmy_time,
+    $start_marathon_time,
+    $current_time,
+    $first_week_end_time,
+    $second_week_end_time,
+    $third_week_end_time;
 
   if ( !$preload ) {
     $preload = get_field( 'preload' );
@@ -106,4 +112,12 @@
       <a href="<?php echo $site_url ?>" class="hdr__logo"><img src="<?php echo $logo_url ?>" alt="#" class="hdr__logo-img"></a>
       <a href="<?php echo wp_logout_url() ?>" class="hdr__logout">Выход<picture class="hdr__logout-icon"><source type="image/svg+xml" srcset="<?php echo $template_directory_uri ?>/img/icon-logout.svg" media="(min-width:767.98px)"><img src="#" alt="#"></picture></a>
       <button type="button" class="hdr__burger"></button>
-    </header>
+    </header> <?php
+    // echo '<div style="text-align:center">';
+    //   echo '<p>Время прохождения анкеты: ' . date( 'd.m.Y H:i:s', $questionnaire_dmy_time ) . '</p>';
+    //   echo '<p>Старт марафона: ' . date( 'd.m.Y H:i:s', $start_marathon_time ) . '</p>';
+    //   echo '<p>Сейчас: ' . date( 'd.m.Y H:i:s', $current_time ) . '</p>';
+    //   echo '<p>Последний день 1 недели: ' . date( 'd.m.Y H:i:s', $first_week_end_time ) . '</p>';
+    //   echo '<p>Последний день 2 недели: ' . date( 'd.m.Y H:i:s', $second_week_end_time ) . '</p>';
+    //   echo '<p>Последний день 3 недели: ' . date( 'd.m.Y H:i:s', $third_week_end_time ) . '</p>';
+    // echo '</div>';

@@ -17,32 +17,32 @@
     transition: opacity .5s, height 1s, padding .25s .4s, margin .5s;
 
     >.account-hero__close {
-      display: block;
-      width: 21px;
-      height: 21px;
+      // display: block;
+      // width: 21px;
+      // height: 21px;
       position: absolute;
-      top: 20px;
-      right: 20px;
+      // top: 20px;
+      // right: 20px;
 
-      &::before,
-      &::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 22px;
-        height: 1px;
-        background: currentColor;
-        pointer-events: none;
-      }
+      // &::before,
+      // &::after {
+      //   content: '';
+      //   position: absolute;
+      //   top: 50%;
+      //   left: 0;
+      //   width: 22px;
+      //   height: 1px;
+      //   background: currentColor;
+      //   pointer-events: none;
+      // }
 
-      &::before {
-        transform: rotate(45deg);
-      }
+      // &::before {
+      //   transform: rotate(45deg);
+      // }
 
-      &::after {
-        transform: rotate(-45deg);
-      }
+      // &::after {
+      //   transform: rotate(-45deg);
+      // }
     }
   }
 

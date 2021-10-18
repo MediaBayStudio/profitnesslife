@@ -163,9 +163,6 @@ require $template_directory . '/inc/redirects.php';
 // Функция создания календаря для стр. план питания
 require $template_directory . '/inc/calendar.php';
 
-// Создание главной секции на внутренних страницах личного кабинета
-require $template_directory . '/components/account-hero-block.php';
-
 require $template_directory . '/inc/close-welcome-block.php';
 require $template_directory . '/inc/load-diet-plan.php';
 require $template_directory . '/inc/weight-send.php';
@@ -174,6 +171,12 @@ require $template_directory . '/inc/measure-send.php';
 
 // Создание карточек в анкете
 require $template_directory . '/components/questionnaire-card.php';
+
+// Создание главной секции на внутренних страницах личного кабинета
+require $template_directory . '/components/account-hero-block.php';
+
+// Контент внутри попапа
+require $template_directory . '/components/popup-content.php';
 
 // Отправка и получение данных анкеты
 require $template_directory . '/inc/questionnaire-send.php';

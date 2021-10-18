@@ -25,4 +25,4 @@ $questionnaire_section_class = $questionnaire_complete ? 'complete' : 'incomplet
 	</section>
 </section> <?php
 
-get_footer();
+// get_footer();

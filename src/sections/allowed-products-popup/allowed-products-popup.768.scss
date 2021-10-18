@@ -1,0 +1,31 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.allowed-products-popup {
+  &__cnt {
+    padding: 45px calc(50vw - 360px);
+  }
+
+  &__close {}
+
+  &__title {}
+
+  .popup {
+    &__text-block {}
+
+    &__text-block-title {}
+
+    &__pic {
+      width: calc(100% / 5);
+    }
+
+    &__img {}
+
+    &__cnt {}
+
+    &__close {}
+
+    &__title {}
+  }
+}

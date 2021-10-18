@@ -83,6 +83,7 @@ var browser = {
   overlay,
   body,
   fakeScrollbar,
+  allowedProductsPopup,
   // Сокращение записи querySelector
   q = function(selector, element) {
     element = element || body;

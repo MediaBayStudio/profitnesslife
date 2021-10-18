@@ -1,0 +1,23 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.popup {
+  &__text-block {}
+
+  &__text-block-title {
+    margin: 0 0 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+  }
+
+  &__descr {
+    font-size: 16px;
+  }
+
+  &__pic {
+    margin: 20px 0 0;
+  }
+
+  &__img {}
+}

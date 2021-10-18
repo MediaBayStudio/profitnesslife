@@ -17,5 +17,10 @@ get_header( 'account' ) ?>
 			}
 		} ?>
 	</section>
-</section> <?php
+</section>
+<div id="fake-scrollbar"></div> <?php
+      wp_footer() ?>
+    </div>
+  </body>
+</html> <?php
 // get_footer();

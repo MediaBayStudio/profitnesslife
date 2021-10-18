@@ -1,6 +1,12 @@
 <?php
-// 
 function questionnaire_send() {
+
+  if ( $_POST['reset'] ) {
+    global $user_id;
+    echo update_field( 'questionnaire_complete', false, 'user_' . $user_id );
+    die();
+  }
+
   $user_id = $_POST['user-id'];
   $target = $_POST['target'];
   $sex = $_POST['sex'];
@@ -23,6 +29,7 @@ function questionnaire_send() {
   // На чем хотите сделать акцент в тренировках
   $body_parts = $_POST['body-parts'];
   $products = $_POST['categories'];
+  $cereals_products = $_POST['cereals-products'];
   $milk_products = $_POST['milk-products'];
   $meat_products = $_POST['meat-products'];
   $fish_products = $_POST['fish-products'];
@@ -68,23 +75,74 @@ function questionnaire_send() {
   $lunch_max_calories = $bmr * $luch_norm;
   $dinner_max_calories = $bmr * $dinner_norm;
 
-  // var_dump('breakfast_max_calories');
-  // var_dump($breakfast_max_calories);
-  // var_dump('lunch_max_calories');
-  // var_dump($lunch_max_calories);
-  // var_dump('dinner_max_calories');
-  // var_dump($dinner_max_calories);
+  // Категории для исключения
+  // исключение круп
+  foreach ( $cereals_products as $cereals_product ) {
+    if ( $cereals_product === 'all-cereals' ) {
+      $exclude_terms[] = 'cereals';
+      $exclude_terms_breakfasts[] = 'cereals';
+    } else if ( $cereals_product === 'exclude-breakfast' ) {
+      $exclude_terms_breakfasts[] = 'cereals';
+    }
+  }
+
+  // исключения молочных продуктов
+  foreach ( $milk_products as $milk_product ) {
+    if ( $milk_product === 'all' ) {
+      $exclude_terms[] = 'milk-products';
+      $exclude_terms_breakfasts[] = 'milk-products';
+    } else {
+      $exclude_terms[] = $milk_product;
+      $exclude_terms_breakfasts[] = $milk_product;
+    }
+  }
+
+  // исключения мясные продуктов
+  foreach ( $meat_products as $meat_product ) {
+    if ( $meat_product === 'all' ) {
+      $exclude_terms[] = 'meat-products';
+      $exclude_terms_breakfasts[] = 'meat-products';
+    } else {
+      $exclude_terms[] = $meat_product;
+      $exclude_terms_breakfasts[] = $meat_product;
+    }
+  }
+
+  // исключения рыбные продуктов
+  foreach ( $fish_products as $fish_product ) {
+    if ( $fish_product === 'all' ) {
+      $exclude_terms[] = 'fish-products';
+      $exclude_terms_breakfasts[] = 'fish-products';
+    } else {
+      $exclude_terms[] = $fish_product;
+      $exclude_terms_breakfasts[] = $fish_product;
+    }
+  }
+
+  foreach ( $products as $product ) {
+    if ( $product !== 'cereals' && $product !== 'fish-products'
+    && $product !== 'milk-products' && $product !== 'meat-products' ) {
+      $exclude_terms[] = $product;
+      $exclude_terms_breakfasts[] = $product;
+    }
+  }
 
   $breakfasts = get_posts( [
     'post_type'   => 'dish',
-    'numberposts' => 5,
+    'numberposts' => 7,
     'orderby' => 'rand',
     'tax_query'   => [
-    [
-      'taxonomy'  => 'dish_type',
-      'field'     => 'slug',
-      'terms'     => 'breakfast',
-      'orderby' => 'rand',
+      [
+        'taxonomy'  => 'dish_type',
+        'field'     => 'slug',
+        'terms'     => 'breakfast',
+        'orderby' => 'rand',
+      ],
+      [
+        'operator'  => 'NOT IN',
+        'taxonomy'  => 'dish_category',
+        'field'     => 'slug',
+        'terms'     => $exclude_terms_breakfasts
       ]
     ],
     'meta_query' => [
@@ -100,14 +158,20 @@ function questionnaire_send() {
 
   $lunches = get_posts( [
     'post_type'   => 'dish',
-    'numberposts' => 5,
+    'numberposts' => 7,
     'orderby' => 'rand',
     'tax_query'   => [
-    [
-      'taxonomy'  => 'dish_type',
-      'field'     => 'slug',
-      'terms'     => 'lunch',
-      'orderby' => 'rand',
+      [
+        'taxonomy'  => 'dish_type',
+        'field'     => 'slug',
+        'terms'     => 'lunch',
+        'orderby' => 'rand'
+      ],
+      [
+        'operator'  => 'NOT IN',
+        'taxonomy'  => 'dish_category',
+        'field'     => 'slug',
+        'terms'     => $exclude_terms
       ]
     ],
     'meta_query' => [
@@ -123,14 +187,20 @@ function questionnaire_send() {
 
   $dinners = get_posts( [
     'post_type'   => 'dish',
-    'numberposts' => 5,
+    'numberposts' => 7,
     'orderby' => 'rand',
     'tax_query'   => [
-    [
-      'taxonomy'  => 'dish_type',
-      'field'     => 'slug',
-      'terms'     => 'dinner',
-      'orderby' => 'rand',
+      [
+        'taxonomy'  => 'dish_type',
+        'field'     => 'slug',
+        'terms'     => 'dinner',
+        'orderby' => 'rand'
+      ],
+      [
+        'operator'  => 'NOT IN',
+        'taxonomy'  => 'dish_category',
+        'field'     => 'slug',
+        'terms'     => $exclude_terms
       ]
     ],
     'meta_query' => [
@@ -156,7 +226,7 @@ function questionnaire_send() {
     $dinners_ids[] = $dinner->ID;
   }
 
-  for ( $i = 0; $i < 5; $i++ ) { 
+  for ( $i = 0; $i < 7; $i++ ) {
     $breakfast_daily_calories = get_field( 'calories', $breakfasts[ $i ] );
     $lunch_daily_calories = get_field( 'calories', $lunches[ $i ] );
     $dinner_daily_calories = get_field( 'calories', $dinners[ $i ] );
@@ -173,6 +243,12 @@ function questionnaire_send() {
           'field'     => 'slug',
           'terms'     => 'snack_1',
           'orderby' => 'rand'
+        ],
+        [
+          'operator'  => 'NOT IN',
+          'taxonomy'  => 'dish_category',
+          'field'     => 'slug',
+          'terms'     => $exclude_terms
         ]
       ],
       'meta_query' => [
@@ -198,13 +274,13 @@ function questionnaire_send() {
           'field'     => 'slug',
           'terms'     => 'snack_2',
           'orderby' => 'rand'
-        ]/*,
+        ],
         [
+          'operator'  => 'NOT IN',
           'taxonomy'  => 'dish_category',
           'field'     => 'slug',
-          'terms'     => 'orehi',
-          'operator' => 'NOT IN'
-        ]*/
+          'terms'     => $exclude_terms
+        ]
       ],
       'meta_query' => [
         [
@@ -216,6 +292,9 @@ function questionnaire_send() {
         ]
       ]
     ] );
+
+    $snacks_1_ids[] = $daily_snack_1[0]->ID;
+    $snacks_2_ids[] = $daily_snack_2[0]->ID;
 
     $response['breakfasts'][] = [
       'title' => $breakfasts[ $i ]->post_title,
@@ -241,8 +320,10 @@ function questionnaire_send() {
       'title' => $daily_snack_2[0]->post_title,
       'calories' => get_field( 'calories', $daily_snack_2[0] )
     ];
-
   }
+
+  $response['categories'] = $exclude_terms;
+  $response['categories_breakfasts'] = $exclude_terms_breakfasts;
 
   $response['bmr'] = $bmr;
   $response['breakfast_ccal'] = $breakfast_max_calories;
@@ -274,62 +355,15 @@ function questionnaire_send() {
 
   update_field( 'week_1', [
     'breakfasts' => $breakfasts_ids,
+    'snack_1' => $snacks_1_ids,
     'lunches' => $lunches_ids,
+    'snack_2' => $snacks_2_ids,
     'dinners' => $dinners_ids
   ], $user_id );
 
   update_field( 'questionnaire_show', true, 'user_' . $user_id );
 
   echo json_encode( $response );
-
-
-  // $sum_calories = get_field( 'calories', $breakfasts[0] ) + get_field( 'calories', $lunches[0] )  + get_field( 'calories', $dinners[0] );
-
-  // $snack_max_calories = ( $bmr - $sum_calories ) / 2;
-
-  // $snacks = get_posts( [
-  //   'post_type'   => 'dish',
-  //   'numberposts' => 2,
-  //   'orderby' => 'rand',
-  //   'tax_query'   => [
-  //   [
-  //     'taxonomy'  => 'dish_type',
-  //     'field'     => 'slug',
-  //     'terms'     => 'snack',
-  //     'orderby' => 'rand'
-  //     ]
-  //   ],
-  //   'meta_query' => [
-  //     [
-  //       'key' => 'calories',
-  //       'value' => $snack_max_calories,
-  //       'compare' => '<=',
-  //       'type' => 'numeric',
-  //       'orderby' => 'rand'
-  //     ]
-  //   ]
-  // ] );
-
-  // $response = [
-  //   'breakfasts' => $breakfasts,
-  //   'lunches' => $lunches,
-  //   'dinners' => $dinners,
-  //   'snaks' => $snacks
-  // ];
-
-  // var_dump($snacks[0]->post_title);
-  // var_dump($snacks[0]->post_title);
-  // var_dump( get_field( 'calories', $snacks[0] ) );
-  // var_dump( get_field( 'calories', $snacks[1] ) );
-
-  // $snack_1 = get_food( $snacks_1, $snack_max_calories );
-  // $snack_2 = get_food( $snacks_2, $snack_max_calories );
-
-  // var_dump( $target );
-  // var_dump( $products );
-  // var_dump( $milk_products );
-  // var_dump( $activity );
-  // var_dump( $body_parts );
 
   die();
 }
