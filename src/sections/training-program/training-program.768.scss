@@ -1,0 +1,42 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.workout-sect {}
+
+.workout-block {
+  display: flex;
+  flex-wrap: wrap;
+  &__title {
+    width: 100%;
+  }
+}
+
+.workout {
+  width: calc((100% - 40px) / 3);
+  overflow: hidden;
+  border-radius: 0 0 20px 20px;
+  &:not(:last-child) {}
+
+  &__title {
+    font-size: 18px;
+  }
+
+  &__body {
+    height: 100%;
+  }
+
+  &__play {
+    &::before {}
+  }
+
+  &__preview {}
+
+  &__duration {
+    font-size: 14px;
+  }
+
+  &__name {
+    font-size: 16px;
+  }
+}

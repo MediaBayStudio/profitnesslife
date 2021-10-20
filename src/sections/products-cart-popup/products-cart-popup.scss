@@ -1,3 +1,56 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.products-cart-popup {
+  &__cnt {}
+
+  &__close {}
+
+  &__title {}
+
+  &__hdr {
+    margin: 0 0 15px;
+    display: flex;
+    flex-flow: column-reverse;
+  }
+
+  &__dates {
+    color: $coral;
+  }
+
+  &__date-form {}
+
+  &__date-to {}
+
+  &__table {}
+
+  &__thead {
+    // margin: 0 0 15px;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    background: linear-gradient(286.12deg, rgba(243, 224, 215, 0.9) 8.77%, #F6EFE9 97.03%);
+    border-radius: 20px;
+    font: 500 14px/1 $roboto;
+    > .products-cart-popup__th {
+      
+    }
+  }
+
+  &__tr {
+    padding: 10px 50px 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &:not(:last-child) {
+      border-bottom: 1px solid #E0E0E0;
+    }
+  }
+
+  &__th {}
+
+  &__tbody {}
+
+  &__td {}
+}

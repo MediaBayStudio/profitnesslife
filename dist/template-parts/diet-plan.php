@@ -1,5 +1,6 @@
 <?php
   $today_day = date( 'j', $current_time - $start_marathon_time );
+  // $today_day = 2;
   // echo '<p>Время прохождения анкеты: ' . date( 'd.m.Y H:i:s', $questionnaire_dmy_time ) . '</p>';
   // echo '<p>Старт марафона: ' . date( 'd.m.Y H:i:s', $start_marathon_time ) . '</p>';
   // echo '<p>Сейчас: ' . date( 'd.m.Y H:i:s', $current_time ) . '</p>';
@@ -32,7 +33,8 @@
       'dinners'
     ];
     foreach ( $types as $type ) :
-      $item = $user_data['week_' . $current_week_number][ $type ][ $today_day - 1 ];
+      // $item = $user_data['week_' . $current_week_number][ $type ][ $today_day - 1 ];
+      $item = $user_data['week_1'][ $type ][ $today_day - 1 ];
       if ( !$item ) {
         continue;
       }
@@ -71,3 +73,6 @@
     endforeach ?>
   </ul>
 </section>
+<?php 
+var_dump( $products_cart_popup );
+ ?>

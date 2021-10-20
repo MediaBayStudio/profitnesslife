@@ -18,6 +18,13 @@ function popup_content( $args ) {
           endif;
         endforeach;
       endif;
+      if ( $tag === 'ul' ) : ?>
+        <ul class="popup__ul"> <?php
+          foreach ( $value as $list_item ) : ?>
+            <li class="popup__list-item"><?php echo $list_item ?></li> <?php
+          endforeach ?>
+        </ul> <?php
+      endif;
     endforeach; ?>
   </div> <?php
 }

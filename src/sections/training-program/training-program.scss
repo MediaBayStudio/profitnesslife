@@ -1,0 +1,79 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.workout-sect {}
+
+.workout-block {
+  &__title {
+    margin: 0 0 15px;
+    display: block;
+    font: bold 20px/1.5 $notoSans;
+  }
+}
+
+.workout {
+  // width: 210px;
+  width: responsive('320->575', '210->400');
+
+  &:not(:last-child) {
+    margin: 0 20px 0 0;
+  }
+
+  &__title {
+    margin: 0 0 15px;
+    display: block;
+    font: 500 16px/1.5 $roboto;
+  }
+
+  &__body {
+    padding: 15px 15px 20px;
+    display: flex;
+    flex-flow: column;
+    background: $white;
+    box-shadow: 0px 8px 20px rgba(147, 167, 181, 0.15);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__play {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    // height: 125px;
+    height: responsive('320->575', '125->200');
+    cursor: pointer;
+    background: rgba(0,0,0,.2);
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 35px;
+      height: 35px;
+      transform: translate(-50%, -50%);
+      background: url('../img/icon-play.svg') center/contain no-repeat;
+    }
+  }
+
+  &__preview {
+    margin: -15px -15px 15px;
+    width: calc(100% + 30px);
+    height: responsive('320->575', '125->200');
+    // height: 125px;
+    object-fit: cover;
+    border-radius: 20px 20px 0 0;
+    pointer-events: none;
+  }
+
+  &__duration {
+    color: $accentGreen;
+    font: 12px/1.5 $roboto;
+  }
+
+  &__name {
+    font: 500 14px/1.5 $roboto;
+  }
+}

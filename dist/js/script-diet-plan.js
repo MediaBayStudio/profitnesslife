@@ -72,6 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
           '&week=' + week +
           '&day_index=' + day;
 
+        console.log('data-day', day);
+
       calendar.classList.add('loading');
 
       fetch(siteUrl + '/wp-admin/admin-ajax.php', {
@@ -94,10 +96,9 @@ document.addEventListener('DOMContentLoaded', function() {
           targetDate = new Date(tragetElementDate.slice(-4), tragetElementDate.slice(3, 5), tragetElementDate.slice(0, 2)).getDate(),
           todayDate = new Date().getDate();
 
-
-          console.log('tragetElementDate', tragetElementDate);
-        console.log('targetDate', targetDate);
-        console.log('todayDate', todayDate);
+        // console.log('tragetElementDate', tragetElementDate);
+        // console.log('targetDate', targetDate);
+        // console.log('todayDate', todayDate);
 
         if (targetDate === todayDate) {
           dayName = 'сегодня, ';
@@ -107,8 +108,10 @@ document.addEventListener('DOMContentLoaded', function() {
           dayName = 'завтра, ';
         }
 
+        console.log(day);
+
         dietPlanList.innerHTML = response;
-        dietPlanDay.textContent = 'День ' + ((+day + 1) * week);
+        dietPlanDay.textContent = 'День ' + ((+day + 1) + ((week - 1) * 7));
         dietPlanDate.innerHTML = '<span class="diet-plan__today">' + dayName + '</span>' + target.getAttribute('data-date').slice(-10);
         // console.log(response);
         // console.log(JSON.parse(response));
@@ -131,9 +134,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 })();
 
-//=include ../sections/nutrition-rules-popup/nutrition-rules-popup.js
+;(function() {
+  nutritionRulesPopup = new Popup('.nutrition-rules-popup', {
+    openButtons: '.nutrition-rules-popup-open',
+    closeButtons: '.nutrition-rules-popup__close'
+  });
+})();
 
-//=include ../sections/products-cart-popup/products-cart-popup.js
+;(function() {
+  productsCartPopup = new Popup('.products-cart-popup', {
+    openButtons: '.products-cart-popup-open',
+    closeButtons: '.products-cart-popup__close'
+  });
+})();
 
 //=include ../sections/footer/footer.js
 

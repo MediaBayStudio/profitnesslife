@@ -1,0 +1,32 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.workout-sect {}
+
+.workout-block {
+  &__title {}
+}
+
+.workout {
+  width: 260px;
+  &:not(:last-child) {}
+
+  &__title {}
+
+  &__body {}
+
+  &__play {
+    height: 140px;
+    &::before {
+    }
+  }
+
+  &__preview {
+    height: 140px;
+  }
+
+  &__duration {}
+
+  &__name {}
+}

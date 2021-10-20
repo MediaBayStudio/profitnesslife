@@ -1,0 +1,31 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.workout-sect {}
+
+.workout-block {
+  &__title {
+    margin: 0 0 20px;
+    font-size: 24px;
+  }
+}
+
+.workout {
+
+  &:not(:last-child) {}
+
+  &__title {}
+
+  &__body {}
+
+  &__play {
+    &::before {}
+  }
+
+  &__preview {}
+
+  &__duration {}
+
+  &__name {}
+}

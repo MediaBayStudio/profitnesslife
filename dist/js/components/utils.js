@@ -84,6 +84,8 @@ var browser = {
   body,
   fakeScrollbar,
   allowedProductsPopup,
+  nutritionRulesPopup,
+  productsCartPopup,
   // Сокращение записи querySelector
   q = function(selector, element) {
     element = element || body;

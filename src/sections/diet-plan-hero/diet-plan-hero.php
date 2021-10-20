@@ -14,7 +14,7 @@ print_account_hero_section( [
     ],
     [
       'title' => 'Правила питания',
-      'class' => 'btn-ol'
+      'class' => 'btn-ol nutrition-rules-popup-open'
     ]
   ]
 ] ) ?>

@@ -11,7 +11,7 @@ print_account_hero_section( [
   'buttons' => [
     [
       'title' => 'Посмотреть',
-      'class' => 'btn-ol'
+      'class' => 'btn-ol products-cart-popup-open'
     ]
   ]
 ] ) ?>

@@ -1,3 +1,41 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.products-cart-popup {
+  &__cnt {}
+
+  &__close {}
+
+  &__title {}
+
+  &__hdr {
+    margin: 0 0 20px;
+    flex-flow: row;
+    justify-content: space-between;
+    font-size: 16px;
+  }
+
+  &__dates {}
+
+  &__date-form {}
+
+  &__date-to {}
+
+  &__table {
+    font-size: 16px;
+  }
+
+  &__thead {
+    padding: 20px 225px 20px 20px;
+    font-size: 18px;
+  }
+
+  &__tr {
+    padding: 15px 275px 15px 0;
+  }
+
+  &__th {}
+
+  &__td {}
+}

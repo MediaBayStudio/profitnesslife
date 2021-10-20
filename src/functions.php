@@ -20,6 +20,81 @@ $email = get_option( 'contacts_email' );
 $logo_id = get_theme_mod( 'custom_logo' );
 $logo_url = wp_get_attachment_url( $logo_id );
 
+// $csv = csv_to_array( $template_directory . '/workout.csv' );
+
+// $i = 0;
+// foreach ( $csv as $c ) {
+//   break;
+//   // echo '<p>$i = ' . $i . '</p>';
+//   $title = $c['title'];
+
+//   // Для дома/зала
+//   $type = explode( '/', str_replace( ' ', '', mb_strtolower( $c['type'] ) ) );
+
+//   // Части тела (все тело, кардио, пресс и т.д.)
+//   $category = explode( '/', str_replace( ' ', '', mb_strtolower( $c['category'] ) ) );
+
+//   // Резинки, гантели
+//   $inventory = explode( '/', str_replace( ' ', '', mb_strtolower( $c['inventory'] ) ) );
+
+//   // Ограничения (руки, ноги т.д.)
+//   $muscle_groups = explode( '/', str_replace( ' ', '', mb_strtolower( $c['muscle_groups'] ) ) );
+
+//   // Повторения
+//   $reps = $c['reps'] ?: 'reps';
+//   $reps_group = [
+//     'newbie_number' => str_replace( ' ', '', $c['newbie'] ),
+//     'newbie_what' => str_replace( ' ', '', $reps ),
+//     'middle_number' => str_replace( ' ', '', $c['middle'] ),
+//     'middle_what' => str_replace( ' ', '', $reps ),
+//     'expert_number' => str_replace( ' ', '', $c['expert'] ),
+//     'expert_what' => str_replace( ' ', '', $reps )
+//   ];
+
+
+//   $post_id = wp_insert_post( [
+//     'post_type' => 'workout',
+//     'post_title'    => $title,
+//     'post_content'  => '',
+//     'post_status'   => 'publish',
+//     'post_author'   => 1
+//   ] );
+
+//   update_field( 'type', $type, $post_id );
+//   update_field( 'category', $category, $post_id );
+//   update_field( 'inventory', $inventory, $post_id );
+//   update_field( 'muscle_groups', $muscle_groups , $post_id);
+//   update_field( 'reps', $reps_group , $post_id);
+
+//   if ( $i === 5 ) {
+//     break;
+//   }
+
+//   $i++;
+
+//   // break;
+// }
+
+function csv_to_array( $filename='', $delimiter=',' ) {
+  if( !file_exists($filename) || !is_readable($filename) )
+      return false;
+
+  $header = null;
+  $data = [];
+
+  if ( ($handle = fopen( $filename, 'r' )) !== false ) {
+    while ( ($row = fgetcsv( $handle, 1000, $delimiter )) !== false ) {
+      if ( !$header ) {
+        $header = $row;
+      } else {
+        $data[] = array_combine( $header, $row );
+      }
+    }
+    fclose( $handle );
+  }
+  return $data;
+}
+
 /*
   Расчеты времени после прохождения анкеты
 */

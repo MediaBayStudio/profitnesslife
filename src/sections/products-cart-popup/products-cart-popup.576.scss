@@ -1,3 +1,31 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.products-cart-popup {
+  &__cnt {}
+
+  &__close {}
+
+  &__title {}
+
+  &__hdr {}
+
+  &__dates {}
+
+  &__date-form {}
+
+  &__date-to {}
+
+  &__table {}
+
+  &__thead {}
+
+  &__tr {}
+
+  &__th {}
+
+  &__tbody {}
+
+  &__td {}
+}
