@@ -40,7 +40,7 @@
             <span class="review__after-weight"><?php echo $review_fields['weight_after'] ?> кг</span>
           </div>
         </div>
-        <p class="review__text"><?php echo $review_fields['text'] ?></p>
+        <p class="review__text lazy" data-src="#"><?php echo $review_fields['text'] ?></p>
       </div> <?php
     endforeach ?>
     <?php
@@ -78,7 +78,7 @@
             <span class="review__after-weight"><?php echo $review_fields['weight_after'] ?> кг</span>
           </div>
         </div>
-        <p class="review__text"><?php echo $review_fields['text'] ?></p>
+        <p class="review__text lazy" data-src="#"><?php echo $review_fields['text'] ?></p>
       </div> <?php
     endforeach ?>
     <div class="reviews-sect__nav"></div>

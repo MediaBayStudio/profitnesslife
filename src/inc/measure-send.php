@@ -25,7 +25,10 @@ function measure_send() {
 
       update_field( 'measure_timeline', $measure_timeline, $user );
 
+      $field = get_field( 'measure_timeline', $user );
+
       $response['initial_measure'] = false;
+      $response['chart_data'] = $field;
     } else {
       update_field( 'initial_measure_date', $_POST['date'], $user );
       update_field( 'initial_measure_chest', $_POST['chest'], $user );

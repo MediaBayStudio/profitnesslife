@@ -1,4 +1,4 @@
-<section class="index-team container sect"<?php echo $section_id ?>>
+<section class="index-team container sect" id="team">
   <h2 class="index-team__title sect-title"><?php echo $section['title'] ?></h2>
   <div class="index-team__team lazy" data-src="#"> <?php
     foreach ( $section['team'] as $person ) : ?>

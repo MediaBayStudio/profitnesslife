@@ -1,0 +1,31 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.inventory-popup {
+  &__cnt {}
+
+  &__close {}
+
+  &__title {}
+
+  .popup {
+    &__cnt {}
+
+    &__close {}
+
+    &__title {}
+
+    &__text-block {}
+
+    &__text-block-title {}
+
+    &__descr {}
+
+    &__recommend {}
+
+    &__pic {}
+
+    &__img {}
+  }
+}

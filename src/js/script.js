@@ -58,11 +58,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // let navLinks = qa('.nav-link, .hdr__callback');
+  let navLinks = qa('.hdr .nav-link, .ftr .nav-link, .index-hero__btn, .index-invite__btn');
 
-  // for (let i = 0, len = navLinks.length; i < len; i++) {
-  // navLinks[i].addEventListener('click', scrollToTarget);
-  // }
+  for (let i = 0, len = navLinks.length; i < len; i++) {
+    navLinks[i].addEventListener('click', scrollToTarget);
+  }
 
   // sticky(hdr);
 

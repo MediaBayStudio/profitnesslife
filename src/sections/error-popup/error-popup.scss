@@ -1,0 +1,17 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.error-popup {
+  align-items: center;
+  &__cnt {
+    max-width: 320px;
+    text-align: center;
+  }
+
+  &__close {}
+
+  &__descr {
+    margin: 50px auto 30px;
+  }
+}

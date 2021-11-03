@@ -10,17 +10,14 @@ if ( ! $typeform || $typeform == 'sign' )
       <span class="form_head_title">Войти в личный кабинет</span>
       <p class="form_head_descr">Данные для входа в личный кабинет выдаются каждому участнику марафона после оплаты</p>
         <!-- <div class="form_auth form_active"><?php #_e( 'Authorization', 'wp-recall' ); ?></div> -->
-    <?php #if ( rcl_is_register_open() ): ?>
-      <!-- <div class="form_reg"><?php #f ( ! $typeform ) { ?><a href="#" class="link-register-rcl link-tab-rcl "><?php #_e( 'Registration', 'wp-recall' ); ?></a><?php #} ?></div> -->
-    <?php #endif; ?>
     </div>
 
-    <div class="form-block-rcl"><?php rcl_notice_form( 'login' ); ?></div>
+    <div class="form-block-rcl"><?php #rcl_notice_form( 'login' ); ?></div>
 
   <?php $user_login  = (isset( $_REQUEST['user_login'] )) ? wp_strip_all_tags( $_REQUEST['user_login'], 0 ) : ''; ?>
   <?php $user_pass   = (isset( $_REQUEST['user_pass'] )) ? wp_strip_all_tags( $_REQUEST['user_pass'], 0 ) : ''; ?>
 
-  <form class="form-sign" action="<?php rcl_form_action( 'login' ); ?>" method="post">
+  <form class="form-sign" action="<?php #rcl_form_action( 'login' ); ?>" method="post">
       <label class="form-sign__field field">
           <input required type="text" placeholder="<?php _e( 'Login', 'wp-recall' ); ?>" value="<?php echo $user_login; ?>" name="user_login" class="field__inp">
       </label>
@@ -28,7 +25,7 @@ if ( ! $typeform || $typeform == 'sign' )
           <input required type="password" placeholder="<?php _e( 'Password', 'wp-recall' ); ?>" value="<?php echo $user_pass; ?>" name="user_pass" class="field__inp">
       </label>
       <!-- <div class="form-block-rcl"> -->
-    <?php do_action( 'login_form' ); ?>
+    <?php #do_action( 'login_form' ); ?>
 
           <!-- <div class="default-field rcl-field-input type-checkbox-input">
               <div class="rcl-checkbox-box">

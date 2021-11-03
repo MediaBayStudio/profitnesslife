@@ -158,8 +158,12 @@ span.wpcf7-not-valid-tip,
   display: none !important;
 }
 
+@import '../../sections/hero-404/hero-404';
+
 
 @media (min-width:767.98px) {
+  @import '../../sections/hero-404/hero-404.768';
+
   .account-page-sections {
     padding-top: 35px;
   }
@@ -212,6 +216,7 @@ span.wpcf7-not-valid-tip,
 }
 
 @media (min-width:1023.98px) {
+  @import '../../sections/hero-404/hero-404.1024';
 
   body {
     font-size: 18px;
@@ -262,6 +267,7 @@ span.wpcf7-not-valid-tip,
 }
 
 @media (min-width:1279.98px) {
+  @import '../../sections/hero-404/hero-404.1280';
    body {
     &.page-template-account,
     &.page-template-chat,

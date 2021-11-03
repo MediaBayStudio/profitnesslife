@@ -11,6 +11,10 @@
   border-radius: 30px;
   background: #fff;
 
+  &__attention {
+    display: none;
+  }
+
   &-maybe-close {
     position: relative;
     overflow: hidden;
@@ -74,10 +78,33 @@
     >.btn {
       width: 100%;
       padding: 10px;
+
       &:nth-child(2) {
         margin: 15px 0 0;
       }
     }
 
+  }
+}
+
+.products-cart-hero {
+  &.attention {
+    .account-hero__attention {
+      margin: 20px 0 0;
+      max-width: 375px;
+      display: flex;
+      align-items: flex-start;
+      color: $coral;
+      font-size: 14px;
+
+      &::before {
+        flex-shrink: 0;
+        margin: 0 5px 0 0;
+        content: '';
+        width: 18px;
+        height: 18px;
+        background: url('img/icon-attention.svg') center/contain no-repeat;
+      }
+    }
   }
 }

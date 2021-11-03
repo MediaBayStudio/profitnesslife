@@ -7,7 +7,7 @@
     transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translate3d(-25%, 0, 0);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -47,23 +47,28 @@
   }
 
   &__marquee {
+    // width: 100vw;
     padding: 8px 0;
     display: flex;
     white-space: nowrap;
     position: absolute;
     bottom: 0;
     left: 0;
-    background: #fff;
-    color: $coral;
-    border: 1px solid;
+    color: transparent;
+    // background: #fff;
+    // color: $coral;
+    border: 1px solid $coral;
     border-left: 0;
     border-right: 0;
     pointer-events: none;
     font-size: 14px;
     text-transform: uppercase;
     transform: translate3d(0, 0, 0);
+    opacity: 0;
+    transition: opacity 1s;
     &.animating {
-      animation: translateLine 80s linear infinite;
+      opacity: 1;
+      animation: translateLine 20s linear infinite;
     }
   }
 }

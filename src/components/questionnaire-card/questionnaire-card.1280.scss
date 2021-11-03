@@ -4,7 +4,7 @@
 
 
 .questionnaire-card {
-  padding: 30px 20px;
+  // padding: 30px 20px;
   &__img {}
 
   &__title {}
@@ -18,7 +18,9 @@
     }
   }
 
-  &__label {}
+  &__label {
+    padding: 30px 20px;
+  }
 
   &__checkbox-input {}
 

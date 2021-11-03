@@ -18,6 +18,7 @@
   &__img {
     max-width: 375px;
     width: 100%;
+    height: responsive('320->575', '217->291');
   }
 }
 

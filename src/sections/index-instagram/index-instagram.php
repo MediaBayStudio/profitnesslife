@@ -11,13 +11,13 @@
     // $update_period_ms = 3 * 24 * 60 * 60;
 
     // if ( !$last_update_time ) {
-    //   $instagram_posts = get_instagram_posts( $main_insta );
-    //   refresh_intsagram_update_date( $current_time_ms );
+      // $instagram_posts = get_instagram_posts( $main_insta );
+      // refresh_intsagram_update_date( $current_time_ms );
     // } else {
-    //   if ( strtotime( $last_update_time ) + $update_period_ms <= $current_time_ms ) {
-    //     $instagram_posts = get_instagram_posts( $main_insta );
-    //     refresh_intsagram_update_date( $current_time_ms );
-    //   } else {
+      // if ( strtotime( $last_update_time ) + $update_period_ms <= $current_time_ms ) {
+        // $instagram_posts = get_instagram_posts( $main_insta );
+        // refresh_intsagram_update_date( $current_time_ms );
+      // } else {
         $instagram_posts = get_posts( [
           'post_type' => 'instagram_post',
           'numberposts' => 4,

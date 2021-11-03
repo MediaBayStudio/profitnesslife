@@ -28,7 +28,10 @@
 .progress-screen {
   &__pic {}
 
-  &__img {}
+  &__img {
+    width: 936px;
+    height: 417px;
+  }
 }
 
 .nutrition-screen {

@@ -15,6 +15,7 @@
 
   &__screen {
     padding: 60px 55px 35px;
+    justify-content: center;
     &.acitve {}
   }
 }
@@ -25,7 +26,10 @@
 .progress-screen {
   &__pic {}
 
-  &__img {}
+  &__img {
+    width: 802px;
+    height: 451px;
+  }
 }
 
 .nutrition-screen {

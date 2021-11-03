@@ -13,6 +13,11 @@
 
 .photo-progress-slider {
   display: flex;
+  transition: opacity .5s;
+  &.loading {
+    opacity: 0.5;
+    pointer-events: none;
+  }
   &:not(.slick-slider) {
     .photo-progress-slider__nav {
       display: none;

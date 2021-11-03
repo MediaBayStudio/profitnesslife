@@ -6,8 +6,6 @@
 
 get_header();
 
-foreach ( $GLOBALS['sections'] as $section ) {
-	require 'template-parts/' . $section['acf_fc_layout'] . '.php';
-}
+require 'template-parts/hero-404.php';
 
 get_footer();

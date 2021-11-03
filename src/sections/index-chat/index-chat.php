@@ -1,4 +1,4 @@
-<section class="index-chat container sect"<?php echo $section_id ?>>
+<section class="index-chat container sect" id="chat">
   <div class="index-chat__text">
     <h2 class="index-chat__title sect-title"><?php echo $section['title'] ?></h2>
     <p class="index-chat__descr"><?php echo $section['descr'] ?></p>

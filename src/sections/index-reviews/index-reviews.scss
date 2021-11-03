@@ -16,6 +16,7 @@
 }
 
 .review {
+  flex-shrink: 0;
   display: flex;
   flex-flow: column;
 
@@ -30,7 +31,7 @@
     padding: 3px;
     width: 57px;
     height: 57px;
-    border-radius: 30px;
+    border-radius: 50%;
     overflow: hidden;
     position: relative;
 
@@ -129,13 +130,21 @@
     margin: 20px 0 0;
     position: relative;
     &::before {
-      content: '“';
+      content: '';
+      width: 65px;
+      height: 90px;
       position: absolute;
-      top: -45px;
+      top: -35px;
       left: 0;
-      font: 190px/1 serif;
-      color: #F6EFE9;
+      background: center/contain no-repeat;
+      // font: 190px/1 serif;
+      // color: #F6EFE9;
       z-index: -1;
+    }
+    &.lazyloaded {
+      &::before {
+        background-image: url('../img/icon-quote.svg');
+      }
     }
   }
 }

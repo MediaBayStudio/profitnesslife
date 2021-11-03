@@ -16,22 +16,27 @@
 
 .measure-current {
   width: 195px;
-  &__title {
+
+  &__title {}
+
+  &__no-data {
+    &-msg {
+      margin-left: -15px;
+      width: calc(100% + 30px);
+    }
   }
 
-  &__date {
-  }
+  &__date {}
 
   &__table {}
 }
 
 .measure-form {
   width: 420px;
-  &__title {
-  }
 
-  &__descr {
-  }
+  &__title {}
+
+  &__descr {}
 
   &__data {}
 

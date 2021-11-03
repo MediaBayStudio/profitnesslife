@@ -18,6 +18,7 @@ get_header( 'account' ) ?>
 			}
 		} ?>
 	</section>
-</section> <?php
+</section>
+<div id="fake-scrollbar"></div> <?php
 
 // get_footer();

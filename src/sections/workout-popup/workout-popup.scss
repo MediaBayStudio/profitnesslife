@@ -1,3 +1,81 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.workout-popup {
+  &__cnt {
+    display: flex;
+    flex-flow: column;
+  }
+
+  &__close {}
+
+  &__title {}
+
+  &__video {
+    max-width: 100%;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+  &__controls {
+    margin: 15px 0 0;
+    display: none;
+  }
+
+  &__text {
+    margin: 20px 0 0;
+    display: flex;
+    flex-flow: column;
+  }
+
+  &__name {
+    font: 500 16px/1.5 $roboto;
+  }
+
+  &__number {
+    margin: 0 0 15px;
+    font: bold 20px/1.3 $notoSans;
+  }
+
+  &__playlist {
+    margin: 25px 0 0;
+    padding: 20px 15px;
+    background: #F3F2EE;
+    border-radius: 30px;
+  }
+
+  &__playlist-item {
+    padding: 20px 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &.active {
+      background: $white;
+      box-shadow: 0px 8px 20px rgba(147, 167, 181, 0.15);
+      border-radius: 30px;
+
+      >.workout-popup__playlist-item-duration {
+        color: $accentGreen;
+      }
+    }
+  }
+
+  &__playlist-item-play-icon {
+    margin: 0 15px 0 0;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+  }
+
+  &__playlist-item-number {
+    pointer-events: none;
+  }
+
+  &__playlist-item-duration {
+    pointer-events: none;
+    margin: 0 0 0 auto;
+    color: $pistachio;
+  }
+}

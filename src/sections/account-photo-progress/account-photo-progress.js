@@ -7,19 +7,28 @@
     slidesLength = slides.length,
 
     buildSlider = function() {
-      if (media('(min-width:575.98px)') && slides.length < 4) {
+      console.log('slidesLength', slidesLength);
+      // if (media('(min-width:575.98px)') && slides.length < 4) {
+      if (media('(min-width:1279.98px)') && slides.length < 5) {
+        console.log('here-1');
         if (SLIDER.hasSlickClass($slidesSect)) {
           SLIDER.unslick($slidesSect);
         }
-      } else if (media('(min-width:767.98px)') && slides.length < 5) {
-        if (SLIDER.hasSlickClass($slidesSect)) {
-          SLIDER.unslick($slidesSect);
-        }
+      // } else if (media('(min-width:767.98px)') && slides.length < 5) {
       } else if (media('(min-width:1023.98px)') && slides.length < 4) {
+        console.log('here-2');
         if (SLIDER.hasSlickClass($slidesSect)) {
           SLIDER.unslick($slidesSect);
         }
-      } else if (media('(min-width:1279.98px)') && slides.length < 5) {
+      // } else if (media('(min-width:1023.98px)') && slides.length < 4) {
+      } else if (media('(min-width:767.98px)') && slides.length < 4) {
+        console.log('here-3');
+        if (SLIDER.hasSlickClass($slidesSect)) {
+          SLIDER.unslick($slidesSect);
+        }
+      // } else if (media('(min-width:1279.98px)') && slides.length < 5) {
+      } else if (media('(min-width:575.98px)') && slides.length < 4) {
+        console.log('here-4');
         if (SLIDER.hasSlickClass($slidesSect)) {
           SLIDER.unslick($slidesSect);
         }
@@ -80,14 +89,12 @@
   windowFuncs.resize.push(buildSlider);
 
 
-  console.log($slidesSect);
-
-
-
   photoProgressForm.addEventListener('change', function(e) {
     let data = new FormData(photoProgressForm);
 
     data.append('action', 'photo_send');
+
+    slider.classList.add('loading');
 
     fetch(photoProgressForm.action, {
         method: 'POST',
@@ -105,12 +112,24 @@
         response = JSON.parse(response);
         console.log(response);
         let slide = `<picture class="photo-progress-pic">
-        <source type="image/webp" srcset="${response.img_webp}">
-        <img src="${response.img}" alt="Фото" class="photo-progress-img">
-      </picture>`;
+          <source type="image/webp" srcset="${response.img_webp}">
+          <img src="${response.img}" alt="Фото" class="photo-progress-img">
+        </picture>`;
 
-        $slidesSect.slick('slickAdd', slide, 1, true);
+        if (SLIDER.hasSlickClass($slidesSect)) {
+          $slidesSect.slick('slickAdd', slide, 1, true);
+        } else {
+          photoProgressForm.insertAdjacentHTML('afterend', slide);
+        }
+
+        slides = qa('form, picture', slider);
+        slidesLength = slides.length;
+
+        buildSlider();
+
         photoProgressForm.reset();
+
+        slider.classList.remove('loading');
       })
       .catch(function(err) {
         console.log(err);

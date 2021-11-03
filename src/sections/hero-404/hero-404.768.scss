@@ -1,0 +1,21 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.hero-404 {
+  padding-top: $sectionVerticalPadding768;
+  padding-bottom: $sectionVerticalPadding768;
+  &__img {}
+
+  &__title {
+    margin-top: 20px;
+    font-size: 28px;
+  }
+
+  &__descr {}
+
+  &__btn {
+    margin-top: 30px;
+    padding: 11px 49px;
+  }
+}

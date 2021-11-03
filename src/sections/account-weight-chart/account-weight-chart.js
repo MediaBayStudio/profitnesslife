@@ -1,8 +1,10 @@
 ;
 (function() {
-  let weightChartCanvas = id('weight-chart');
-  if (weightChartCanvas) {
-    let weightChartTabs = q('.weight-chart__tabs'),
+  let weightChartSect = id('weight-chart-sect');
+
+  if (weightChartSect) {
+    let weightChartCanvas = id('weight-chart'),
+      weightChartTabs = q('.weight-chart__tabs', weightChartSect),
       activeWeekBtn = q('.weight-chart__tab.active', weightChartTabs),
       weekData = JSON.parse(activeWeekBtn.getAttribute('data-chart')),
       weightChartCtx = weightChartCanvas.getContext('2d'),
@@ -31,73 +33,74 @@
 
     weightChartTabs.addEventListener('click', updateWeightChart);
 
-    if (!weekData) {
-      activeWeekBtn = q('.weight-chart__tab[data-chart]', weightChartTabs);
-      weekData = JSON.parse(activeWeekBtn.getAttribute('data-chart'));
-    }
+    if (!weightChartSect.classList.contains('hide')) {
+      if (!weekData) {
+        activeWeekBtn = q('.weight-chart__tab[data-chart]', weightChartTabs);
+        weekData = JSON.parse(activeWeekBtn.getAttribute('data-chart'));
+      }
 
-    let dates = [],
-      weights = [],
-      gridFontSize = media('(max-width:767.98px)') ? 10 : 16;
+      let dates = [],
+        weights = [],
+        gridFontSize = media('(max-width:767.98px)') ? 10 : 16;
 
-    for (let key in weekData) {
-      dates[dates.length] = weekData[key].date.slice(0, -5);
-      weights[weights.length] = weekData[key].weight;
-    }
+      for (let key in weekData) {
+        dates[dates.length] = weekData[key].date.slice(0, -5);
+        weights[weights.length] = weekData[key].weight;
+      }
 
-
-    weightChart = new Chart(weightChartCtx, {
-      type: 'line',
-      defaults: {
-        borderColor: 'red'
-      },
-      data: {
-        labels: dates,
-        datasets: [{
-          label: 'Вес, кг',
-          data: weights,
-          backgroundColor: '#85B921',
-          borderColor: '#85B921',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        plugins: {
-          legend: {
-            display: false
-          }
+      weightChart = new Chart(weightChartCtx, {
+        type: 'line',
+        defaults: {
+          borderColor: 'red'
         },
-        scales: {
-          x: {
-            ticks: {
-              color: '#B0BBA7',
-              font: {
-                size: gridFontSize,
-                family: 'Roboto'
-              }
-            },
-            grid: {
+        data: {
+          labels: dates,
+          datasets: [{
+            label: 'Вес, кг',
+            data: weights,
+            backgroundColor: '#85B921',
+            borderColor: '#85B921',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
               display: false
             }
           },
-          y: {
-            ticks: {
-              stepSize: 1,
-              color: '#B0BBA7',
-              font: {
-                size: gridFontSize,
-                family: 'Roboto'
+          scales: {
+            x: {
+              ticks: {
+                color: '#B0BBA7',
+                font: {
+                  size: gridFontSize,
+                  family: 'Roboto'
+                }
+              },
+              grid: {
+                display: false
               }
             },
-            grid: {
-              display: false
-            },
-            beginAtZero: true,
-            min: weights[weights.length - 1] - 2,
-            max: +weights[0] + 1
+            y: {
+              ticks: {
+                stepSize: 1,
+                color: '#B0BBA7',
+                font: {
+                  size: gridFontSize,
+                  family: 'Roboto'
+                }
+              },
+              grid: {
+                display: false
+              },
+              beginAtZero: true,
+              min: weights[weights.length - 1] - 2,
+              max: +weights[0] + 1
+            }
           }
         }
-      }
-    });
+      });
+    }
   }
 })();

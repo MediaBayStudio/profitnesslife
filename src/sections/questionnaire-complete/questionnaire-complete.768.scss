@@ -6,8 +6,19 @@
   margin: 0 0 $sectionVerticalPadding768;
   padding: 45px 25px 90px;
   font-size: 16px;
-  &__title {
+
+  &__title-block {
     margin: 0 0 15px;
+    display: flex;
+    flex-flow: row-reverse;
+  }
+
+  &__title {
+    
+  }
+
+  &__reset-btn {
+    margin: 0;
   }
 
   &__list {

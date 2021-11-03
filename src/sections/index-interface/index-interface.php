@@ -1,4 +1,4 @@
-<section class="index-interface container sect"<?php echo $section_id ?>>
+<section class="index-interface container sect" id="interface">
   <h2 class="index-interface__title sect-title"><?php echo $section['title'] ?></h2>
   <div class="index-interface__screens">
     <div class="index-interface__screens-tabs">
@@ -10,7 +10,7 @@
     </div>
     <div class="index-interface__screen nutrition-screen active">
       <picture class="nutrition-screen__pic lazy">
-        <source type="image/webp" media="(max-width:767.98px)" srcset="#" data-srcset="<?php #echo $template_directory_uri ?>/img/interface-1-mobile.webp">
+        <source type="image/webp" media="(max-width:767.98px)" srcset="#" data-srcset="<?php echo $template_directory_uri ?>/img/interface-1-mobile.webp">
         <source type="image/webp" media="(min-width:767.98px) and (max-width:1023.98px)" srcset="#" data-srcset="<?php echo $template_directory_uri ?>/img/interface-1-tablet.webp">
         <source type="image/png" media="(min-width:767.98px) and (max-width:1023.98px)" srcset="#" data-srcset="<?php echo $template_directory_uri ?>/img/interface-1-tablet.png">
         <source type="image/webp" media="(min-width:1023.98px) and (max-width:1279.98px)" srcset="#" data-srcset="<?php echo $template_directory_uri ?>/img/interface-1-laptop.webp">

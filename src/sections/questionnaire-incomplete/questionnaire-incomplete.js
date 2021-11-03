@@ -1,7 +1,7 @@
 ;
 (function() {
   let section = id('questionnaire-incomplete-section'),
-    questionnaireForm = id('questionnaire-form');
+    questionnaireForm = document.forms['questionnaire-form'];
 
   if (section && questionnaireForm) {
     let stepSelector = '.questionnaire-form__step',
@@ -10,14 +10,16 @@
       currentStepElement = q('.questionnaire-form__count-current', questionnaireForm),
       backBtn = q('.questionnaire-form__back', questionnaireForm),
       nextBtn = q('.questionnaire-form__next', questionnaireForm),
-      submitBtn = q('.questionnaire-form__submit', questionnaireForm),
+      submitBtn = questionnaireForm['submit'],
       progressLine = q('.questionnaire-form__progress-line', questionnaireForm),
       steps = qa(stepSelector + ':not(.extra-step)', questionnaireForm),
       extraSteps = qa(stepSelector + '.extra-step', questionnaireForm),
       stepsLength = steps.length,
       extraStepsLength = extraSteps.length,
       isExtraStep = false,
+      next = true,
       extraStepCount = 0,
+      lastExtraStepCount = 0,
       currentStepNumber = 0,
       // currentStepNumber = 5,
       validateRules = {
@@ -55,6 +57,9 @@
         },
         'cereals-products[]': {
           'required': 'Выберите хоть что-то'
+        },
+        'inventory[]': {
+          'required': 'Выберите хоть что-то'
         }
       },
       validateLength = 4,
@@ -63,6 +68,7 @@
         e.preventDefault();
 
         questionnaireForm.classList.add('loading');
+        submitBtn.blur();
 
         let data = new FormData(questionnaireForm),
           url = siteUrl + '/wp-admin/admin-ajax.php';
@@ -84,85 +90,92 @@
           .then(function(response) {
             response = JSON.parse(response);
 
-            let breakfasts = '<h3>Завтрак:</h3>',
-              lunches = '<h3>Обед:</h3>',
-              dinners = '<h3>Ужин:</h3>',
-              snack_1 = '<h3>Перекус:</h3>',
-              snack_2 = '<h3>Перекус:</h3>',
-              j = 0;
+            // let breakfasts = '<h3>Завтрак:</h3>',
+            //   lunches = '<h3>Обед:</h3>',
+            //   dinners = '<h3>Ужин:</h3>',
+            //   snack_1 = '<h3>Перекус:</h3>',
+            //   snack_2 = '<h3>Перекус:</h3>',
+            //   j = 0;
 
-            for (let key in response.breakfasts) {
-              j++;
-              breakfasts += '<span style="display:block">День ' + j + ': ' + response.breakfasts[key].title + ' (~' + response.breakfasts[key].calories + ' ккал)</span>';
-            }
+            // for (let key in response.breakfasts) {
+            //   j++;
+            //   breakfasts += '<span style="display:block">День ' + j + ': ' + response.breakfasts[key].title + ' (~' + response.breakfasts[key].calories + ' ккал)</span>';
+            // }
 
-            j = 0;
-            for (let key in response.snack_1) {
-              j++;
-              snack_1 += '<span style="display:block">День ' + j + ': ' + response.snack_1[key].title + ' (~' + response.snack_1[key].calories + ' ккал)</span>';
-            }
+            // j = 0;
+            // for (let key in response.snack_1) {
+            //   j++;
+            //   snack_1 += '<span style="display:block">День ' + j + ': ' + response.snack_1[key].title + ' (~' + response.snack_1[key].calories + ' ккал)</span>';
+            // }
 
-            j = 0;
-            for (let key in response.lunches) {
-              j++;
-              lunches += '<span style="display:block">День ' + j + ': ' + response.lunches[key].title + ' (~' + response.lunches[key].calories + ' ккал)</span>';
-            }
+            // j = 0;
+            // for (let key in response.lunches) {
+            //   j++;
+            //   lunches += '<span style="display:block">День ' + j + ': ' + response.lunches[key].title + ' (~' + response.lunches[key].calories + ' ккал)</span>';
+            // }
 
-            j = 0;
-            for (let key in response.snack_2) {
-              j++;
-              snack_2 += '<span style="display:block">День ' + j + ': ' + response.snack_2[key].title + ' (~' + response.snack_2[key].calories + ' ккал)</span>';
-            }
+            // j = 0;
+            // for (let key in response.snack_2) {
+            //   j++;
+            //   snack_2 += '<span style="display:block">День ' + j + ': ' + response.snack_2[key].title + ' (~' + response.snack_2[key].calories + ' ккал)</span>';
+            // }
 
-            j = 0;
-            for (let key in response.dinners) {
-              j++;
-              dinners += '<span style="display:block">День ' + j + ': ' + response.dinners[key].title + ' (~' + response.dinners[key].calories + ' ккал)</span>';
-            }
+            // j = 0;
+            // for (let key in response.dinners) {
+            //   j++;
+            //   dinners += '<span style="display:block">День ' + j + ': ' + response.dinners[key].title + ' (~' + response.dinners[key].calories + ' ккал)</span>';
+            // }
 
-            completeBlock.insertAdjacentHTML('beforeend', '<button type="button" id="reset" class="btn btn-green" style="width:200px;margin:0 0 20px;">Сбросить анкету</button>');
-            completeBlock.insertAdjacentHTML('beforeend', '<p>Суточная норма калорий: ' + response.bmr + '</p>');
-            completeBlock.insertAdjacentHTML('beforeend', '<p>Исключили продукты: ' + response.categories + '</p>');
-            completeBlock.insertAdjacentHTML('beforeend', '<p>Исключили только на завтраки: ' + response.categories_breakfasts + '</p>');
-            completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на завтрак: ' + response.breakfast_ccal + '</p>');
-            completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на обед: ' + response.lunch_ccal + '</p>');
-            completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на ужин: ' + response.dinner_ccal + '</p>');
-            completeBlock.insertAdjacentHTML('beforeend', breakfasts + snack_1 + lunches + snack_2 + dinners);
+            // completeBlock.insertAdjacentHTML('beforeend', '<button type="button" id="reset" class="btn btn-green" style="width:200px;margin:0 0 20px;">Сбросить анкету</button>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Суточная норма калорий: ' + response.bmr + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Исключили продукты: ' + response.categories + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Исключили только на завтраки: ' + response.categories_breakfasts + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на завтрак: ' + response.breakfast_ccal + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на обед: ' + response.lunch_ccal + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на ужин: ' + response.dinner_ccal + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>terms: ' + response.terms + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', breakfasts + snack_1 + lunches + snack_2 + dinners);
 
-            questionnaireForm.classList.remove('loading');
-            questionnaireForm.classList.add('complete');
-            console.log(response);
-            scrollToTarget('', '.questionnaire-incomplete-section__title');
+            // questionnaireForm.classList.remove('loading');
+            // questionnaireForm.classList.add('complete');
+            // console.log(response);
+            // scrollToTarget('', '.questionnaire-incomplete-section__title');
+            location.href = siteUrl + '/diet-plan';
 
-            id('reset').addEventListener('click', function() {
-              let data = 'action=questionnaire_send&reset=reset',
-                url = siteUrl + '/wp-admin/admin-ajax.php';
+            // id('reset').addEventListener('click', function() {
+            //   let data = 'action=questionnaire_send&reset=reset',
+            //     url = siteUrl + '/wp-admin/admin-ajax.php';
 
-              fetch(url, {
-                  method: 'POST',
-                  body: data,
-                  headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                  }
-                })
-                .then(function(response) {
-                  if (response.ok) {
-                    return response.text();
-                  } else {
-                    console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
-                    return '';
-                  }
-                })
-                .then(function(response) {
-                  // console.log(response);
-                  location.reload();
-                })
-                .catch(function(err) {
-                  console.log(err);
-                });
-            });
+            //   fetch(url, {
+            //       method: 'POST',
+            //       body: data,
+            //       headers: {
+            //         'Content-Type': 'application/x-www-form-urlencoded'
+            //       }
+            //     })
+            //     .then(function(response) {
+            //       if (response.ok) {
+            //         return response.text();
+            //       } else {
+            //         console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
+            //         return '';
+            //       }
+            //     })
+            //     .then(function(response) {
+            //       // console.log(response);
+            //       location.reload();
+            //     })
+            //     .catch(function(err) {
+            //       console.log(err);
+            //     });
+            // });
           })
           .catch(function(err) {
+            if (errorPopup) {
+              errorPopup.children[0].insertAdjacentHTML('beforeend', '<button type="button" id="error-popup-btn" class="btn btn-green" style="padding:10px 20px">Попробовать еще</button>');
+              id('error-popup-btn').addEventListener('click', resetQuestionnaire);
+              errorPopup.openPopup();
+            }
             console.log(err);
           });
       },
@@ -350,6 +363,11 @@
           }
         }
 
+        if (currentStepNumber === 2 && questionnaireForm.target.value === 'weight-maintaining') {
+          validateCount++;
+        }
+
+
         if (validateCount >= validateLength) {
           return true;
         } else {
@@ -377,6 +395,7 @@
       },
       // Показать дополнительный шаг
       showExtraStep = function(extraStep) {
+        // console.log('extraStep');
         // Ищем активный шаг
         let activeStep = q(stepSelector + ':not(.hide)', questionnaireForm);
 
@@ -396,13 +415,27 @@
           extraStepCount = 1;
         }
 
+        // if (lastExtraStepCount <= 0) {
+        //   lastExtraStepCount = 1;
+        // }
+
         currentStepElement.textContent = currentStepNumber + 1 + '.' + extraStepCount;
+        // currentStepElement.textContent = currentStepNumber + 1 + '.' + lastExtraStepCount;
 
         scrollToTarget('', '.questionnaire-incomplete-section__title');
       },
       // Показать шаг
       showStep = function(number) {
+        // console.log('showStep');
         isExtraStep = false;
+
+        if (questionnaireForm.target.value === 'weight-maintaining') {
+          questionnaireForm['target-weight'].removeAttribute('required');
+          questionnaireForm['target-weight'].setAttribute('tabindex', '-1');
+        } else {
+          questionnaireForm['target-weight'].setAttribute('required', '');
+          questionnaireForm['target-weight'].removeAttribute('tabindex');
+        }
 
         let activeStep = q(stepSelector + ':not(.hide)', questionnaireForm);
 
@@ -429,7 +462,7 @@
 
         scrollToTarget('', '.questionnaire-incomplete-section__title');
 
-        extraStepCount = 0;
+        // extraStepCount = 0;
       },
       showForm = function() {
         section.classList.add('show-form');
@@ -445,6 +478,7 @@
       resetFields();
 
       if (isExtraStep) {
+        // С дополнительного шага
         let activeExtraStep = q('.extra-step:not(.hide)', questionnaireForm),
           checkedFields = qa(':checked', steps[currentStepNumber]),
           excludeName,
@@ -455,39 +489,41 @@
           excludeValue = activeExtraStep.getAttribute('data-answer');
         }
 
-        if (extraStepCount > 1) {
+        if (extraStepCount >= 1) {
           for (let i = extraStepCount - 1; i >= 0; i--) {
             if (excludeName === checkedFields[i].name && excludeValue === checkedFields[i].value) {
               continue;
             }
             let extraStep = q('.extra-step[data-question="' + checkedFields[i].name + '"][data-answer="' + checkedFields[i].value + '"]', questionnaireForm);
             if (extraStep) {
+              // на доп шаг
               isExtraStep = true;
-              extraStepCount--;
               showExtraStep(extraStep);
+              extraStepCount--;
               return;
             } // endif extraStep
           } // endfor
         }
 
-
-        // С дополнительного шага на обычный шаг
         extraStepCount = 0;
         showStep(currentStepNumber);
 
       } else {
-        // С обычного шага на доп. шаг
         let prevStep = steps[--currentStepNumber];
+        // let prevStep = steps[currentStepNumber - 1];
 
         if (prevStep) {
+          // С обычного шага на доп. шаг
           let checkedFields = qa(':checked', prevStep);
 
           for (let i = checkedFields.length - 1; i >= 0; i--) {
             let extraStep = q('.extra-step[data-question="' + checkedFields[i].name + '"][data-answer="' + checkedFields[i].value + '"]', questionnaireForm);
             if (extraStep) {
               isExtraStep = true;
-              extraStepCount--;
               showExtraStep(extraStep);
+              extraStepCount--;
+              // lastExtraStepCount--;
+              // extraStepCount = lastExtraStepCount;
               return;
             } // endif extraStep
           } // endfor
@@ -501,21 +537,63 @@
     });
 
     nextBtn.addEventListener('click', function() {
-      // console.log('msg');
+      console.log('currentStepNumber', currentStepNumber);
       if (validateFields()) {
-        // console.log('validateFields');
-        let checkedFields = qa('input[type="checkbox"]:checked', steps[currentStepNumber]);
+        let checkedFields = qa('input[type="checkbox"]:checked', steps[currentStepNumber]),
+          extraStep = null,
+          activeStep = null,
+          existsExtraStep = false;
 
+        if (currentStepNumber === 5 && !isExtraStep) {
+          extraStepCount = 0;
+        }
+
+        // Нужно проверить есть ли дополнительный шаг
         for (let i = extraStepCount, len = checkedFields.length; i < len; i++) {
-          let extraStep = q('.extra-step[data-question="' + checkedFields[i].name + '"][data-answer="' + checkedFields[i].value + '"]', questionnaireForm);
-          if (extraStep) {
+          extraStep = q('.extra-step[data-question="' + checkedFields[i].name + '"][data-answer="' + checkedFields[i].value + '"]', questionnaireForm);
+          activeStep = q(stepSelector + ':not(.hide)', questionnaireForm);
+
+          console.log('input', checkedFields[i]);
+
+          if (extraStep && extraStep !== activeStep) {
+            existsExtraStep = true;
+            break;
+          }
+        }
+
+        console.log(checkedFields);
+        console.log('activeStep', activeStep);
+        console.log('extraStep', extraStep);
+
+        if (isExtraStep) {
+          // С дополнительного шага
+          console.log('С доп шага');
+          // console.log('existsExtraStep', existsExtraStep);
+
+          // На дополнительный шаг
+          if (existsExtraStep) {
             isExtraStep = true;
             extraStepCount++;
-            // console.log('showExtraStep', extraStep);
+            showExtraStep(extraStep);
+            console.log('на доп шаг');
+            return;
+          }
+        } else {
+          // С обычного шага
+          console.log('С обычного шага');
+
+          // На дополнительнй шаг
+          if (existsExtraStep) {
+            console.log('на доп шаг');
+            isExtraStep = true;
+            // extraStepCount++;
+            extraStepCount = 0;
             showExtraStep(extraStep);
             return;
           }
         }
+
+        // На обычный шаг
         showStep(++currentStepNumber);
       }
     });
@@ -533,6 +611,7 @@
         if (extraStep) {
           isExtraStep = true;
           extraStepCount++;
+          // lastExtraStepCount++;
           showExtraStep(extraStep);
           return;
         }

@@ -37,11 +37,13 @@
     display: flex;
     align-items: center;
     font: 500 14px/1 $roboto;
+    transition: color .5s;
   }
   .hdr__logout-icon {
     margin: 0 0 0 10px;
     width: 18px;
     height: 17px;
+    transition: filter .5s;
   }
   >.hdr__burger {
     display: none;

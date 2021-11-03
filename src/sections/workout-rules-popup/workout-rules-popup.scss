@@ -1,0 +1,27 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.workout-rules-popup {
+  &__cnt {}
+
+  &__close {}
+
+  &__title {}
+
+  &__important {}
+
+  .popup {
+    &__cnt {}
+
+    &__close {}
+
+    &__title {}
+
+    &__important {}
+
+    &__important-title {}
+
+    &__important-descr {}
+  }
+}

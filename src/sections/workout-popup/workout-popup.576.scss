@@ -1,3 +1,29 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.workout-popup {
+  &__cnt {}
+
+  &__close {}
+
+  &__title {}
+
+  &__video {}
+
+  &__controls {}
+
+  &__text {}
+
+  &__number {}
+
+  &__playlist {}
+
+  &__playlist-item {}
+
+  &__playlist-item-play-icon {}
+
+  &__playlist-item-number {}
+
+  &__playlist-item-duration {}
+}

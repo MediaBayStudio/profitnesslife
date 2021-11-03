@@ -19,7 +19,8 @@ if ( is_user_logged_in() ) { ?>
 				}
 			} ?>
 		</section>
-	</section> <?php
+	</section>
+	<div id="fake-scrollbar"></div> <?php
 } else {
 	echo '<div class="container">';
 	require 'components/form-sign.php';

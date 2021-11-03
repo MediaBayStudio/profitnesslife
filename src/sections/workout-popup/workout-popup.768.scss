@@ -1,3 +1,39 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.workout-popup {
+  &__cnt {
+    flex-flow: wrap;
+  }
+
+  &__close {}
+
+  &__title {}
+
+  &__video {}
+
+  &__controls {
+    margin: 15px 0 20px;
+    width: 100%;
+  }
+
+  &__text {
+    margin: 0;
+  }
+
+  &__number {}
+
+  &__playlist {
+    margin: 0 0 0 auto;
+    width: 280px;
+  }
+
+  &__playlist-item {}
+
+  &__playlist-item-play-icon {}
+
+  &__playlist-item-number {}
+
+  &__playlist-item-duration {}
+}

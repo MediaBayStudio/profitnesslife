@@ -1,0 +1,47 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.login-popup {
+  &__cnt {}
+
+  .form-tab-rcl {}
+
+  .form_head {}
+
+  .form_head_title {}
+
+  .form_head_descr {}
+
+  .form-block-rcl {}
+
+  .form-sign {
+    margin: auto;
+    max-width: 300px;
+    &__field {}
+  }
+
+  .field {
+    &__inp {}
+  }
+
+  .rcl-bttn {
+    &__type-primary {}
+
+    &__size-medium {}
+
+    &__fullwidth {}
+
+    &__ico {}
+
+    &__ico-left {}
+
+    &__text {}
+  }
+
+  .link-tab-form {}
+
+  .rcli {}
+
+  .fa-sign-in {}
+}

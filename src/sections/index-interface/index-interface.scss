@@ -74,9 +74,13 @@
 .training-screen,
 .support-screen,
 .progress-screen {
-  &__pic {}
+  &__pic {
+  }
 
-  &__img {}
+  &__img {
+    width: 177px;
+    height: 364px;
+  }
 }
 
 .nutrition-screen {

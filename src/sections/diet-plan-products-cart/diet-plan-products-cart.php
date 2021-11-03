@@ -13,5 +13,6 @@ print_account_hero_section( [
       'title' => 'Посмотреть',
       'class' => 'btn-ol products-cart-popup-open'
     ]
-  ]
+  ],
+  'attention' => 'Внимание, после замены блюда в продуктовой корзине произошли изменения'
 ] ) ?>

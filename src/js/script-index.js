@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //=include ../sections/index-instagram/index-instagram.js
 
+//=include ../sections/login-popup/login-popup.js
+
 //=include ../sections/footer/footer.js
 
 });

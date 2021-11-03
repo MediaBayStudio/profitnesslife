@@ -19,11 +19,13 @@
 
   &__person-pic {
     margin: 0 0 20px;
-    display: block;
-    max-width: 375px;
+    display: flex;
   }
 
   &__person-img {
+    max-width: 375px;
+    object-fit: contain;
+    height: responsive('320->575', '310->415');
   }
 
   &__person-info {}

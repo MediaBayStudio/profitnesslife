@@ -18,10 +18,27 @@
     $script_name = 'script-index';
     $style_name = 'style-index';
 
-    // $preload[] = $GLOBALS['sections'][0]
+    $preload[] = [
+      'filepath' => $template_directory_uri . '/img/hero-img.mobile.svg',
+      'media' => '(max-width:575.98px)'
+    ];
+    $preload[] = [
+      'filepath' => $template_directory_uri . '/img/hero-img.tablet.svg',
+      'media' => '(min-width:575.98px) and (max-width:1023.98px)'
+    ];
+    $preload[] = [
+      'filepath' => $template_directory_uri . '/img/hero-img.laptop.svg',
+      'media' => '(min-width:1023.98px) and (max-width:1279.98px)'
+    ];
+    $preload[] = [
+      'filepath' => $template_directory_uri . '/img/hero-img.svg',
+      'media' => '(min-width:1279.98px)'
+    ];
   } else if ( is_404() ) {
-    $script_name = 'script-404';
-    $style_name = 'style-404';
+    $script_name = '';
+    $style_name = 'style-index';
+
+    $preload[] = $template_directory_uri . '/img/404.svg';
   } else if ( is_single() ) {
     $script_name = 'script-single';
     $style_name = 'style-single';
@@ -47,23 +64,24 @@
     } 
   }
 
+
   $GLOBALS['page_script_name'] = $script_name;
   $GLOBALS['page_style_name'] = $style_name ?>
 <!DOCTYPE html>
 <html <?php language_attributes() ?>>
 <head>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=CustomEvent%2CIntersectionObserver%2CIntersectionObserverEntry%2CElement.prototype.closest%2CElement.prototype.dataset%2CHTMLPictureElement"></script>
-  <meta charset="<?php bloginfo( 'charset' ) ?>">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="<?php bloginfo( 'charset' ) ?>" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <!-- styles preload -->
-  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/style.css">
+  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/style.css" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.css" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.576.css" media="(min-width:575.98px)" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.768.css" media="(min-width:767.98px)" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.1024.css" media="(min-width:1023.98px)" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.1280.css" media="(min-width:1279.98px)" />
-  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/hover.css" media="(hover) and (min-width:1024px)">
+  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/hover.css" media="(hover) and (min-width:1024px)" />
   <!-- fonts preload --> <?php
 	$fonts = [
 		'NotoSans-Bold.woff' => 'woff',
@@ -80,7 +98,10 @@
   echo PHP_EOL;
 
   $preload[] = $logo_url;
-  $preload[] = $template_directory_uri . '/img/icon-burger.svg';
+  $preload[] = [
+    'filepath' => $template_directory_uri . '/img/icon-burger.svg',
+    'media' => '(max-width:767.98px)'
+  ];
 
   if ( $preload ) {
     foreach ( $preload as $item ) {
@@ -110,7 +131,11 @@
         'items_wrap'      => '<ul class="%2$s">%3$s</ul>'
       ] ) ?>
       <button type="button" class="hdr__burger"></button>
-      <!-- <button type="button" class="hdr__login btn btn-ol">Личный кабинет</button> -->
-      <a href="<?php echo $site_url ?>/account" class="hdr__login btn btn-ol">Личный кабинет</a> <?php
+      <!-- <button type="button" class="hdr__login btn btn-ol">Личный кабинет</button> --> <?php
+      if ( is_user_logged_in() ) : ?>
+        <a href="<?php echo $site_url ?>/account" class="hdr__login btn btn-ol">Личный кабинет</a> <?php
+      else : ?>
+        <button href="<?php echo $site_url ?>/account" class="hdr__login hdr-login-btn btn btn-ol">Личный кабинет</button> <?php
+      endif;
       require 'template-parts/mobile-menu.php' ?>
     </header>

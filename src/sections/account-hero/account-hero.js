@@ -6,6 +6,11 @@
     weightGoalCurrent = id('weight-goal-current'),
     weightGoalTotal = id('weight-goal-total'),
     weightGoalSvgBar = id('weight-goal-svg-bar'),
+    userAvatarForm = document.forms['user-avatar-form'],
+    userAvatar = {
+      source: q('source', userAvatarForm),
+      img: q('img', userAvatarForm)
+    },
     updateSvgBar = function(value) {
       let r = weightGoalSvgBar.getAttribute('r'),
         c = Math.PI * (r * 2);
@@ -113,6 +118,43 @@
           updateWeightChart(weightChart, today, weight);
         }
 
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  });
+
+  console.log(userAvatarForm);
+
+  userAvatarForm.addEventListener('change', function(e) {
+    let data = new FormData(userAvatarForm);
+
+    data.append('action', 'photo_send');
+    data.append('type', 'avatar');
+
+    userAvatarForm.classList.add('loading');
+
+    fetch(userAvatarForm.action, {
+        method: 'POST',
+        body: data
+      })
+      .then(function(response) {
+        if (response.ok) {
+          return response.text();
+        } else {
+          console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
+          return '';
+        }
+      })
+      .then(function(response) {
+        response = JSON.parse(response);
+
+        userAvatarForm.classList.remove('loading');
+        
+        userAvatar.source.srcset = response.img_webp;
+        userAvatar.img.src = response.img;
+
+        userAvatarForm.reset();
       })
       .catch(function(err) {
         console.log(err);

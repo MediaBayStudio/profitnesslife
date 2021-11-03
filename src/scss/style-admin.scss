@@ -23,3 +23,15 @@
 //     display: none !important;
 //   }
 // }
+
+#your-profile {
+  // Скрываем персональные настройки
+  h2:first-of-type,
+  // и таблицу персональных настроек
+  table:first-of-type,
+  // Скрываем обо мне
+  h2:nth-of-type(4),
+  table:nth-of-type(4), {
+    display: none;
+  }
+}

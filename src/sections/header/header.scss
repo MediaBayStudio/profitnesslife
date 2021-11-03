@@ -7,6 +7,10 @@
   padding-bottom: 20px;
   display: flex;
   align-items: center;
+  background: $white;
+  &.fixed {
+    display: none;
+  }
 
   &__logo {}
 

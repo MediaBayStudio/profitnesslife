@@ -7,6 +7,7 @@
     $user_id,
     $user_data,
     $current_template,
+    $questionnaire_date,
     $questionnaire_complete,
     $template_directory_uri,
     $questionnaire_dmy_time,
@@ -61,17 +62,17 @@
 <html <?php language_attributes() ?>>
 <head>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=CustomEvent%2CIntersectionObserver%2CIntersectionObserverEntry%2CElement.prototype.closest%2CElement.prototype.dataset%2CHTMLPictureElement"></script>
-  <meta charset="<?php bloginfo( 'charset' ) ?>">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="<?php bloginfo( 'charset' ) ?>" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <!-- styles preload -->
-  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/style.css">
+  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/style.css" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.css" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.576.css" media="(min-width:575.98px)" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.768.css" media="(min-width:767.98px)" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.1024.css" media="(min-width:1023.98px)" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.1280.css" media="(min-width:1279.98px)" />
-  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/hover.css" media="(hover) and (min-width:1024px)">
+  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/hover.css" media="(hover) and (min-width:1024px)" />
   <!-- fonts preload --> <?php
 	$fonts = [
 		'NotoSans-Bold.woff' => 'woff',
@@ -88,7 +89,14 @@
   echo PHP_EOL;
 
   $preload[] = $logo_url;
-  $preload[] = $template_directory_uri . '/img/icon-burger.svg';
+  $preload[] = [
+    'filepath' => $template_directory_uri . '/img/icon-burger.svg',
+    'media' => '(max-width:767.98px)'
+  ];
+
+  if ( is_user_logged_in() && $questionnaire_date && $current_time < $start_marathon_time ) {
+    $preload[] = $template_directory_uri . '/img/icon-edit.svg';
+  }
 
   if ( $preload ) {
     foreach ( $preload as $item ) {
@@ -109,8 +117,10 @@
   </noscript>
   <div id="page-wrapper">
     <header class="hdr hdr-account container">
-      <a href="<?php echo $site_url ?>" class="hdr__logo"><img src="<?php echo $logo_url ?>" alt="#" class="hdr__logo-img"></a>
-      <a href="<?php echo wp_logout_url() ?>" class="hdr__logout">Выход<picture class="hdr__logout-icon"><source type="image/svg+xml" srcset="<?php echo $template_directory_uri ?>/img/icon-logout.svg" media="(min-width:767.98px)"><img src="#" alt="#"></picture></a>
+      <a href="<?php echo $site_url ?>" class="hdr__logo"><img src="<?php echo $logo_url ?>" alt="#" class="hdr__logo-img"></a> <?php
+      if ( is_user_logged_in() ) : ?>
+        <a href="<?php echo wp_logout_url() ?>" class="hdr__logout"><?php echo $user->user_firstname . ' ' . $user->user_lastname ?><picture class="hdr__logout-icon"><source type="image/svg+xml" srcset="<?php echo $template_directory_uri ?>/img/icon-logout.svg" media="(min-width:767.98px)"><img src="#" alt="#"></picture></a> <?php
+      endif ?>
       <button type="button" class="hdr__burger"></button>
     </header> <?php
     // echo '<div style="text-align:center">';

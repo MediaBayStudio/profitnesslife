@@ -2,7 +2,9 @@
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
 
-.workout-sect {}
+.workout-sect {
+  padding-bottom: $sectionVerticalPadding1280;
+}
 
 .workout-block {
   &__title {}

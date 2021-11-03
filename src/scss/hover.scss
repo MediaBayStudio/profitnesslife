@@ -4,6 +4,7 @@
 
 .ftr__nav-li>.nav-link,
 .hdr__nav-li>.nav-link,
+.hdr__logout,
 .ftr__tel,
 .ftr__email {
   &:hover {
@@ -18,7 +19,21 @@
   }
 }
 
-.btn {}
+.hdr__logout:hover {
+  >.hdr__logout-icon {
+    filter: invert(58%) sepia(50%) saturate(601%) hue-rotate(39deg) brightness(100%) contrast(96%);
+  }
+}
+
+// .btn:hover {
+//   background: #8EC526;
+// }
+
+// .btn-green:hover {
+//   &::before {
+//     border-color: #8EC526;
+//   }
+// }
 
 .instagram-post {
   &:hover {

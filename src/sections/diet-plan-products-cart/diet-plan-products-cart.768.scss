@@ -27,3 +27,14 @@
     }
   }
 }
+
+.products-cart-hero {
+  &.attention {
+    .account-hero__attention {
+
+      &::before {
+        margin-top: 3px;
+      }
+    }
+  }
+}

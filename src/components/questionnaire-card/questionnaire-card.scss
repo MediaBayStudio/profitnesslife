@@ -5,7 +5,7 @@
 
 .questionnaire-card {
   margin: 20px 0 0 0;
-  padding: 10px;
+  // padding: 10px;
   background: $white;
   box-shadow: 4px 4px 15px rgba(147, 167, 181, 0.15);
   border-radius: 20px;
@@ -39,6 +39,7 @@
   }
 
   &__label {
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -112,7 +113,10 @@
   padding: 20px;
 
   > .questionnaire-card__label {
+    width: 100%;
+    height: 100%;
     align-items: flex-start;
+    justify-content: flex-start;
     flex-flow: column;
     text-align: left;
   }
@@ -170,5 +174,16 @@
   justify-content: center;
   .questionnaire-card__img {
     margin: 0 auto 20px;
+  }
+}
+
+.questionnaire-card-products {
+  .questionnaire-card__checkbox-input {
+    &:checked {
+      +.questionnaire-card__label {
+        opacity: .35;
+        box-shadow: none;
+      }
+    }
   }
 }

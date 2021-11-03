@@ -4,12 +4,14 @@
 
 .index-payment {
   overflow: hidden;
-  &__title {
-  }
+
+  &__title {}
+
   &__list {
     margin: auto;
     max-width: 375px;
     display: flex;
+
     // > .slick-list {
     // }
     &.slick-slider {
@@ -20,25 +22,67 @@
       }
     }
   }
+
   &__method {
     flex-shrink: 0;
     padding: 20px;
+    height: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    box-shadow: 4px 4px 15px rgba(147, 167, 181, 0.15);
-    border-radius: 30px;
-    background: #fff;
+    // box-shadow: 4px 4px 15px rgba(147, 167, 181, 0.15);
+    // border-radius: 30px;
+    // background: $white;
+    position: relative;
+
     &:not(:last-child) {
       margin: 0 20px 0 0;
     }
   }
-  &__method-img {
-  }
+
+  &__method-fig {}
+
+  &__method-fig,
   &__method-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    backface-visibility: hidden;
+    position: absolute;
+    transition: transform .6s linear;
+    box-shadow: 4px 4px 15px rgba(147, 167, 181, 0.15);
+    border-radius: 30px;
+    background: $white;
   }
+
+  &__method-img {}
+
+  &__method-text {}
+
+  &__method-img {
+    transform: perspective(600px) rotateY(0deg);
+  }
+
+  &__method-text {
+    transform: perspective(600px) rotateY(180deg);
+  }
+
   &__nav {
     display: none;
   }
+}
+
+.index-payment__method:hover>.index-payment__method-fig {
+  transform: perspective(600px) rotateY(-180deg);
+}
+
+.index-payment__method:hover>.index-payment__method-text {
+  transform: perspective(600px) rotateY(0deg);
 }

@@ -2,9 +2,14 @@
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
 
-.workout-sect {}
+.workout-sect {
+  padding-bottom: $sectionVerticalPadding320;
+}
 
 .workout-block {
+  &:not(:last-child) {
+    margin: 0 0 50px;
+  }
   &__title {
     margin: 0 0 15px;
     display: block;

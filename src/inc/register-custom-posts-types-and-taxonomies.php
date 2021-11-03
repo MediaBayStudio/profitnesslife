@@ -103,10 +103,10 @@ add_action( 'init', function () {
 		'menu_icon' => null,
 		'hierarchical' => false,
 		'supports' => ['title'],
-		'taxonomies' => ['wokrout_category', 'wokrout_type', 'workout_inventory', 'muscle_groups']
+		'taxonomies' => ['workout_category', 'workout_type', 'workout_inventory', 'muscle_groups']
 	] );
 
-	register_taxonomy( 'wokrout_category', ['workout'], [
+	register_taxonomy( 'workout_category', ['workout'], [
 		'label' => '',
 		'labels' => [
 			'name' => 'Категории',
@@ -126,7 +126,7 @@ add_action( 'init', function () {
 		'meta_box_cb' => false
 	] );
 
-	register_taxonomy( 'wokrout_type', ['workout'], [
+	register_taxonomy( 'workout_type', ['workout'], [
 		'label' => '',
 		'labels' => [
 			'name' => 'Типы',
@@ -147,7 +147,7 @@ add_action( 'init', function () {
 	] );
 
 
-	register_taxonomy( 'wokrout_inventory', ['workout'], [
+	register_taxonomy( 'workout_inventory', ['workout'], [
 		'label' => '',
 		'labels' => [
 			'name' => 'Инвентарь',
