@@ -468,33 +468,26 @@ if ( !$questionnaire_complete ) : ?>
         </div>
       </div>
 
-      <!-- <div class="questionnaire-form__step extra-step with-next-button hide" data-question="place" data-answer="at-home"> -->
-        <!-- <span class="questionnaire-form__step-title">С каким интвентарём вы бы хотели тренироваться дома?</span> --> <?php
-        // questionnaire_card( [
-        //   'class' => 'questionnaire-card-inventory-checkboxes',
-        //   'checkboxes_class' => 'checkbox-green',
-        //   'checkboxes' => [
-        //     [
-        //       'title' => 'С гантелями',
-        //       'id' => 'with-weight',
-        //       'value' => 'with-weight',
-        //       'name' => 'inventory'
-        //     ],
-        //     [
-        //       'title' => 'С резинками',
-        //       'id' => 'with-elastic',
-        //       'value' => 'with-elastic',
-        //       'name' => 'inventory'
-        //     ],
-        //     [
-        //       'title' => 'Без инвентаря',
-        //       'id' => 'without-inventory',
-        //       'value' => 'without-inventory',
-        //       'name' => 'inventory'
-        //     ]
-        //   ]
-        // ] ) ?>
-      <!-- </div> -->
+      <div class="questionnaire-form__step extra-step with-next-button hide" data-question="place" data-answer="at-home">
+        <span class="questionnaire-form__step-title">С каким интвентарём вы бы хотели тренироваться дома?</span>
+        <div class="inventory-checkboxes">
+          <label class="inventory-checkboxes__checkbox">
+            <input type="checkbox" name="inventory[]" value="with-weight" class="checkbox-green">
+            <span class="checkbox-pseudo-input"></span>
+            <span class="checkbox-text">С гантелями</span>
+          </label>
+          <label class="inventory-checkboxes__checkbox">
+            <input type="checkbox" name="inventory[]" value="with-elastic" class="checkbox-green">
+            <span class="checkbox-pseudo-input"></span>
+            <span class="checkbox-text">С резинками</span>
+          </label>
+          <label class="inventory-checkboxes__checkbox">
+            <input type="checkbox" name="inventory[]" value="without-inventory" class="checkbox-green">
+            <span class="checkbox-pseudo-input"></span>
+            <span class="checkbox-text">Без инвентаря</span>
+          </label>
+        </div>
+      </div>
 
       <div class="questionnaire-form__step with-final-button hide">
         <span class="questionnaire-form__step-title">Каким проблемным местам вы хотите уделить внимание?</span>
@@ -535,7 +528,7 @@ if ( !$questionnaire_complete ) : ?>
       <div class="questionnaire-form__complete"></div>
 
       <button type="button" class="questionnaire-form__next btn btn-green hide">Далее</button>
-      <button class="questionnaire-form__submit btn btn-green hide">Завершить</button>
+      <button name="submit" class="questionnaire-form__submit btn btn-green hide">Завершить</button>
 
     </form>
   </section> <?php

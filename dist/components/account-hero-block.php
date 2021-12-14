@@ -49,6 +49,9 @@ function print_account_hero_section( $args ) {
           } ?>
         </div> <?php
       endif ?>
-    </div>
+    </div> <?php
+    if ( $parsed_args['attention'] ) : ?>
+      <p class="account-hero__attention"><?php echo $parsed_args['attention'] ?></p> <?php
+    endif ?>
   </section> <?php
 }

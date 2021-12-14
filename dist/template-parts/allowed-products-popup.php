@@ -385,10 +385,6 @@ $cnt = [
           'webp' => '/img/milk-products-3.webp'
         ],
         [
-          'url' => '/img/milk-products-3.jpg',
-          'webp' => '/img/milk-products-3.webp'
-        ],
-        [
           'url' => '/img/milk-products-4.jpg',
           'webp' => '/img/milk-products-4.webp'
         ]

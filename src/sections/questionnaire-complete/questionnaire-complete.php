@@ -4,7 +4,7 @@ if ( $questionnaire_complete ) {
 
   print_account_hero_section( [
     'title' => 'Анкета участника',
-    'descr' => 'До начала марафона ты можешь скорректировать данные анкеты на этой странице. Если ты захочешь изменить что-то позже — обратись к менеджеру.',
+    'descr' => 'Ты можешь скорректировать данные анкеты на этой странице, для этого необходимо заново ее пройти. Это ты можешь сделать только до начала марафона.',
     'buttons' => [
       [
         'title' => 'Перейти в чат',
@@ -80,27 +80,76 @@ if ( $questionnaire_complete ) {
             'include' => $user_data['categories']
           ] );
 
+          $milk_products = [];
+          $meat_products = [];
+          $fish_products = [];
+
+          $terms_counts = [];
+
+          // var_dump( $terms );
+
           $terms_count = count( $terms );
 
           foreach ( $terms as $term ) {
+            switch ( $term->parent ) {
+              // milk-products
+              case 6:
+                $milk_products[] = $term;
+                break;
+              // meat-products
+              case 11:
+                $meat_products[] = $term;
+                break;
+              // fish-products
+              case 16:
+                $fish_products[] = $term;
+                break;
+            }
+
             switch ( $term->slug ) {
               case 'milk-products':
               case 'meat-products':
               case 'fish-products':
-                for ( $i = 0; $i < $terms_count; $i++ ) {
-                  if ( $terms[ $i ]->parent === $term->term_id ) {
-                    unset( $terms[ $i ] );
-                  }
-                }
-                $term->name .= ' полностью';
+                $childs = get_term_children( $term->term_id, 'dish_category' );
+                $terms_counts[ $term->slug ] = count( $childs );
+                // for ( $i = 0; $i < $terms_count; $i++ ) {
+                //   if ( $terms[ $i ]->parent === $term->term_id ) {
+                //     unset( $terms[ $i ] );
+                //   }
+                // }
+                // $term->name .= ' полностью';
                 break;
+            }
+
+            if ( $term->slug === 'cereals' ) {
+              $categories_text .= $term->name;
+              if ( $user_data['cereals_exclude_breakfast'] ) {
+                $categories_text .= ' исключены только на завтрак, ';
+              }
+              $categories_text .= ', ';
             }
           }
 
-          foreach ( $terms as $term ) {
-            if ( $term->slug === 'cereals' && $user_data['cereals_exclude_breakfast'] ) {
-              $categories_text .= $term->name . ' исключены только на завтрак, ';
-            } else {
+          if ( count( $milk_products ) === $terms_counts['milk-products'] ) {
+            $categories_text .= 'молочные продукты полностью, ';
+          } else {
+            foreach ( $milk_products as $term ) {
+              $categories_text .= $term->name . ', ';
+            }
+          }
+
+          if ( count( $meat_products ) === $terms_counts['meat-products'] ) {
+            $categories_text .= 'мясо полностью, ';
+          } else {
+            foreach ( $meat_products as $term ) {
+              $categories_text .= $term->name . ', ';
+            }
+          }
+
+          if ( count( $fish_products ) === $terms_counts['fish-products'] ) {
+            $categories_text .= 'рыба полностью, ';
+          } else {
+            foreach ( $fish_products as $term ) {
               $categories_text .= $term->name . ', ';
             }
           }

@@ -21,3 +21,10 @@
 .post-type-dish #minor-publishing-actions {
   display: none;
 }
+
+#your-profile h2:first-of-type,
+#your-profile table:first-of-type,
+#your-profile h2:nth-of-type(4),
+#your-profile table:nth-of-type(4) {
+  display: none;
+}

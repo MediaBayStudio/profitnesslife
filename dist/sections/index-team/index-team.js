@@ -20,7 +20,7 @@
             $slider.slick({
               appendDots: $('.index-team__nav', teamSlider.parentElement),
               slide: slidesSelector,
-              infinite: false,
+              // infinite: false,
               arrows: false,
               dots: true,
               draggable: false,

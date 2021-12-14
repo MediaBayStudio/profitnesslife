@@ -18,22 +18,30 @@ function photo_send() {
     } else {
       // Медиа файл загружен
       // обновляем поле галереи
-
-      $images_ids[] = $attachment_id;
-      if ( $user_data['photo_progress'] ) {
-        foreach ( $user_data['photo_progress'] as $img ) {
-          $images_ids[] = $img['ID'];
+      // или поле аватара
+      if ( $_POST['type'] === 'avatar' ) {
+        $field_name = 'img';
+        $field_value = $attachment_id;
+      } else {
+        $images_ids[] = $attachment_id;
+        if ( $user_data['photo_progress'] ) {
+          foreach ( $user_data['photo_progress'] as $img ) {
+            $images_ids[] = $img['ID'];
+          }
         }
+
+        $field_name = 'photo_progress';
+        $field_value = $images_ids;
       }
 
-      $updated = update_field( 'photo_progress', $images_ids, $user );
+      $updated = update_field( $field_name, $field_value, $user );
 
       if ( $updated ) {
         // Поле обновлено
         echo json_encode( [
           'img' => wp_get_attachment_url( $attachment_id ),
           'img_webp' => $upload_baseurl . get_post_meta( $attachment_id, 'webp' )[0]
-          ] );
+        ] );
       } else {
         // Ошибка обновления поля
         // удалить вложение и вернуть 0

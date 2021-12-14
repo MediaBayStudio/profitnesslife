@@ -41,14 +41,14 @@ add_filter( 'wp_nav_menu_items', function( $items, $args ) {
 
 // задать свои классы для пунктов меню (li)
   add_filter( 'nav_menu_css_class', function( $classes, $item, $args, $depth ) {
-    global $questionnaire_show;
+    global $show_diet_plan;
     $container_class = $args->container_class;
     $li_class = '';
 
     switch ( $container_class ) {
       case 'side-menu__nav':
         $li_class = 'side-menu__nav-li';
-        // if ( ($item->ID === 424 || $item->ID === 423) && !$questionnaire_show ) {
+        // if ( ($item->ID === 424 || $item->ID === 423) && !$show_diet_plan ) {
         //   $li_class .= ' disabled';
         // }
         break;

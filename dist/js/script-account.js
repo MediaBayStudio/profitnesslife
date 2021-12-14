@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
     weightGoalCurrent = id('weight-goal-current'),
     weightGoalTotal = id('weight-goal-total'),
     weightGoalSvgBar = id('weight-goal-svg-bar'),
+    userAvatarForm = document.forms['user-avatar-form'],
+    userAvatar = {
+      source: q('source', userAvatarForm),
+      img: q('img', userAvatarForm)
+    },
     updateSvgBar = function(value) {
       let r = weightGoalSvgBar.getAttribute('r'),
         c = Math.PI * (r * 2);
@@ -124,13 +129,52 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(err);
       });
   });
+
+  console.log(userAvatarForm);
+
+  userAvatarForm.addEventListener('change', function(e) {
+    let data = new FormData(userAvatarForm);
+
+    data.append('action', 'photo_send');
+    data.append('type', 'avatar');
+
+    userAvatarForm.classList.add('loading');
+
+    fetch(userAvatarForm.action, {
+        method: 'POST',
+        body: data
+      })
+      .then(function(response) {
+        if (response.ok) {
+          return response.text();
+        } else {
+          console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
+          return '';
+        }
+      })
+      .then(function(response) {
+        response = JSON.parse(response);
+
+        userAvatarForm.classList.remove('loading');
+        
+        userAvatar.source.srcset = response.img_webp;
+        userAvatar.img.src = response.img;
+
+        userAvatarForm.reset();
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  });
 })();
 
 ;
 (function() {
-  let weightChartCanvas = id('weight-chart');
-  if (weightChartCanvas) {
-    let weightChartTabs = q('.weight-chart__tabs'),
+  let weightChartSect = id('weight-chart-sect');
+
+  if (weightChartSect) {
+    let weightChartCanvas = id('weight-chart'),
+      weightChartTabs = q('.weight-chart__tabs', weightChartSect),
       activeWeekBtn = q('.weight-chart__tab.active', weightChartTabs),
       weekData = JSON.parse(activeWeekBtn.getAttribute('data-chart')),
       weightChartCtx = weightChartCanvas.getContext('2d'),
@@ -159,74 +203,75 @@ document.addEventListener('DOMContentLoaded', function() {
 
     weightChartTabs.addEventListener('click', updateWeightChart);
 
-    if (!weekData) {
-      activeWeekBtn = q('.weight-chart__tab[data-chart]', weightChartTabs);
-      weekData = JSON.parse(activeWeekBtn.getAttribute('data-chart'));
-    }
+    if (!weightChartSect.classList.contains('hide')) {
+      if (!weekData) {
+        activeWeekBtn = q('.weight-chart__tab[data-chart]', weightChartTabs);
+        weekData = JSON.parse(activeWeekBtn.getAttribute('data-chart'));
+      }
 
-    let dates = [],
-      weights = [],
-      gridFontSize = media('(max-width:767.98px)') ? 10 : 16;
+      let dates = [],
+        weights = [],
+        gridFontSize = media('(max-width:767.98px)') ? 10 : 16;
 
-    for (let key in weekData) {
-      dates[dates.length] = weekData[key].date.slice(0, -5);
-      weights[weights.length] = weekData[key].weight;
-    }
+      for (let key in weekData) {
+        dates[dates.length] = weekData[key].date.slice(0, -5);
+        weights[weights.length] = weekData[key].weight;
+      }
 
-
-    weightChart = new Chart(weightChartCtx, {
-      type: 'line',
-      defaults: {
-        borderColor: 'red'
-      },
-      data: {
-        labels: dates,
-        datasets: [{
-          label: 'Вес, кг',
-          data: weights,
-          backgroundColor: '#85B921',
-          borderColor: '#85B921',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        plugins: {
-          legend: {
-            display: false
-          }
+      weightChart = new Chart(weightChartCtx, {
+        type: 'line',
+        defaults: {
+          borderColor: 'red'
         },
-        scales: {
-          x: {
-            ticks: {
-              color: '#B0BBA7',
-              font: {
-                size: gridFontSize,
-                family: 'Roboto'
-              }
-            },
-            grid: {
+        data: {
+          labels: dates,
+          datasets: [{
+            label: 'Вес, кг',
+            data: weights,
+            backgroundColor: '#85B921',
+            borderColor: '#85B921',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
               display: false
             }
           },
-          y: {
-            ticks: {
-              stepSize: 1,
-              color: '#B0BBA7',
-              font: {
-                size: gridFontSize,
-                family: 'Roboto'
+          scales: {
+            x: {
+              ticks: {
+                color: '#B0BBA7',
+                font: {
+                  size: gridFontSize,
+                  family: 'Roboto'
+                }
+              },
+              grid: {
+                display: false
               }
             },
-            grid: {
-              display: false
-            },
-            beginAtZero: true,
-            min: weights[weights.length - 1] - 2,
-            max: +weights[0] + 1
+            y: {
+              ticks: {
+                stepSize: 1,
+                color: '#B0BBA7',
+                font: {
+                  size: gridFontSize,
+                  family: 'Roboto'
+                }
+              },
+              grid: {
+                display: false
+              },
+              beginAtZero: true,
+              min: weights[weights.length - 1] - 2,
+              max: +weights[0] + 1
+            }
           }
         }
-      }
-    });
+      });
+    }
   }
 })();
 
@@ -238,14 +283,120 @@ document.addEventListener('DOMContentLoaded', function() {
     gridFontSize = media('(max-width:767.98px)') ? 10 : 16,
     legendFontSize = media('(max-width:767.98px)') ? 14 : 16;
 
-  console.log(measureForm);
-  console.log(measureChartCanvas);
-  console.log(measureChartCtx);
-
   if (measureForm) {
+
+    let initialDate = measureChartCanvas.getAttribute('data-initial-date'),
+      initialChest = measureChartCanvas.getAttribute('data-initial-chest'),
+      initialWaist = measureChartCanvas.getAttribute('data-initial-waist'),
+      initialHip = measureChartCanvas.getAttribute('data-initial-hip'),
+      measureChartData = measureChartCanvas.getAttribute('data-measure-chart'),
+      measureChartIsCreated = measureChartData !== 'null',
+      createMeasureChart = function(date, chest, waist, hip) {
+        measureChart = new Chart(measureChartCtx, {
+          type: 'line',
+          data: {
+            labels: date,
+            datasets: [{
+              label: 'Грудь',
+              data: chest,
+              backgroundColor: '#85B921',
+              borderColor: '#85B921',
+              borderWidth: 1
+            }, {
+              label: 'Талия',
+              data: waist,
+              backgroundColor: '#F0BE0F',
+              borderColor: '#F0BE0F',
+              borderWidth: 1
+            }, {
+              label: 'Бёдра',
+              data: hip,
+              backgroundColor: '#E99A8B',
+              borderColor: '#E99A8B',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            plugins: {
+              legend: {
+                // align: 'start',
+                padding: 10,
+                labels: {
+                  padding: 15,
+                  boxWidth: 5,
+                  boxHeight: 5,
+                  usePointStyle: true,
+                  font: {
+                    size: legendFontSize,
+                    family: 'Roboto'
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                ticks: {
+                  color: '#B0BBA7',
+                  font: {
+                    size: gridFontSize,
+                    family: 'Roboto'
+                  }
+                },
+                grid: {
+                  display: false
+                }
+              },
+              y: {
+                ticks: {
+                  stepSize: 1,
+                  color: '#B0BBA7',
+                  font: {
+                    size: gridFontSize,
+                    family: 'Roboto'
+                  }
+                },
+                grid: {
+                  display: false
+                }
+              }
+            }
+          }
+        });
+      },
+      parseMeasureChartData = function(measureData) {
+        measureData = measureData || measureChartCanvas.getAttribute('data-measure-chart');
+
+        console.log(measureData);
+
+        let data = measureData.constructor === Array ? measureData : JSON.parse(measureData),
+          date = [initialDate.slice(0, -5)],
+          chest = [],
+          waist = [],
+          hip = [];
+
+        initialChest && chest.push(initialChest);
+        initialWaist && waist.push(initialWaist);
+        initialHip && hip.push(initialHip);
+
+        data.forEach(function(el) {
+          date.push(el.date.slice(0, -5));
+          chest.push(el.chest);
+          waist.push(el.waist);
+          hip.push(el.hip);
+        });
+
+        return {
+          'date': date,
+          'chest': chest,
+          'waist': waist,
+          'hip': hip
+        }
+      };
+
     measureForm.addEventListener('input', function(e) {
       measureForm.submit.classList.toggle('disabled', measureForm.chest.value.length < 2 || measureForm.waist.value.length < 2 || measureForm.hip.value.length < 2);
     });
+
     measureForm.addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -257,6 +408,7 @@ document.addEventListener('DOMContentLoaded', function() {
       data.append('date', today);
 
       measureForm.classList.add('loading');
+      measureForm.submit.blur();
 
       fetch(measureForm.action, {
           method: 'POST',
@@ -271,15 +423,62 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         })
         .then(function(response) {
-          measureForm.classList.remove('loading');
-          measureForm.classList.add('disabled');
-
           console.log(response);
-
+          response = JSON.parse(response);
+          measureForm.classList.add('disabled');
+          measureForm.classList.remove('loading');
+          q('.measure-current').classList.remove('no-data');
+          q('.measure-form__descr').textContent = 'Будет доступно завтра';
           id('measure-chest-value').textContent = measureForm['chest'].value;
           id('measure-waist-value').textContent = measureForm['waist'].value;
           id('measure-hip-value').textContent = measureForm['hip'].value;
           id('measure-date').textContent = today;
+
+          if (measureChartIsCreated) {
+            measureChartData = parseMeasureChartData(response.chart_data);
+            measureChart.data.labels = measureChartData.date;
+            measureChart.data.datasets.forEach(function(dataset) {
+              let bodyPart;
+              switch (dataset.label) {
+                case 'Грудь':
+                  bodyPart = 'chest';
+                  break;
+                case 'Талия':
+                  bodyPart = 'waist';
+                  break;
+                case 'Бёдра':
+                  bodyPart = 'hip';
+                  break;
+              }
+              return dataset.data = measureChartData[bodyPart];
+            });
+            measureChart.update();
+            console.log('update');
+          } else {
+            if (measureChartData === 'null') {
+              if (!response.initial_measure) {
+                // Строим график только если измерение не первоначальное
+                measureChartData = parseMeasureChartData(response.chart_data);
+                measureChartCanvas.classList.remove('hide');
+                createMeasureChart(measureChartData.date, measureChartData.chest, measureChartData.waist, measureChartData.hip);
+                measureChartIsCreated = true;
+              }
+            } else {
+              measureChartData = parseMeasureChartData();
+              measureChartCanvas.classList.remove('hide');
+              createMeasureChart(measureChartData.date, measureChartData.chest, measureChartData.waist, measureChartData.hip);
+              measureChartIsCreated = true;
+            }
+          }
+
+          // Очищаем поля формы
+          measureForm['chest'].value = '';
+          measureForm['waist'].value = '';
+          measureForm['hip'].value = '';
+
+          measureForm['chest'].setAttribute('tabindex', '-1');
+          measureForm['waist'].setAttribute('tabindex', '-1');
+          measureForm['hip'].setAttribute('tabindex', '-1');
 
         })
         .catch(function(err) {
@@ -287,76 +486,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    measureChart = new Chart(measureChartCtx, {
-      type: 'line',
-      data: {
-        labels: ['11.10', '12.10', '13.10'],
-        datasets: [{
-          label: 'Грудь',
-          data: [100, 99, 98],
-          backgroundColor: '#85B921',
-          borderColor: '#85B921',
-          borderWidth: 1
-        }, {
-          label: 'Талия',
-          data: [110, 108, 107],
-          backgroundColor: '#F0BE0F',
-          borderColor: '#F0BE0F',
-          borderWidth: 1
-        }, {
-          label: 'Бёдра',
-          data: [77, 76, 75],
-          backgroundColor: '#E99A8B',
-          borderColor: '#E99A8B',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        plugins: {
-          legend: {
-            // align: 'start',
-            padding: 10,
-            labels: {
-              padding: 15,
-              boxWidth: 5,
-              boxHeight: 5,
-              usePointStyle: true,
-              font: {
-                size: legendFontSize,
-                family: 'Roboto'
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            ticks: {
-              color: '#B0BBA7',
-              font: {
-                size: gridFontSize,
-                family: 'Roboto'
-              }
-            },
-            grid: {
-              display: false
-            }
-          },
-          y: {
-            ticks: {
-              stepSize: 1,
-              color: '#B0BBA7',
-              font: {
-                size: gridFontSize,
-                family: 'Roboto'
-              }
-            },
-            grid: {
-              display: false
-            }
-          }
-        }
+    // Постройка графика
+    if (initialChest && initialWaist && initialHip) {
+      console.log(measureChartData);
+
+      if (measureChartData !== 'null') {
+        measureChartData = parseMeasureChartData();
+
+        createMeasureChart(measureChartData.date, measureChartData.chest, measureChartData.waist, measureChartData.hip);
+        measureChartIsCreated = true;
       }
-    });
+    }
+
   }
 
 })();
@@ -370,19 +511,28 @@ document.addEventListener('DOMContentLoaded', function() {
     slidesLength = slides.length,
 
     buildSlider = function() {
-      if (media('(min-width:575.98px)') && slides.length < 4) {
+      console.log('slidesLength', slidesLength);
+      // if (media('(min-width:575.98px)') && slides.length < 4) {
+      if (media('(min-width:1279.98px)') && slides.length < 5) {
+        console.log('here-1');
         if (SLIDER.hasSlickClass($slidesSect)) {
           SLIDER.unslick($slidesSect);
         }
-      } else if (media('(min-width:767.98px)') && slides.length < 5) {
-        if (SLIDER.hasSlickClass($slidesSect)) {
-          SLIDER.unslick($slidesSect);
-        }
+      // } else if (media('(min-width:767.98px)') && slides.length < 5) {
       } else if (media('(min-width:1023.98px)') && slides.length < 4) {
+        console.log('here-2');
         if (SLIDER.hasSlickClass($slidesSect)) {
           SLIDER.unslick($slidesSect);
         }
-      } else if (media('(min-width:1279.98px)') && slides.length < 5) {
+      // } else if (media('(min-width:1023.98px)') && slides.length < 4) {
+      } else if (media('(min-width:767.98px)') && slides.length < 4) {
+        console.log('here-3');
+        if (SLIDER.hasSlickClass($slidesSect)) {
+          SLIDER.unslick($slidesSect);
+        }
+      // } else if (media('(min-width:1279.98px)') && slides.length < 5) {
+      } else if (media('(min-width:575.98px)') && slides.length < 4) {
+        console.log('here-4');
         if (SLIDER.hasSlickClass($slidesSect)) {
           SLIDER.unslick($slidesSect);
         }
@@ -443,14 +593,12 @@ document.addEventListener('DOMContentLoaded', function() {
   windowFuncs.resize.push(buildSlider);
 
 
-  console.log($slidesSect);
-
-
-
   photoProgressForm.addEventListener('change', function(e) {
     let data = new FormData(photoProgressForm);
 
     data.append('action', 'photo_send');
+
+    slider.classList.add('loading');
 
     fetch(photoProgressForm.action, {
         method: 'POST',
@@ -468,12 +616,24 @@ document.addEventListener('DOMContentLoaded', function() {
         response = JSON.parse(response);
         console.log(response);
         let slide = `<picture class="photo-progress-pic">
-        <source type="image/webp" srcset="${response.img_webp}">
-        <img src="${response.img}" alt="Фото" class="photo-progress-img">
-      </picture>`;
+          <source type="image/webp" srcset="${response.img_webp}">
+          <img src="${response.img}" alt="Фото" class="photo-progress-img">
+        </picture>`;
 
-        $slidesSect.slick('slickAdd', slide, 1, true);
+        if (SLIDER.hasSlickClass($slidesSect)) {
+          $slidesSect.slick('slickAdd', slide, 1, true);
+        } else {
+          photoProgressForm.insertAdjacentHTML('afterend', slide);
+        }
+
+        slides = qa('form, picture', slider);
+        slidesLength = slides.length;
+
+        buildSlider();
+
         photoProgressForm.reset();
+
+        slider.classList.remove('loading');
       })
       .catch(function(err) {
         console.log(err);

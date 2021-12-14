@@ -1,4 +1,5 @@
 <?php
+ 
 print_account_hero_section( [
   'title' => $section['title'],
   'descr' => $section['descr'],
@@ -10,7 +11,8 @@ print_account_hero_section( [
   'buttons' => [
     [
       'title' => 'Перейти в чат',
-      'class' => 'btn-green'
+      'class' => 'btn-green',
+      'href' => $section['link']
     ]
   ]
 ] );

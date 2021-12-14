@@ -30,6 +30,7 @@ $workout = [
     'day_2' => $user_data['workout_week_3']['day_2'],
     'day_3' => $user_data['workout_week_3']['day_3']
   ];
+
 #} ?>
 
 <section class="workout-sect"> <?php
@@ -92,13 +93,13 @@ $workout = [
             <span class="workout__name"> <?php
             switch ( $type ) {
               case 'Руки':
-                echo 'Тренировка на верх';
+                echo 'Тренировка на верхнюю группу мышц';
                 break;
               case 'Ноги':
-                echo 'Тренировка на низ';
+                echo 'Тренировка на нижнюю группу мышц';
                 break;
               default:
-                echo 'Тренировка';
+                echo 'Тренировка на все группы мышц';
                 break;
             } ?> </span>
           </div>

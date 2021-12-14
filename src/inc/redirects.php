@@ -1,11 +1,17 @@
 <?php
 
+// echo '<p>Время окончания марафона ' . $finish_marathon_time . '</p>';
+// echo '<p>Текущее время ' . $current_time . '</p>';
+
 add_action( 'wp', function() {
   global 
     $post,
     $site_url,
-    $questionnaire_show,
-    $questionnaire_complete;
+    $current_time,
+    $show_diet_plan,
+    $finish_marathon_time,
+    $questionnaire_complete,
+    $user;
 
   switch ( $post->post_name ) {
     case 'questionnaire':
@@ -15,6 +21,12 @@ add_action( 'wp', function() {
     case 'account':
       $GLOBALS['is_account_page'] = true;
       break;
+  }
+
+  // Если марафон окончен, то редирект на главную
+  if ( !is_front_page() && is_super_admin() && $questionnaire_complete && $show_diet_plan && $current_time >= $finish_marathon_time ) {
+    wp_redirect( $site_url );
+    exit;
   }
 
   // if ( is_super_admin() ) {
@@ -56,7 +68,7 @@ add_action( 'wp', function() {
           то со страниц тренировок и плана питания
           редиректим на личный кабинет
         */
-        if ( !$questionnaire_show ) {
+        if ( !$show_diet_plan ) {
           switch ( $post->post_name) {
             case 'training-program':
             case 'diet-plan':

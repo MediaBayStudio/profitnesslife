@@ -1,3 +1,5 @@
+<?php 
+$products_cart_popup = recalculate_products_cart() ?>
 <div class="products-cart-popup popup">
   <div class="products-cart-popup__cnt popup__cnt">
     <button type="button" class="products-cart-popup__close popup__close"></button>
@@ -24,72 +26,22 @@
         по
         <span class="products-cart-popup__date-to"><?php echo date( 'd.m.Y', strtotime( '-1 day', $time_to ) ) ?></span>
       </span>
-    </div> <?php
-      foreach ( $user_data['week_1'] as $dish_type ) {
-        foreach ( $dish_type as $dish ) {
-          $ingredients = get_field( 'ingredients', $dish );
-          foreach ( $ingredients as $ingredient ) {
-            $ingredient_title = $ingredient['title']->name;
-
-            if ( $ingredient_title === 'Овощи' || $ingredient_title === 'Сезонные овощи' ) {
-              continue;
-            }
-
-            if ( $products_cart_popup[ $ingredient_title ] ) {
-              if ( $ingredient['number']['value'] ) {
-                switch ( $ingredient['units']['value'] ) {
-                  case 'teaspoon':
-                    $value = $ingredient['number'] * 5;
-                    break;
-                  case 'tablespoon':
-                    $value = $ingredient['number'] * 10;
-                    break;
-                  default:
-                    $value = $ingredient['number'];
-                    break;
-                }
-                $products_cart_popup[ $ingredient_title ]['number'] += $value;
-              }
-            } else {
-              $products_cart_popup[ $ingredient_title ] = [
-                'title' => $ingredient_title
-              ];
-              $label = $ingredient['units']['label'];
-              if ( $ingredient['number'] ) {
-                switch ( $ingredient['units']['value'] ) {
-                  case 'teaspoon':
-                    $value = $ingredient['number'] * 5;
-                    $label = 'гр.';
-                    break;
-                  case 'tablespoon':
-                    $value = $ingredient['number'] * 10;
-                    $label = 'гр.';
-                    break;
-                  default:
-                    $label = $ingredient['units']['label'];
-                    $value = $ingredient['number'];
-                    break;
-                }
-                $products_cart_popup[ $ingredient_title ]['label'] = $label;
-                $products_cart_popup[ $ingredient_title ]['number'] = $value;
-              }
-            }
-          }
-        }
-      } ?>
+    </div>
     <div class="products-cart-popup__thead">
       <span class="products-cart-popup__th">Продукты</span>
       <span class="products-cart-popup__th">Количество</span>
     </div>
     <div class="products-cart-popup__table"> <?php
-      foreach ( $products_cart_popup as $product ) : ?>
-        <div class="products-cart-popup__tr">
-          <span class="products-cart-popup__td"><?php echo $product['title'] ?></span>
-          <span class="products-cart-popup__td"><?php
-          if ( $product['label'] ) {
-            echo $product['number'] . ' ' . $product['label'];
-          } ?></span>
-        </div> <?php
+      foreach ( $products_cart_popup as $array_part => $products ) :
+        foreach ( $products as $key => $value ) : ?>
+          <div class="products-cart-popup__tr">
+            <span class="products-cart-popup__td"><?php echo $key ?></span>
+            <span class="products-cart-popup__td"><?php
+            if ( $value['number'] ) {
+              echo $value['number'] . ' ' . $value['label'];
+            } ?></span>
+          </div> <?php
+        endforeach;
       endforeach ?>
     </div>
   </div>

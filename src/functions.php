@@ -30,47 +30,69 @@ $logo_url = wp_get_attachment_url( $logo_id );
 $questionnaire_date =  $user_data['questionnaire_time'];
 // $questionnaire_date =  '12.09.2021 12:10:27'; // 3 неделя
 // $questionnaire_date =  '21.09.2021 12:10:27'; // 2 неделя
-$questionnaire_dmy_date = substr( $questionnaire_date, 0, -9 );
 
 if ( $questionnaire_date ) {
   // Время прохождения анкеты в мс
-  $questionnaire_time =  strtotime( $questionnaire_date );
-  $questionnaire_dmy_time =  strtotime( $questionnaire_dmy_date );
+  // $questionnaire_time =  strtotime( $questionnaire_date );
+  // $questionnaire_dmy_time =  strtotime( $questionnaire_dmy_date );
+
   // Время начала марафона в мс (следующий понедельник от даты прохождения анкеты)
-  $start_marathon_time = strtotime( 'next monday', $questionnaire_dmy_time );
+  // $start_marathon_time = strtotime( 'next monday', $questionnaire_dmy_time );
   // $start_marathon_time = strtotime( '+5 seconds', $questionnaire_dmy_time );
 
   // Название дня прохождения анкеты: Sun || Mon || Tue || etc...
-  $questionnaire_week_day = date( 'D', $questionnaire_time );
+  // $questionnaire_week_day = date( 'D', $questionnaire_time );
+
+  // Текущее время в мс
+  // $current_time = strtotime( 'now' );
+
+  // Время открытия анкеты
+  /*
+    Если анкета пройдена в воскресенье или понедельник,
+    то показывать результат через 3 часа
+    Если анкета пройдена в любой другой день,
+    то показывать результат в следующее воскресенье в 10 утра
+  */
+
+  // if ( $questionnaire_week_day === 'Sun' || $questionnaire_week_day === 'Mon' ) {
+  //   $questionnaire_result_time = strtotime( '+3 hours', $questionnaire_time );
+  // } else {
+  //   $questionnaire_result_time = strtotime( 'next sunday +10 hours', $questionnaire_time );
+  // }
+
+  // $show_diet_plan = $current_time >= $questionnaire_result_time;
 
   // Текущее время в мс
   $current_time = strtotime( 'now' );
 
-  // Время открытия анкеты
-  /*
-    Если анкета пройдена в воскресенье,
-    то показывать результат через 3 часа
-    Если анкета пройдена не в воскресенье,
-    то показывать результат в следующее воскресенье в 10 утра
-  */
-  if ( $questionnaire_week_day === 'Sun' ) {
-    $questionnaire_result_time = strtotime( '+3 hours', $questionnaire_time );
-  } else {
-    $questionnaire_result_time = strtotime( 'next sunday +10 hours', $questionnaire_time );
+  $start_marathon_time = $user_data['start_marathon_time'];
+
+  // Пришло время показывать план питания или нет
+  if ( !$user_data['show_diet_plan'] ) {
+    $show_diet_plan = $current_time >= $user_data['diet_plan_open_date'];
+    update_field( 'show_diet_plan', $show_diet_plan, 'user_' . $user_id );
   }
 
-  $questionnaire_show = $current_time >= $questionnaire_result_time;
+  // Концы каждой недели марафона (только дата, без времени)
+  // $first_week_end_time = strtotime( '+1 week', $start_marathon_time );
+  // $second_week_end_time = strtotime( '+2 week', $start_marathon_time );
+  // $third_week_end_time = strtotime( '+3 week', $start_marathon_time );
 
-  update_field( 'questionnaire_show', $questionnaire_show, 'user_' . $user_id );
+  // $finish_marathon_time = $third_week_end_time;
+
+  // $weeks_end_dates = [ $first_week_end_time, $second_week_end_time, $third_week_end_time ]; // переменная используется в графиках
 
   // Концы каждой недели марафона (только дата, без времени)
-  $first_week_end_time = strtotime( '+1 week', $start_marathon_time );
-  $second_week_end_time = strtotime( '+2 week', $start_marathon_time );
-  $third_week_end_time = strtotime( '+3 week', $start_marathon_time );
+  $first_week_end_time = $user_data['first_week_end_time'];
+  $second_week_end_time = $user_data['second_week_end_time'];
+  $third_week_end_time = $user_data['third_week_end_time'];
 
-  $finish_marathon_time = $third_week_end_time;
-
-  $weeks_end_dates = [ $first_week_end_time, $second_week_end_time, $third_week_end_time ];
+  // Переменная используется в графиках
+  $weeks_end_dates = [
+    $first_week_end_time,
+    $second_week_end_time,
+    $third_week_end_time
+  ];
 
   // echo '<p>Старт марафона: ' . date( 'd.m.Y H:i:s', $start_marathon_time ) . '</p>';
   // echo '<p>Сейчас: ' . date( 'd.m.Y H:i:s', $current_time ) . '</p>';
@@ -120,25 +142,6 @@ add_filter( 'site_transient_update_plugins', function( $value ) {
   return $value;
 } );
 
-
-// Enable the option show in rest
-// add_filter( 'acf/rest_api/field_settings/show_in_rest', '__return_true' );
-
-// Enable the option edit in rest
-// add_filter( 'acf/rest_api/field_settings/edit_in_rest', '__return_true' );
-
-// Роли для пользователей
-add_filter( 'editable_roles', function( $all_roles ) {
-  unset(
-    $all_roles['subscriber'],
-    $all_roles['author'],
-    $all_roles['editor']
-  );
-  return $all_roles;
-} );
-
-
-
 // Определение slug шаблона, нужно для подключения нужных стилей и скриптов к страницам
 add_filter( 'template_include', function( $template ) {
   global $post;
@@ -162,6 +165,9 @@ add_filter( 'template_include', function( $template ) {
 
 // Редиректы пользователей
 require $template_directory . '/inc/redirects.php';
+
+// Роли пользователей
+require $template_directory . '/inc/users-roles.php';
 
 // Функция создания календаря для стр. план питания
 require $template_directory . '/inc/calendar.php';

@@ -17,7 +17,7 @@ function create_link_preload( $item ) {
       if ( $item['upload'] ) {
         $filepath = $item['filepath'];
       } else {
-        $filepath = php_path_join( $template_directory, $item['filepath'] );
+        $filepath = $item['filepath'];
       } // endif $item['upload']
 
       // if ( $item['file'] ) {

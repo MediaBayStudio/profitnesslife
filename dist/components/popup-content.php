@@ -4,8 +4,11 @@ function popup_content( $args ) {
   <div class="popup__text-block">
     <span class="popup__text-block-title"><?php echo $args['title'] ?></span> <?php
     foreach ( $args['tags'] as $tag => $value ) :
-      if ( $tag === 'p' || $tag === 'p2' ) : ?>
+      if ( $tag === 'p' || $tag === 'p2' || $tag === 'p3' ) : ?>
         <p class="popup__descr"><?php echo $value ?></p> <?php
+      endif;
+      if ( $tag === 'recommend' ) : ?>
+        <span class="popup__recommend lazy" data-src="#"><?php echo $value ?></span> <?php
       endif;
       if ( $tag === 'images' || $tag === 'images2' ) :
         foreach ( $value as $img ) :

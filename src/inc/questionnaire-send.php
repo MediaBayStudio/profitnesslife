@@ -3,7 +3,7 @@ function questionnaire_send() {
   if ( $_POST['reset'] ) {
     global $user_id;
     update_field( 'questionnaire_complete', false, 'user_' . $user_id );
-    update_field( 'questionnaire_show', false, 'user_' . $user_id );
+    update_field( 'show_diet_plan', false, 'user_' . $user_id );
     update_field( 'questionnaire_time', '', 'user_' . $user_id );
     update_field( 'weight_timeline', [], 'user_' . $user_id );
     update_field( 'measure_timeline', [], 'user_' . $user_id );
@@ -251,7 +251,7 @@ function questionnaire_send() {
   $response['dinner_ccal'] = $dinner_max_calories;
   $response['terms'] = $categories;
 
-  var_dump( $response );
+  // var_dump( $response );
 
   function fill_array( $array, $max ) {
     $count = count( $array );
@@ -630,7 +630,7 @@ function questionnaire_send() {
 
 
   // !!! Убрать после тестов
-  update_field( 'questionnaire_show', true, $user_id );
+  update_field( 'show_diet_plan', true, $user_id );
   // !!!
 
   $response['workout'] = $workout;
@@ -660,8 +660,7 @@ function questionnaire_send() {
   update_field( 'start_weight', $current_weight, $user_id );
   update_field( 'current_weight', $current_weight, $user_id );
   update_field( 'target_weight', $target_weight, $user_id );
-  update_field( 'questionnaire_complete', true, $user_id );
-  update_field( 'questionnaire_time', date( 'd.m.Y H:i:s' ), $user_id );
+  update_field( 'questionnaire_complete', true, $user_id ); // Анкета была пройдена
   update_field( 'training_experience', $training_experience, $user_id );
   update_field( 'training_restrictions', $training_restrictions, $user_id );
   update_field( 'place', $place, $user_id );
@@ -676,13 +675,65 @@ function questionnaire_send() {
   update_field( 'children', $children, $user_id );
   update_field( 'categories', $categories, $user_id );
 
-  // update_field( 'week_1', [
-  //   'breakfasts' => $breakfasts_ids,
-  //   'snack_1' => $snacks_1_ids,
-  //   'lunches' => $lunches_ids,
-  //   'snack_2' => $snacks_2_ids,
-  //   'dinners' => $dinners_ids
-  // ], $user_id );
+
+  /* РАСЧЕТЫ ВРЕМЕНИ */
+  // Дата прохождения анкеты
+  $questionnaire_date =  date( 'd.m.Y H:i:s' );
+  $questionnaire_dmy_date = date( 'd.m.Y' );
+
+  // Время прохождения анкеты в мс
+  $questionnaire_time =  strtotime( $questionnaire_date );
+  $questionnaire_dmy_time =  strtotime( $questionnaire_dmy_date );
+
+  // Время начала марафона в мс (следующий понедельник от даты прохождения анкеты)
+  $start_marathon_time = strtotime( 'next monday', $questionnaire_dmy_time );
+
+  // Название дня прохождения анкеты: Sun || Mon || Tue || etc...
+  $questionnaire_week_day = date( 'D', $questionnaire_time );
+
+  // Время открытия анкеты
+  /*
+    Если анкета пройдена в воскресенье или понедельник,
+    то показывать результат через 3 часа
+    Если анкета пройдена в любой другой день,
+    то показывать результат в следующее воскресенье в 10 утра
+  */
+  if ( $questionnaire_week_day === 'Sun' || $questionnaire_week_day === 'Mon' ) {
+    $diet_plan_open_time = strtotime( '+3 hours', $questionnaire_time );
+  } else {
+    $diet_plan_open_time = strtotime( 'next sunday +10 hours', $questionnaire_time );
+  }
+
+  $diet_plan_open_date = date( 'd.m.Y H:i:s', $diet_plan_open_time );
+
+  $first_week_end_time = strtotime( '+1 week', $start_marathon_time );
+  $second_week_end_time = strtotime( '+2 week', $start_marathon_time );
+  $third_week_end_time = strtotime( '+3 week', $start_marathon_time );
+
+  $first_week_end_date = date( 'd.m.Y H:i:s', $first_week_end_time );
+  $second_week_end_date = date( 'd.m.Y H:i:s', $second_week_end_time );
+  $third_week_end_date = date( 'd.m.Y H:i:s', $third_week_end_time );
+
+  $start_marathon_date = date( 'd.m.Y H:i:s', $start_marathon_time );
+
+  $finish_marathon_time = $third_week_end_time;
+  $finish_marathon_date = $third_week_end_date;
+
+  update_field( 'first_week_end_time', $first_week_end_time, $user_id );
+  update_field( 'second_week_end_time', $second_week_end_time, $user_id );
+  update_field( 'third_week_end_time', $third_week_end_time, $user_id );
+
+  update_field( 'first_week_end_date', $first_week_end_date, $user_id );
+  update_field( 'second_week_end_date', $second_week_end_date, $user_id );
+  update_field( 'third_week_end_date', $third_week_end_date, $user_id );
+
+  update_field( 'diet_plan_open_date', $diet_plan_open_date, $user_id );
+  update_field( 'start_marathon_time', $start_marathon_time, $user_id );
+  update_field( 'finish_marathon_time', $finish_marathon_time, $user_id );
+  update_field( 'start_marathon_date', $start_marathon_date, $user_id );
+  update_field( 'finish_marathon_date', $finish_marathon_date, $user_id );
+  update_field( 'questionnaire_time', $questionnaire_date, $user_id );
+
 
   for ( $i = 0, $len = count( $breakfasts_ids ); $i < $len; $i++ ) {
     $diet_plan[] = [
@@ -697,8 +748,7 @@ function questionnaire_send() {
   $response['diet_plan'] = $diet_plan;
 
   update_field( 'diet_plan', $diet_plan, $user_id );
-
-  update_field( 'questionnaire_show', true, $user_id );
+  // update_field( 'show_diet_plan', true, $user_id );
 
   echo json_encode( $response );
 

@@ -1,1 +1,1 @@
-@charset "UTF-8";.index-form-sect{display:flex;flex-flow:column-reverse}.index-form-sect__descr{margin:0 0 35px}.index-form-sect__img{max-width:375px;width:100%}.index-form .field{margin:0 0 35px;width:100%}.index-form .btn{margin:20px 0 0;padding:10px 47px}
+@charset "UTF-8";.index-form-sect{display:flex;flex-flow:column-reverse}.index-form-sect__descr{margin:0 0 35px}.index-form-sect__img{max-width:375px;width:100%;height:calc((100vw - 320px)/ (575 - 320)*(291 - 217) + 217px)}.index-form .field{margin:0 0 35px;width:100%}.index-form .btn{margin:20px 0 0;padding:10px 47px}

@@ -9,7 +9,7 @@ print_account_hero_section( [
   ],
   'buttons' => [
     [
-      'title' => 'Разрешённые продукты',
+      'title' => 'Рекомендованные продукты',
       'class' => 'btn-ol allowed-popup-open'
     ],
     [

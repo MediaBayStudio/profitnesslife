@@ -14,8 +14,13 @@
       'container_class' => 'menu__nav',
       'menu_class'      => 'menu__nav-list',
       'items_wrap'      => '<ul class="%2$s">%3$s</ul>'
-    ] ) ?>
-    <button type="button" class="menu__login btn btn-green">Личный кабинет</button>
-    <img src="#" alt="image" data-src="<?php echo $template_directory_uri ?>/img/menu-img.jpg" class="menu__img lazy">
+    ] );
+    if ( is_user_logged_in() ) : ?>
+      <a href="<?php echo $site_url ?>/account" class="menu__login btn btn-green">Личный кабинет</a> <?php
+    else : ?>
+      <button href="<?php echo $site_url ?>/account" class="menu__login hdr-login-btn btn btn-green">Личный кабинет</button> <?php
+    endif ?>
+    <!-- <button type="button" class="menu__login btn btn-green">Личный кабинет</button> -->
+    <img src="#" alt="image" data-src="<?php echo $template_directory_uri ?>/img/menu-img.svg" class="menu__img lazy">
   </div>
 </aside>

@@ -72,6 +72,34 @@ var browser = {
       }
     }
   },
+  resetQuestionnaire = function() {
+    this.classList.add('loading');
+    
+    let data = 'action=questionnaire_send&reset=reset',
+      url = siteUrl + '/wp-admin/admin-ajax.php';
+
+    fetch(url, {
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then(function(response) {
+        if (response.ok) {
+          return response.text();
+        } else {
+          console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
+          return '';
+        }
+      })
+      .then(function(response) {
+        location.reload();
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  },
   weightChart,
   measureChart,
   mask, // ф-я маски телефонов в поля ввода (в файле telMask.js)
@@ -85,7 +113,13 @@ var browser = {
   fakeScrollbar,
   allowedProductsPopup,
   nutritionRulesPopup,
+  workoutRulesPopup,
+  inventoryPopup,
   productsCartPopup,
+  loginPopup,
+  workoutPopup,
+  errorPopup,
+  thanksPopup,
   // Сокращение записи querySelector
   q = function(selector, element) {
     element = element || body;
@@ -128,10 +162,12 @@ var browser = {
     }
 
     if (!target && _.tagName === 'A') {
-      target = q(_.getAttribute('href'));
+      target = _.getAttribute('href').replace(/http:\/\/|https:\/\//, '');
+      target = q(target);
     }
 
     if (target.constructor === String) {
+      target = target.replace(/http:\/\/|https:\/\//, '');
       target = q(target);
     }
 
@@ -151,6 +187,9 @@ var browser = {
         if (start === null) {
           start = time;
         }
+
+        // targetTop = target.getBoundingClientRect().top - +(targetStyles.paddingTop).slice(0, -2) - +(targetStyles.marginTop).slice(0, -2)
+        console.log(targetTop);
         let progress = time - start,
           r = (targetTop < 0 ? Math.max(wndwY - progress / V, wndwY + targetTop) : Math.min(wndwY + progress / V, wndwY + targetTop));
 
@@ -161,10 +200,15 @@ var browser = {
         }
       }
 
+      console.log(targetStyles.paddingTop);
+
     requestAnimationFrame(step);
   },
   // Функция запрета/разрешения прокрутки страницы
   pageScroll = function(disallow) {
+    if (!fakeScrollbar) {
+      return;
+    }
     fakeScrollbar.classList.toggle('active', disallow);
     body.classList.toggle('no-scroll', disallow);
     body.style.paddingRight = disallow ? fakeScrollbar.offsetWidth - fakeScrollbar.clientWidth + 'px' : '';
@@ -898,11 +942,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // let navLinks = qa('.nav-link, .hdr__callback');
+  let navLinks = qa('.hdr .nav-link, .ftr .nav-link, .index-hero__btn, .index-invite__btn');
 
-  // for (let i = 0, len = navLinks.length; i < len; i++) {
-  // navLinks[i].addEventListener('click', scrollToTarget);
-  // }
+  for (let i = 0, len = navLinks.length; i < len; i++) {
+    navLinks[i].addEventListener('click', scrollToTarget);
+  }
 
   // sticky(hdr);
 
