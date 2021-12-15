@@ -72,11 +72,21 @@ var browser = {
       }
     }
   },
-  resetQuestionnaire = function() {
-    this.classList.add('loading');
-    
-    let data = 'action=questionnaire_send&reset=reset',
+  resetQuestionnaire = function(resetByUser) {
+    let target = this !== window ? this : event.target,
+      userID = target.getAttribute('data-user'),
+      data = 'action=questionnaire_send&reset=reset',
       url = siteUrl + '/wp-admin/admin-ajax.php';
+
+    if (userID) {
+      data += '&user=' + userID;
+    }
+
+    if (resetByUser) {
+      data += '&reset_by_user=1';
+    }
+
+    target.classList.add('loading');
 
     fetch(url, {
         method: 'POST',
@@ -94,9 +104,11 @@ var browser = {
         }
       })
       .then(function(response) {
+        console.log(response);
         location.reload();
       })
       .catch(function(err) {
+        target.classList.remove('loading');
         console.log(err);
       });
   },
@@ -111,6 +123,7 @@ var browser = {
   overlay,
   body,
   fakeScrollbar,
+  resetQuestionnairePopup,
   allowedProductsPopup,
   nutritionRulesPopup,
   workoutRulesPopup,

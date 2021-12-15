@@ -528,7 +528,7 @@ if ( !$questionnaire_complete ) : ?>
       <div class="questionnaire-form__complete"></div>
 
       <button type="button" class="questionnaire-form__next btn btn-green hide">Далее</button>
-      <button name="submit" class="questionnaire-form__submit btn btn-green hide">Завершить</button>
+      <button name="submit" class="questionnaire-form__submit btn btn-green hide"><span class="loader loader-white"><span class="loader__circle"></span></span>Завершить</button>
 
     </form>
   </section> <?php

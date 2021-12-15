@@ -71,23 +71,128 @@ add_action( 'manage_dish_posts_custom_column', function( $colname, $post_id ) {
   }
 }, 5, 2);
 
-
 // добавляем возможность сортировать колонку
-add_filter( 'manage_edit-dish_sortable_columns', 'sort_columns_by_calories' );
-
-function sort_columns_by_calories( $sortable_columns ) {
+add_filter( 'manage_edit-dish_sortable_columns', function( $sortable_columns ) {
   $sortable_columns['calories'] = ['calories_calories', false];
   $sortable_columns['type'] = ['type_type', false];
   return $sortable_columns;
-}
+} );
+
+add_filter( 'manage_users_columns', function( $columns ) {
+  $num = 1; // после какой по счету колонки вставлять новые
+
+  // var_dump( $columns );
+
+  // return $columns;
+
+  $new_columns = [
+    'username' => 'Имя пользователя',
+    'name' => 'Имя',
+    'email' => 'E-mail',
+    'user_role' => 'Роль',
+    'start_date' => 'Дата начала марафона',
+    'end_date' => 'Дата завершения марафона',
+    'marathons_count' => 'Кол-во прохождений марафона'
+  ];
+
+  return array_slice( $columns, 0, $num ) + $new_columns;
+}, 4 );
+
+// Заполнение колонок нужными данными
+add_action( 'manage_users_custom_column', function( $output, $column_name, $user_id ) {
+  global $site_url;
+
+  $user_data = get_fields( 'user_' . $user_id );
+  $user = new WP_User( $user_id );
+
+  $get_params = '';
+
+  // Массив гет параметров для сортируемых колонок
+  if ( $_GET['role'] ) {
+    $get_params .= 'role=waiting&';
+  }
+
+  switch ( $column_name ) {
+    case 'start_date':
+      $start_date = date( 'd.m.Y', $user_data['start_marathon_time'] );
+      $output = "<p><a href=\"{$site_url}/wp-admin/users.php?filter=true&meta_key=start_marathon_time&meta_value={$user_data['start_marathon_time']}\">{$start_date}</a></p>";
+      break;
+    case 'end_date':
+      $finish_date = date( 'd.m.Y', $user_data['finish_marathon_time'] );
+      $output = "<p><a href=\"{$site_url}/wp-admin/users.php?filter=true&meta_key=finish_marathon_time&meta_value={$user_data['finish_marathon_time']}\">{$finish_date}</a></p>";
+      break;
+    case 'user_role':
+      global $wp_roles;
+
+      $all_roles = $wp_roles->roles; 
+
+      foreach ( $user->roles as $user_role_key ) {
+        $user_role = $user_role_key;
+      }
+
+      foreach ( $all_roles as $role_key => $role_details ) {
+        if ( $role_key == $user_role_key ) {
+          $user_role_name = $role_details['name'];
+        }
+      }
+      $output = "<p><a href=\"{$site_url}/wp-admin/users.php?role={$user_role_key}\">{$user_role_name}</a></p>";
+      break;
+    case 'marathons_count':
+      $output = "<p><a href=\"{$site_url}/wp-admin/users.php?filter=true&meta_key=marathons_count&meta_value={$user_data['marathons_count']}\">{$user_data['marathons_count']}</a></p>";
+      break;
+  }
+
+  return $output;
+}, 25, 3 );
+
+// добавляем возможность сортировать колонку
+add_filter( 'manage_users_sortable_columns', function( $sortable_columns ) {
+  $sortable_columns['start_date'] = ['start-date_start-date', false];
+  $sortable_columns['end_date'] = ['end-date_end-date', false];
+  $sortable_columns['user_role'] = ['role_role', false];
+  $sortable_columns['marathons_count'] = ['role_role', false];
+  return $sortable_columns;
+} );
+
+
+add_action( 'pre_get_users', function( $query ) {
+  if ( !is_admin() ) {
+    return;
+  }
+
+  if ( $_GET['filter'] && $_GET['meta_value'] && $_GET['meta_key'] ) {
+    $query->set( 'meta_key', $_GET['meta_key'] );
+    $query->set( 'meta_value', $_GET['meta_value'] );
+  } else {
+    switch ( $query_orderby ) {
+      case 'start-date_start-date':
+        $meta_key = 'start_marathon_time';
+        $meta_value = 'meta_value_num';
+        break;
+      case 'end-date_end-date':
+        $meta_key = 'end_marathon_time';
+        $meta_value = 'meta_value_num';
+        break;
+      case 'role_role':
+        $meta_key = 'role';
+        $meta_value = 'meta_value';
+        break;
+    }
+
+    $query->set( 'meta_key', $meta_key );
+    $query->set( 'orderby', $meta_value );
+  }
+
+} );
 
 // изменяем запрос при сортировке колонки
 add_action( 'pre_get_posts', function( $query ) {
   $query_orderby = $query->get( 'orderby' );
 
-  if ( !is_admin() || !$query->is_main_query() 
+  if ( !is_admin()
+    || !$query->is_main_query()
     || $query_orderby !== 'calories_calories'
-    && $query_orderby !== 'type_type') {
+    && $query_orderby !== 'type_type' ) {
     return;
   }
 

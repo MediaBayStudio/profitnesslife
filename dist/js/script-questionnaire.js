@@ -4,12 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //=include ../sections/mobile-menu/mobile-menu.js
 
-;
-(function() {
-  let resetBtn = id('reset');
+// ;
+// (function() {
+//   let resetBtn = id('reset');
 
-  resetBtn && resetBtn.addEventListener('click', resetQuestionnaire);
-})();
+//   resetBtn && resetBtn.addEventListener('click', resetQuestionnaire);
+// })();
 
 ;
 (function() {
@@ -668,6 +668,14 @@ document.addEventListener('DOMContentLoaded', function() {
 (function() {
   errorPopup = new Popup('.error-popup', {
     closeButtons: '.error-popup__close'
+  });
+})();
+
+;
+(function() {
+  resetQuestionnairePopup = new Popup('.reset-questionnaire-popup', {
+    openButtons: '.questionnaire-complete-sect__reset-btn',
+    closeButtons: '.reset-questionnaire-popup__close, .reset-questionnaire-popup__cancel-btn'
   });
 })();
 

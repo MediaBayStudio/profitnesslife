@@ -22,6 +22,10 @@ $email = get_option( 'contacts_email' );
 $logo_id = get_theme_mod( 'custom_logo' );
 $logo_url = wp_get_attachment_url( $logo_id );
 
+add_action( 'admin_color_scheme_picker', function() {
+  echo '<button type="button" class="button" onclick="resetQuestionnaire()" id="clear-user-data-btn" data-user="' . $_GET['user_id'] . '">Запустить марафон еще раз</button>';
+} );
+
 /*
   Расчеты времени после прохождения анкеты
 */
@@ -31,37 +35,8 @@ $questionnaire_date =  $user_data['questionnaire_time'];
 // $questionnaire_date =  '12.09.2021 12:10:27'; // 3 неделя
 // $questionnaire_date =  '21.09.2021 12:10:27'; // 2 неделя
 
+// Если анкета пройдена, то считаем время
 if ( $questionnaire_date ) {
-  // Время прохождения анкеты в мс
-  // $questionnaire_time =  strtotime( $questionnaire_date );
-  // $questionnaire_dmy_time =  strtotime( $questionnaire_dmy_date );
-
-  // Время начала марафона в мс (следующий понедельник от даты прохождения анкеты)
-  // $start_marathon_time = strtotime( 'next monday', $questionnaire_dmy_time );
-  // $start_marathon_time = strtotime( '+5 seconds', $questionnaire_dmy_time );
-
-  // Название дня прохождения анкеты: Sun || Mon || Tue || etc...
-  // $questionnaire_week_day = date( 'D', $questionnaire_time );
-
-  // Текущее время в мс
-  // $current_time = strtotime( 'now' );
-
-  // Время открытия анкеты
-  /*
-    Если анкета пройдена в воскресенье или понедельник,
-    то показывать результат через 3 часа
-    Если анкета пройдена в любой другой день,
-    то показывать результат в следующее воскресенье в 10 утра
-  */
-
-  // if ( $questionnaire_week_day === 'Sun' || $questionnaire_week_day === 'Mon' ) {
-  //   $questionnaire_result_time = strtotime( '+3 hours', $questionnaire_time );
-  // } else {
-  //   $questionnaire_result_time = strtotime( 'next sunday +10 hours', $questionnaire_time );
-  // }
-
-  // $show_diet_plan = $current_time >= $questionnaire_result_time;
-
   // Текущее время в мс
   $current_time = strtotime( 'now' );
 
@@ -73,21 +48,27 @@ if ( $questionnaire_date ) {
     update_field( 'show_diet_plan', $show_diet_plan, 'user_' . $user_id );
   }
 
-  // Концы каждой недели марафона (только дата, без времени)
-  // $first_week_end_time = strtotime( '+1 week', $start_marathon_time );
-  // $second_week_end_time = strtotime( '+2 week', $start_marathon_time );
-  // $third_week_end_time = strtotime( '+3 week', $start_marathon_time );
+  // Марафон начался, меняем роль пользователя
+  if ( $start_marathon_time <= $current_time && !is_super_admin() ) {
+    if ( in_array( 'waiting', (array)$user->roles ) ) {
+      $user->set_role( 'started' );
+    }
+  }
 
-  // $finish_marathon_time = $third_week_end_time;
-
-  // $weeks_end_dates = [ $first_week_end_time, $second_week_end_time, $third_week_end_time ]; // переменная используется в графиках
+  // Марафон закончился, меняем роль пользователя
+  if ( $user_data['finish_marathon_time'] <= $current_time && !is_super_admin() ) {
+    if ( in_array( 'started', (array)$user->roles ) ) {
+      $user->set_role( 'completed' );
+      update_field( 'marathons_count', $user_data['marathons_count'] + 1, 'user_' . $user_id );
+    }
+  }
 
   // Концы каждой недели марафона (только дата, без времени)
   $first_week_end_time = $user_data['first_week_end_time'];
   $second_week_end_time = $user_data['second_week_end_time'];
   $third_week_end_time = $user_data['third_week_end_time'];
 
-  // Переменная используется в графиках
+  // Переменная используется в пострении графиков веса и объемов тела
   $weeks_end_dates = [
     $first_week_end_time,
     $second_week_end_time,
@@ -109,7 +90,6 @@ if ( $questionnaire_date ) {
   }
 
   // echo '<p>Сейчас идет неделя ' . $current_week_number . '</p>';
-
   // var_dump( date( 'd.m.Y H:i:s', $questionnaire_result_time ) );
 }
 

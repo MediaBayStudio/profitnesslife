@@ -23,8 +23,21 @@
 }
 
 #your-profile h2:first-of-type,
-#your-profile table:first-of-type,
+#your-profile tr.user-rich-editing-wrap,
+#your-profile tr.user-syntax-highlighting-wrap,
+#your-profile tr.user-comment-shortcuts-wrap,
+#your-profile tr.show-admin-bar.user-admin-bar-front-wrap,
+#your-profile tr.user-language-wrap,
+#your-profile tr.user-admin-color-wrap fieldset,
 #your-profile h2:nth-of-type(4),
 #your-profile table:nth-of-type(4) {
   display: none;
+}
+#your-profile tr.user-admin-color-wrap > th {
+  color: transparent;
+}
+#your-profile tr.user-admin-color-wrap > th::before {
+  content: "Сброс анкеты";
+  display: inline-block;
+  color: #1d2327;
 }

@@ -73,13 +73,29 @@ body {
   }
 }
 
-.loader_white {
+.loader-white {
+  background: $accentGreen;
 
-  // background: $color;
   >.loader__circle {
-    // border-top-color: $color;
-    // border-left-color: $color;
+    border-top-color: $white;
+    border-left-color: $white;
   }
+}
+
+.loader-green {
+
+  background: $white;
+
+  >.loader__circle {
+    border-top-color: $accentGreen;
+    border-left-color: $accentGreen;
+  }
+}
+
+.loading {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .loading>.loader {
@@ -167,7 +183,7 @@ span.wpcf7-not-valid-tip,
   .account-page-sections {
     padding-top: 35px;
   }
-  
+
   body {
     font-size: 15px;
 
@@ -227,6 +243,7 @@ span.wpcf7-not-valid-tip,
     &.page-template-training-program,
     &.page-template-questionnaire {
       background: $white;
+
       >#page-wrapper {
 
         &::before {
@@ -268,7 +285,9 @@ span.wpcf7-not-valid-tip,
 
 @media (min-width:1279.98px) {
   @import '../../sections/hero-404/hero-404.1280';
-   body {
+
+  body {
+
     &.page-template-account,
     &.page-template-chat,
     &.page-template-diet-plan,

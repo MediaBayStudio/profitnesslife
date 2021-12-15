@@ -1,6 +1,6 @@
-;
-(function() {
-  let resetBtn = id('reset');
+// ;
+// (function() {
+//   let resetBtn = id('reset');
 
-  resetBtn && resetBtn.addEventListener('click', resetQuestionnaire);
-})();
+//   resetBtn && resetBtn.addEventListener('click', resetQuestionnaire);
+// })();

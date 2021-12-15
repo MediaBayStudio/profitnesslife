@@ -4,6 +4,7 @@
 // echo '<p>Текущее время ' . $current_time . '</p>';
 
 add_action( 'wp', function() {
+  return;
   global 
     $post,
     $site_url,

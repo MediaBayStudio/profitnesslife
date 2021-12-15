@@ -1,12 +1,77 @@
 <?php
 function questionnaire_send() {
   if ( $_POST['reset'] ) {
-    global $user_id;
-    update_field( 'questionnaire_complete', false, 'user_' . $user_id );
-    update_field( 'show_diet_plan', false, 'user_' . $user_id );
-    update_field( 'questionnaire_time', '', 'user_' . $user_id );
-    update_field( 'weight_timeline', [], 'user_' . $user_id );
-    update_field( 'measure_timeline', [], 'user_' . $user_id );
+
+    if ( $_POST['user'] ) {
+      $user = new WP_User( $_POST['user'] );
+      $user_id = 'user_' . $_POST['user'];
+    } else {
+      $user = wp_get_current_user();
+      $user_id = 'user_' . $user->ID;
+    }
+
+    $user_data = get_fields( $user_id );
+
+    if ( $_POST['reset_by_user'] ) {
+      update_field( 'reset', true, $user_id );
+    } else {
+      update_field( 'reset', false, $user_id );
+    }
+
+    update_field( 'questionnaire_complete', false, $user_id );
+    update_field( 'show_diet_plan', false, $user_id );
+    update_field( 'weight_timeline', [], $user_id );
+    update_field( 'measure_timeline', [], $user_id );
+    update_field( 'workout_week_1', [], $user_id );
+    update_field( 'workout_week_2', [], $user_id );
+    update_field( 'workout_week_3', [], $user_id );
+    
+    update_field( 'replacement_breakfasts', [], $user_id );
+    update_field( 'replacement_lunches', [], $user_id );
+    update_field( 'replacement_dinners', [], $user_id );
+
+    update_field( 'diet_plan', [], $user_id );
+
+    if ( $user_data['photo_progress'] ) {
+      foreach ( $user_data['photo_progress'] as $photo_progress_image ) {
+        wp_delete_attachment( $photo_progress_image['ID'], true );
+      }
+      update_field( 'photo_progress', [], $user_id );
+    }
+
+    if ( $user_id !== 'user_1' ) {
+      $user->set_role( 'waiting' );
+    }
+
+    update_field( 'age', '', $user_id );
+    update_field( 'telegram_chat', '', $user_id );
+    update_field( 'start_weight', '', $user_id );
+    update_field( 'current_weight', '', $user_id );
+    update_field( 'target_weight', '', $user_id );
+    update_field( 'training_restrictions', [], $user_id );
+    update_field( 'inventory', [], $user_id );
+    update_field( 'body_parts', [], $user_id );
+    update_field( 'height', '', $user_id );
+    update_field( 'calories', '', $user_id );
+    update_field( 'carbohydrates', '', $user_id );
+    update_field( 'proteins', '', $user_id );
+    update_field( 'fats', '', $user_id );
+    update_field( 'categories', [], $user_id );
+    update_field( 'first_week_end_time', '', $user_id );
+    update_field( 'second_week_end_time', '', $user_id );
+    update_field( 'third_week_end_time', '', $user_id );
+
+    update_field( 'first_week_end_date', '', $user_id );
+    update_field( 'second_week_end_date', '', $user_id );
+    update_field( 'third_week_end_date', '', $user_id );
+
+    update_field( 'diet_plan_open_date', '', $user_id );
+    update_field( 'start_marathon_time', '', $user_id );
+    update_field( 'finish_marathon_time', '', $user_id );
+    update_field( 'start_marathon_date', '', $user_id );
+    update_field( 'finish_marathon_date', '', $user_id );
+    update_field( 'questionnaire_time', '', $user_id );
+
     die();
   }
 

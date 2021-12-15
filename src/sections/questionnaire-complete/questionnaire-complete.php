@@ -23,9 +23,9 @@ if ( $questionnaire_complete ) {
 
   <section class="questionnaire-complete-sect">
     <div class="questionnaire-complete-sect__title-block"> <?php
-      #if ( $current_time < $start_marathon_time ) : ?>
-        <button type="button" id="reset" class="questionnaire-complete-sect__reset-btn">Пройти анкету заново</button> <?php
-      #endif ?>
+      if ( $current_time <= $start_marathon_time && !$user_data['reset'] ) : ?>
+        <button type="button" class="questionnaire-complete-sect__reset-btn">Пройти анкету заново</button> <?php
+      endif ?>
       <h3 class="questionnaire-complete-sect__title">Общие вопросы</h3>
     </div>
     <ul class="questionnaire-complete-sect__list">

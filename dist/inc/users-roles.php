@@ -20,7 +20,7 @@ add_filter( 'editable_roles', function( $all_roles ) {
 // $roles = [
 //   'completed' => 'Завершил марафон',
 //   'started' => 'В процессе прохождения',
-//   'waiting' => 'Ождиает начала'
+//   'waiting' => 'Ожидает начала'
 // ];
 
 // foreach ( $roles as $key => $value ) {
@@ -28,42 +28,8 @@ add_filter( 'editable_roles', function( $all_roles ) {
 //   var_dump( $result );
 // }
 
-add_filter( 'manage_users_columns', function( $columns ) {
-  $num = 1; // после какой по счету колонки вставлять новые
+/*
 
-  // var_dump( $columns );
+КОЛОНКИ В manage-posts-columns.php
 
-  // return $columns;
-
-  $new_columns = [
-    'username' => 'Имя пользователя',
-    'name' => 'Имя',
-    'email' => 'E-mail',
-    'role' => 'Роль',
-    'start_date' => 'Дата начала марафона',
-    'end_date' => 'Дата завершения марафона',
-    'count' => 'Кол-во прохождений марафона'
-  ];
-
-  return array_slice( $columns, 0, $num ) + $new_columns;
-}, 4 );
-
-// Заполнение колонок нужными данными
-add_action( 'manage_users_custom_column', function( $output, $column_name, $user_id ) {
-  global $site_url;
-
-  $user_data = get_fields( 'user_' . $user_id );
-
-  // var_dump( $user_data );
-
-  switch ( $column_name ) {
-    case 'start_date':
-      $output = "<p>{$start_marathon_time}</p>";
-      break;
-    case 'end_date':
-      $output = "<p>{$start_marathon_time}</p>";
-      break;
-  }
-
-  return $output;
-}, 25, 3 );
+*/

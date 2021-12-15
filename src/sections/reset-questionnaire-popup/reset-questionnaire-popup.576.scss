@@ -1,0 +1,20 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+
+.reset-questionnaire-popup {
+  &__cnt {}
+
+  &__close {}
+
+  &__title {}
+
+  &__descr {}
+
+  &__buttons {}
+
+  &__cancel-btn {}
+
+  &__confirm-btn {}
+}

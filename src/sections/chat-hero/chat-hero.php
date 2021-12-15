@@ -1,4 +1,65 @@
 <?php
+if ( !$user_data['telegram_chat'] && $user_id != '1' ) {
+  echo "<p>Пользователь не прикреплен к чату</p>";
+  $users = get_users( [
+    'number' => -1,
+    'role__in' => ['waiting', 'started'],
+    'meta_query' => [
+      [
+        'key' => 'telegram_chat',
+        'value' => ''
+      ]
+    ]
+  ] );
+
+  $users_count = count_users();
+  $total_users_count = $users_count['avail_roles']['waiting'] + $users_count['avail_roles']['started'];
+
+  foreach ( $section['chats'] as $chat ) {
+    if ( $chat['users'] ) {
+      $chats_counts[] = count( $chat['users'] );
+    } else {
+      $chats_counts[] = 0;
+    }
+  }
+
+  // Наименьшее кол-во пользователей в массиве
+  $target_chat_value = min( $chats_counts );
+
+
+  // Определяем ключ в массиве
+  foreach ( $chats_counts as $key => $value ) {
+    if ( $value === $target_chat_value ) {
+      $target_chat_index = $key;
+      break;
+    }
+  }
+
+
+  echo "<p>target_chat_index: {$target_chat_index}</p>";
+
+  if ( is_array( $section['chats'][ $target_chat_index ]['users'] ) ) {
+    if ( !in_array( $user_id, $section['chats'][ $target_chat_index ]['users'] ) ) {
+      $section['chats'][ $target_chat_index ]['users'][] = $user_id;
+      $update = true;
+      echo "<p>Пользователя нет в чате</p>";
+    } else {
+      echo "<p>Этот пользователь уже есть в чате</p>";
+    }
+  } else {
+    $section['chats'][ $target_chat_index ]['users'] = [ $user_id ];
+    $update = true;
+    echo "<p>Чат пустой</p>";
+  }
+
+  if ( $update ) {
+    echo "<p>Добавим пользователя в чат</p>";
+    $sections = $GLOBALS['sections'];
+    $sections[0]['chats'] = $section['chats'];
+    update_field( 'sections', $sections, $post->ID );
+    update_field( 'telegram_chat', $section['chats'][ $target_chat_index ]['link'], 'user_' . $user_id );
+  }
+}
  
 print_account_hero_section( [
   'title' => $section['title'],
@@ -12,57 +73,7 @@ print_account_hero_section( [
     [
       'title' => 'Перейти в чат',
       'class' => 'btn-green',
-      'href' => $section['link']
+      'href' => $section['chats'][ $target_chat_index ]['link']
     ]
   ]
-] );
-
-// $posts = get_posts( [
-//   'post_type' => 'dish',
-//   'numberposts' => -1
-// ] );
-
-
-// var_dump( $fileds['ingredients'] );
-// var_dump( $terms );
-
-
-// $bug_count = 0;
-// foreach ( $posts as $post ) {
-//   $ingredients = get_field( 'ingredients', $post->ID );
-//   $terms = get_the_terms( $post->ID, 'dish_ingredients' );
-
-//   foreach ( $ingredients as $ingredient ) {
-//     if ( !$ingredient['title'] ) {
-//       $bug_count++;
-//     }
-  // }
-
-  // foreach ( $ingredients as $ingredient ) {
-  //   if ( $ingredient['title'] ) {
-  //     foreach ( $terms as $key => $term ) {
-  //       // echo "<p>Сравниваю {$term->name} с {$ingredient['title']->name} </p>";
-  //       if ( $term->name === $ingredient['title']->name ) {
-  //         unset( $terms[ $key ] );
-  //       }
-  //     }
-  //   }
-  // }
-  // if ( $terms ) {
-  //   $terms = array_values( $terms );
-  //   for ( $i = 0, $len = count( $ingredients ); $i < $len; $i++ ) { 
-  //     if ( !$ingredients[ $i ]['title'] ) {
-  //       $ingredients[ $i ]['title'] = $terms[0];
-  //     }
-  //   }
-  //   echo "<p>У записи {$post->post_title} остался ингредиент: </p>";
-  //   var_dump( $ingredients );
-  //   echo '<br><br>';
-  //   var_dump( update_field( 'ingredients', $ingredients, $post->ID ) );
-  //   // break;
-  // }
-// }
-
-// var_dump( $bug_count );
-
-?>
+] ) ?>

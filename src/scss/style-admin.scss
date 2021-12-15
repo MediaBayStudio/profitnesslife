@@ -17,7 +17,7 @@
 }
 
 // Страница редактирование приема пищи
-// .post-type-recipe,
+// .post-type-recipe,#1d2327
 // .post-type-dish {
 //   .acf-field-611bd3f02251a {
 //     display: none !important;
@@ -28,10 +28,26 @@
   // Скрываем персональные настройки
   h2:first-of-type,
   // и таблицу персональных настроек
-  table:first-of-type,
+  // table:first-of-type,
+  tr.user-rich-editing-wrap,
+  tr.user-syntax-highlighting-wrap,
+  tr.user-comment-shortcuts-wrap,
+  tr.show-admin-bar.user-admin-bar-front-wrap,
+  tr.user-language-wrap,
+  tr.user-admin-color-wrap fieldset,
   // Скрываем обо мне
   h2:nth-of-type(4),
   table:nth-of-type(4), {
     display: none;
+  }
+
+  tr.user-admin-color-wrap > th {
+    color: transparent;
+    &::before {
+      content: 'Сброс анкеты';
+      display: inline-block;
+      // all: inherit;
+      color: #1d2327;
+    }
   }
 }
