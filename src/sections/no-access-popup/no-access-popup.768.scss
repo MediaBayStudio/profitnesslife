@@ -1,0 +1,18 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.no-access-popup {
+  &__cnt {}
+
+  &__close {}
+
+  &__title {
+    margin: 0 0 20px;
+    font-size: 24px;
+  }
+
+  &__descr {}
+
+  &__btn {}
+}

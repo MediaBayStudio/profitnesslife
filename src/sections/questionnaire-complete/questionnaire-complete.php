@@ -8,7 +8,9 @@ if ( $questionnaire_complete ) {
     'buttons' => [
       [
         'title' => 'Перейти в чат',
-        'class' => 'btn-green'
+        'class' => 'btn-green',
+        'href' => $manager_link,
+        'target' => '_blank'
       ]
     ],
     'img' => [
@@ -24,7 +26,7 @@ if ( $questionnaire_complete ) {
   <section class="questionnaire-complete-sect">
     <div class="questionnaire-complete-sect__title-block"> <?php
       if ( $current_time <= $start_marathon_time && !$user_data['reset'] ) : ?>
-        <button type="button" class="questionnaire-complete-sect__reset-btn">Пройти анкету заново</button> <?php
+        <button type="button" class="questionnaire-complete-sect__reset-btn" data-user="<?php echo $user_id ?>" onclick="resetQuestionnaire(true)">Пройти анкету заново</button> <?php
       endif ?>
       <h3 class="questionnaire-complete-sect__title">Общие вопросы</h3>
     </div>

@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //=include ../sections/login-popup/login-popup.js
 
+//=include ../sections/no-access-popup/no-access-popup.js
+
 //=include ../sections/footer/footer.js
 
 });

@@ -1,0 +1,34 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.no-access-popup {
+  padding: 20px;
+  align-items: center;
+
+  &__cnt {
+    padding: 50px 20px;
+    max-width: 605px;
+    text-align: center;
+    border-radius: 30px;
+    box-shadow: 0px 8px 20px rgba(147, 167, 181, 0.15);
+  }
+
+  &__close {}
+
+  &__title {
+    font-size: 20px;
+  }
+
+  &__descr {
+    margin: auto;
+    max-width: 475px;
+  }
+
+  &__btn {
+    margin: 30px auto 0;
+    max-width: 100%;
+    width: 250px;
+    height: 45px;
+  }
+}

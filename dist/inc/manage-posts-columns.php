@@ -160,27 +160,26 @@ add_action( 'pre_get_users', function( $query ) {
     return;
   }
 
+  $query_orderby = $query->get( 'orderby' );
+
   if ( $_GET['filter'] && $_GET['meta_value'] && $_GET['meta_key'] ) {
     $query->set( 'meta_key', $_GET['meta_key'] );
     $query->set( 'meta_value', $_GET['meta_value'] );
-  } else {
+  } else if ( $query_orderby === 'start-date_start-date' || $query_orderby === 'end-date_end-date' || $query_orderby === 'role_role' ) {
     switch ( $query_orderby ) {
       case 'start-date_start-date':
         $meta_key = 'start_marathon_time';
-        $meta_value = 'meta_value_num';
         break;
       case 'end-date_end-date':
-        $meta_key = 'end_marathon_time';
-        $meta_value = 'meta_value_num';
+        $meta_key = 'finish_marathon_time';
         break;
       case 'role_role':
         $meta_key = 'role';
-        $meta_value = 'meta_value';
         break;
     }
 
     $query->set( 'meta_key', $meta_key );
-    $query->set( 'orderby', $meta_value );
+    $query->set( 'orderby', 'meta_value_num' );
   }
 
 } );

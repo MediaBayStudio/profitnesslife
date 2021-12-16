@@ -18,14 +18,15 @@ function print_account_hero_section( $args ) {
     //     'class' => '',
     //     'callback' => '',
     //     'id' => '',
-    //     'href' => ''
+    //     'href' => '',
+    //     'target' => ''
     //   ]
     // ]
   ];
 
   $parsed_args = wp_parse_args( $args, $defaults ) ?>
 
-  <section class="account-hero<?php echo $parsed_args['class'] ?><?php if ( $parsed_args['can_be_hidden'] ) echo 'account-hero-maybe-close' ?>" data-user-id="<?php echo $user_id ?>">
+  <section class="account-hero<?php echo $parsed_args['class'] ?><?php if ( $parsed_args['can_be_hidden'] ) echo ' account-hero-maybe-close' ?>" data-user-id="<?php echo $user_id ?>">
     <button type="button" class="account-hero__close popup__close" title="Больше не показывать"></button>
     <img src="<?php echo $parsed_args['img']['url'] ?>" alt="<?php echo $parsed_args['img']['alt'] ?>" class="account-hero__img">
     <div class="account-hero__text">
@@ -38,6 +39,7 @@ function print_account_hero_section( $args ) {
               $btn_tag = 'a';
               $btn_attr_key = 'href';
               $btn_attr_value = $btn['href'];
+              $btn_target = $btn['target'] ? ' target="_blank"' : '';
             } else {
               $btn_tag = 'button';
               $btn_attr_key = 'type';
@@ -45,7 +47,7 @@ function print_account_hero_section( $args ) {
             }
             $callback = $btn['callback'] ? ' onclick=\"' . $btn['callback'] . '\"' : '';
 
-            echo "<{$btn_tag} {$btn_attr_key}=\"{$btn_attr_value}\" class=\"btn {$btn['class']}\"{$callback}>{$btn['title']}</{$btn_tag}>";
+            echo "<{$btn_tag} {$btn_attr_key}=\"{$btn_attr_value}\"{$btn_target} class=\"btn {$btn['class']}\"{$callback}>{$btn['title']}</{$btn_tag}>";
           } ?>
         </div> <?php
       endif ?>

@@ -6,43 +6,48 @@
 
 get_header();
 
-$csv_array = csv_to_array( $template_directory . '/213.csv' );
+// echo '<p>Время окончания марафона ' . $finish_marathon_time . '</p>';
+// echo '<p>Текущее время ' . $current_time . '</p>';
 
-function csv_to_array( $filename='', $delimiter=',' ) {
-  if( !file_exists($filename) || !is_readable($filename) )
-      return false;
+// var_dump( $current_time >= $finish_marathon_time );
 
-  $header = null;
-  $data = [];
+// $csv_array = csv_to_array( $template_directory . '/213.csv' );
 
-  if ( ($handle = fopen( $filename, 'r' )) !== false ) {
-    while ( ($row = fgetcsv( $handle, 1000, $delimiter )) !== false ) {
-      if ( !$header ) {
-        $header = $row;
-      } else {
-        $data[] = array_combine( $header, $row );
-      }
-    }
-    fclose( $handle );
-  }
-  return $data;
-}
+// function csv_to_array( $filename='', $delimiter=',' ) {
+//   if( !file_exists($filename) || !is_readable($filename) )
+//       return false;
 
-$dish = $csv_array[0];
+//   $header = null;
+//   $data = [];
 
-$ingredients = preg_split( '/\n/', $dish['Ингредиенты'] );
+//   if ( ($handle = fopen( $filename, 'r' )) !== false ) {
+//     while ( ($row = fgetcsv( $handle, 1000, $delimiter )) !== false ) {
+//       if ( !$header ) {
+//         $header = $row;
+//       } else {
+//         $data[] = array_combine( $header, $row );
+//       }
+//     }
+//     fclose( $handle );
+//   }
+//   return $data;
+// }
 
-echo '<h2>Ингредиенты:</h2>';
-foreach ( $ingredients as $key => $value ) {
-  $ingredient_data = explode( '/', $value );
-  $ingredients[ $key ] = [
-    'name' => $ingredient_data[0],
-    'count' => $ingredient_data[1],
-    'units' => $ingredient_data[2]
-  ];
+// $dish = $csv_array[0];
 
-  echo "<p><span>{$ingredient_data[0]}</span> <span>{$ingredient_data[1]}</span> <span>{$ingredient_data[2]}</span></p>";
-}
+// $ingredients = preg_split( '/\n/', $dish['Ингредиенты'] );
+
+// echo '<h2>Ингредиенты:</h2>';
+// foreach ( $ingredients as $key => $value ) {
+//   $ingredient_data = explode( '/', $value );
+//   $ingredients[ $key ] = [
+//     'name' => $ingredient_data[0],
+//     'count' => $ingredient_data[1],
+//     'units' => $ingredient_data[2]
+//   ];
+
+//   echo "<p><span>{$ingredient_data[0]}</span> <span>{$ingredient_data[1]}</span> <span>{$ingredient_data[2]}</span></p>";
+// }
 
 // var_dump( $ingredients );
 

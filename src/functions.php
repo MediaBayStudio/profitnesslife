@@ -18,6 +18,7 @@ $upload_baseurl = $upload_dir['baseurl'] . DIRECTORY_SEPARATOR;
 $tel = get_option( 'contacts_tel' );
 $tel_clean = str_replace( [' ', '–', '-', '(', ')'], '', $tel );
 $email = get_option( 'contacts_email' );
+$manager_link = get_option( 'contacts_manager_link' );
 
 $logo_id = get_theme_mod( 'custom_logo' );
 $logo_url = wp_get_attachment_url( $logo_id );
@@ -41,6 +42,7 @@ if ( $questionnaire_date ) {
   $current_time = strtotime( 'now' );
 
   $start_marathon_time = $user_data['start_marathon_time'];
+  $finish_marathon_time = $user_data['finish_marathon_time'];
 
   // Пришло время показывать план питания или нет
   if ( !$user_data['show_diet_plan'] ) {
@@ -52,13 +54,15 @@ if ( $questionnaire_date ) {
   if ( $start_marathon_time <= $current_time && !is_super_admin() ) {
     if ( in_array( 'waiting', (array)$user->roles ) ) {
       $user->set_role( 'started' );
+      update_field( 'role', 1, 'user_' . $user_id );
     }
   }
 
   // Марафон закончился, меняем роль пользователя
-  if ( $user_data['finish_marathon_time'] <= $current_time && !is_super_admin() ) {
+  if ( $finish_marathon_time <= $current_time && !is_super_admin() ) {
     if ( in_array( 'started', (array)$user->roles ) ) {
       $user->set_role( 'completed' );
+      update_field( 'role', 2, 'user_' . $user_id );
       update_field( 'marathons_count', $user_data['marathons_count'] + 1, 'user_' . $user_id );
     }
   }

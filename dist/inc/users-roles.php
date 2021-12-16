@@ -13,6 +13,10 @@ add_filter( 'editable_roles', function( $all_roles ) {
   return $all_roles;
 } );
 
+add_action( 'user_register', function( $user_id ) {
+  update_field( 'role', 0, 'user_' . $user_id );
+} );
+
 // remove_role( 'completed' );
 // remove_role( 'started' );
 // remove_role( 'waiting' );

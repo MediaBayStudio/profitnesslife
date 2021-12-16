@@ -16,14 +16,16 @@ if ( $user_data['show_msg'] ) {
     <form action="<?php echo $site_url ?>/wp-admin/admin-ajax.php" class="user-data__avatar-form" id="user-avatar-form">
       <input type="file" name="photo" accept="image/jpeg,image/png" class="user-data__avatar-input">
       <picture class="user-data__avatar-pic lazy"> <?php
-        if ( $user_data['img'] ) :
+        if ( $user_data['img'] ) {
           $avatar_url = $user_data['img']['url'];
           $avatar_webp = $upload_baseurl . get_post_meta( $user_data['img']['ID'] )['webp'][0];
-        else :
+        } else {
           $avatar_url = $template_directory_uri . '/img/icon-add-avatar.svg';
           $avatar_webp = '#';
+        }
+        if ( $avatar_webp !== '#' ) : ?>
+          <source type="image/webp" srcset="#" data-srcset="<?php echo $avatar_webp ?>"> <?php
         endif ?>
-        <source type="image/webp" srcset="#" data-srcset="<?php echo $avatar_webp ?>">
         <img src="#" alt="Фото профиля" data-src="<?php echo $avatar_url ?>" class="user-data__avatar-img">
       </picture>
     </form>

@@ -4,7 +4,7 @@
 // echo '<p>Текущее время ' . $current_time . '</p>';
 
 add_action( 'wp', function() {
-  return;
+  // return;
   global 
     $post,
     $site_url,
@@ -22,12 +22,6 @@ add_action( 'wp', function() {
     case 'account':
       $GLOBALS['is_account_page'] = true;
       break;
-  }
-
-  // Если марафон окончен, то редирект на главную
-  if ( !is_front_page() && is_super_admin() && $questionnaire_complete && $show_diet_plan && $current_time >= $finish_marathon_time ) {
-    wp_redirect( $site_url );
-    exit;
   }
 
   // if ( is_super_admin() ) {
@@ -73,6 +67,7 @@ add_action( 'wp', function() {
           switch ( $post->post_name) {
             case 'training-program':
             case 'diet-plan':
+            case 'chat':
               wp_redirect( $site_url . '/account' );
               exit;
           }
@@ -80,6 +75,13 @@ add_action( 'wp', function() {
       }
     }
   }
+
+  // Если марафон окончен, то редирект на главную
+  if ( !is_front_page() && is_user_logged_in() && !is_super_admin() && $current_time && $finish_marathon_time && $current_time >= $finish_marathon_time ) {
+    wp_redirect( $site_url . '?completed=true' );
+    exit;
+  }
+
 } );
 
 add_action( 'wp_logout', function() {

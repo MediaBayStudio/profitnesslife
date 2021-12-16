@@ -3,6 +3,7 @@
     $preload,
     $site_url,
     $logo_url,
+    $manager_link,
     $user,
     $user_id,
     $user_data,
@@ -50,7 +51,6 @@
       // $questionnaire_complete определяется в functions.php
 
       if ( $current_template === 'questionnaire' ) {
-
         if ( $questionnaire_complete ) {
           $preload[] = $template_directory_uri . '/img/questionnaire-hero-img.svg';
         } else {
@@ -63,8 +63,6 @@
       $style_name = '';
     } 
   }
-
-
   $GLOBALS['page_script_name'] = $script_name;
   $GLOBALS['page_style_name'] = $style_name ?>
 <!DOCTYPE html>
@@ -130,8 +128,7 @@
         'menu_class'      => 'hdr__nav-list',
         'items_wrap'      => '<ul class="%2$s">%3$s</ul>'
       ] ) ?>
-      <button type="button" class="hdr__burger"></button>
-      <!-- <button type="button" class="hdr__login btn btn-ol">Личный кабинет</button> --> <?php
+      <button type="button" class="hdr__burger"></button> <?php
       if ( is_user_logged_in() ) : ?>
         <a href="<?php echo $site_url ?>/account" class="hdr__login btn btn-ol">Личный кабинет</a> <?php
       else : ?>
