@@ -8,7 +8,7 @@
     $user_data,
     $current_template,
     $questionnaire_date,
-    $questionnaire_complete,
+    $show_diet_plan,
     $template_directory_uri,
     $questionnaire_dmy_time,
     $start_marathon_time,
@@ -17,6 +17,172 @@
     $second_week_end_time,
     $third_week_end_time;
 
+function add_user_to_chat( $user_data, $user_id ) {
+  if ( !is_user_logged_in() ) {
+    return;
+  }
+
+  if ( !$user_data['questionnaire_complete'] ) {
+    echo "<p>Пользователь не прошел анкету</p>";
+    return;
+  }
+
+  $user_chat_link = $user_data['telegram_chat'];
+  $user_start_marathon_date = date( 'd.m.Y', $user_data['start_marathon_time'] );
+  $chats = get_field( 'telegram_chats', 419 );
+
+  // echo "<p>user_chat_link: {$user_chat_link}</p>";
+  // echo "<p>user_start_marathon_date: {$user_start_marathon_date}</p>";
+  // echo "<p>user_id: {$user_id}</p>";
+
+  // var_dump( $chats );
+
+  if ( $user_chat_link ) {
+    echo "<p>За пользователем закреплен чат: {$user_chat_link}</p>";
+
+    // for ( $i = 0, $len = count( $chats ); $i < $len; $i++ ) { 
+
+    //   if ( in_array( $user_id, $chats[ $i ]['users'] ) ) {
+    //     echo "<p>На странице чата пользователь есть в чате {$chats[ $i ]['link']}, нужно его удалить</p>";
+    //     $user_key_in_chat = array_search( $user_id, $chats[ $i ]['users'] );
+    //     array_splice( $chats[ $i ]['users'], $user_key_in_chat, 1 );
+    //   } else {
+    //     echo "<p>Пользователя нет в чате {$chats[ $i ]['link']}</p>";
+    //   }
+
+    //   if ( $chats[ $i ]['link'] === $user_chat_link ) {
+    //     if ( !in_array( $user_id, $chats[ $i ]['users'] ) ) {
+    //       echo "<p>На странице чата нет такой информации, добавим пользователя в чат {$chats[ $i ]['link']}</p>";
+    //       $chats[ $i ]['users'][] = $user_id;
+    //     } else {
+    //       echo "<p>На странице чата тоже есть эта информация</p>";
+    //     }
+    //   }
+
+    // }
+  } else {
+    echo "<p>За пользователем не закреплен чат</p>";
+
+    foreach ( $chats as $chat_data ) {
+      if ( in_array( $user_id, $chat_data['users'] ) ) {
+        echo "<p>Пользователь есть на странице чата в чате {$chat_data['link']}, обновим ему поле</p>";
+        // update_field( 'telegram_chat', $chat_data['link'], 'user_' . $user_id );
+        return;
+      }
+    }
+
+    echo "<p>Пользователя нет в чатах на странце</p>";
+
+    // Сохраним кол-во пользователей в чатах в отдельный массив
+    foreach ( $chats as $chat ) {
+      if ( $chat['start_marathon_date'] !== $user_start_marathon_date ) {
+        // Если чат не подходит по дате, то поставить максимальное кол-во участников
+        $chats_counts[] = 9999;
+      } else {
+        if ( $chat['users'] ) {
+          $chats_counts[] = count( $chat['users'] );
+        } else {
+          // Чат пустой
+          $chats_counts[] = 0;
+        }
+      }
+    }
+
+    // var_dump( $chats_counts );
+
+    $target_chat_key = min( $chats_counts );
+
+    foreach ( $chats_counts as $key => $value ) {
+      if ( $value === $target_chat_key && $target_chat_key !== 9999 ) {
+        $target_chat_index = $key;
+        break;
+      }
+    }
+
+    echo "<p>Будем вставлять в чат {$target_chat_index}</p>";
+
+    $chats[ $target_chat_index ]['users'][] = $user_id;
+
+    update_field( 'telegram_chats', $chats, 419 );
+    update_field( 'telegram_chat', $chats[ $target_chat_index ]['link'], 'user_' . $user_id );
+
+  }
+}
+
+add_user_to_chat( $user_data, $user_id );
+
+// if ( !$user_data['telegram_chat'] && $user_id != '1' ) {
+//   echo "<p>Пользователь не прикреплен к чату</p>";
+
+//   // var_dump( date( 'd.m.Y.', $user_data['start_marathon_time'] ) );
+
+//   $chat_page_sections = get_field( 'sections', 419 );
+//   $chat_page_section = $chat_page_sections[0];
+
+//   $user_start_marathon_date = date( 'd.m.Y', $user_data['start_marathon_time'] );
+
+//   // var_dump( $chat_page_section['chats'] );
+
+//   // Возьмем в переменные кол-во участников в чатах
+//   // и заодно проверим есть ли участник в чате
+//   foreach ( $chat_page_section['chats'] as $chat ) {
+//     if ( $chat['start_marathon_date'] !== $user_start_marathon_date ) {
+//       continue;
+//     }
+//     if ( $chat['users'] ) {
+//       if ( in_array( $user_id, $chat['users'] ) ) {
+//         echo '<p>Пользователь есть в странице чата, обновим ему поле</p>';
+//         update_field( 'telegram_chat', $chat['link'], 'user_' . $user_id );
+//         $chats_counts = [];
+//         break;
+//       }
+//       $chats_counts[] = count( $chat['users'] );
+//     } else {
+//       $chats_counts[] = 0;
+//     }
+//   }
+
+//   if ( $chats_counts ) {
+//     // Наименьшее кол-во пользователей в массиве
+//     $target_chat_value = min( $chats_counts );
+
+
+//     // Определяем ключ в массиве
+//     foreach ( $chats_counts as $key => $value ) {
+//       if ( $value === $target_chat_value ) {
+//         $target_chat_index = $key;
+//         break;
+//       }
+//     }
+
+//     echo "<p>Проверяю чат номер: {$target_chat_index}</p>";
+
+//     if ( is_array( $chat_page_section['chats'][ $target_chat_index ]['users'] ) ) {
+//       if ( !in_array( $user_id, $chat_page_section['chats'][ $target_chat_index ]['users'] ) ) {
+//         $chat_page_section['chats'][ $target_chat_index ]['users'][] = $user_id;
+//         $update = true;
+//         echo "<p>Пользователя нет в чате</p>";
+//       } else {
+//         echo "<p>Этот пользователь уже есть в чате</p>";
+//       }
+//     } else {
+//       $chat_page_section['chats'][ $target_chat_index ]['users'] = [ $user_id ];
+//       $update = true;
+//       echo "<p>Чат пустой</p>";
+//     }
+
+//     if ( $update ) {
+//       echo "<p>Добавим пользователя в чат</p>";
+//       // $sections = $GLOBALS['sections'];
+//       $chat_page_sections[0]['chats'] = $chat_page_section['chats'];
+//       update_field( 'sections', $chat_page_sections, 419 );
+//       update_field( 'telegram_chat', $chat_page_section['chats'][ $target_chat_index ]['link'], 'user_' . $user_id );
+//     }
+//   } else {
+//     echo '<p>Подходящих чатов для пользователя не нашлось</p>';
+//   }
+// }
+    
   if ( !$preload ) {
     $preload = get_field( 'preload' );
   }
@@ -41,7 +207,7 @@
 
       if ( $current_template === 'questionnaire' ) {
 
-        if ( $questionnaire_complete ) {
+        if ( $show_diet_plan ) {
           $preload[] = $template_directory_uri . '/img/questionnaire-hero-img.svg';
         } else {
           $preload[] = $template_directory_uri . '/img/questionnaire-start-img.svg';

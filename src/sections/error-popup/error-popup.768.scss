@@ -4,11 +4,31 @@
 
 .error-popup {
   &__cnt {
-    max-width: 550px;
+    max-width: 850px;
     padding: 45px;
   }
 
   &__close {}
 
-  &__descr {}
+  &__img {}
+
+  &__title {}
+
+  &__descr {
+    margin: auto;
+    max-width: 460px;
+  }
+
+  &__buttons {
+    .btn {
+      width: 215px;
+      height: 50px;
+    }
+
+    .btn-green {}
+
+    .btn-ol:not(:only-child) {
+      margin: 0 0 0 20px;
+    }
+  }
 }

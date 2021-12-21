@@ -48,7 +48,7 @@ add_filter( 'wp_nav_menu_items', function( $items, $args ) {
     switch ( $container_class ) {
       case 'side-menu__nav':
         $li_class = 'side-menu__nav-li';
-        if ( ($item->ID === 424 || $item->ID === 423 || $item->ID === 421) && !$show_diet_plan ) {
+        if ( !is_super_admin() && ($item->ID === 424 || $item->ID === 423 || $item->ID === 421) && !$show_diet_plan ) {
           $li_class .= ' disabled';
         }
         break;

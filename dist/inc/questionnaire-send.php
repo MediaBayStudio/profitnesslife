@@ -43,6 +43,16 @@ function questionnaire_send() {
       $user->set_role( 'waiting' );
     }
 
+    // Удаление пользователя из телеграм чата
+    $chats = get_field( 'telegram_chats', 419 );
+    for ( $i = 0, $len = count( $chats ); $i < $len; $i++ ) { 
+      if ( in_array( $user->ID, $chats[ $i ]['users'] ) ) {
+        $user_key_in_chat = array_search( $user->ID, $chats[ $i ]['users'] );
+        array_splice( $chats[ $i ]['users'], $user_key_in_chat, 1 );
+      }
+    }
+    update_field( 'telegram_chats', $chats, 419 );
+
     update_field( 'age', '', $user_id );
     update_field( 'telegram_chat', '', $user_id );
     update_field( 'start_weight', '', $user_id );
@@ -66,6 +76,7 @@ function questionnaire_send() {
     update_field( 'third_week_end_date', '', $user_id );
 
     update_field( 'diet_plan_open_date', '', $user_id );
+    update_field( 'diet_plan_open_time', '', $user_id );
     update_field( 'start_marathon_time', '', $user_id );
     update_field( 'finish_marathon_time', '', $user_id );
     update_field( 'start_marathon_date', '', $user_id );
@@ -97,7 +108,7 @@ function questionnaire_send() {
   // На чем хотите сделать акцент в тренировках
   $body_parts = $_POST['body-parts'];
   $products = $_POST['categories'];
-  $cereals_products = $_POST['cereals-products'];
+  // $cereals_products = $_POST['cereals-products'];
   $milk_products = $_POST['milk-products'];
   $meat_products = $_POST['meat-products'];
   $fish_products = $_POST['fish-products'];
@@ -157,32 +168,32 @@ function questionnaire_send() {
 
   $categories = [];
   $exclude_terms = [];
-  $exclude_terms_breakfasts = [];
+  // $exclude_terms_breakfasts = [];
 
   // Категории для исключения
   // исключение круп
-  foreach ( $cereals_products as $cereals_product ) {
-    if ( $cereals_product === 'all-cereals' ) {
-      $exclude_terms[] = 'cereals';
-      $exclude_terms_breakfasts[] = 'cereals';
-      $term = get_term_by( 'slug', 'cereals', 'dish_category' );
-      $categories[] = $term->term_id;
-    } else if ( $cereals_product === 'exclude-breakfast' ) {
-      update_field( 'cereals_exclude_breakfast', true, $user_id );
-      $exclude_terms_breakfasts[] = 'cereals';
-    }
-  }
+  // foreach ( $cereals_products as $cereals_product ) {
+  //   if ( $cereals_product === 'all-cereals' ) {
+  //     $exclude_terms[] = 'cereals';
+  //     $exclude_terms_breakfasts[] = 'cereals';
+  //     $term = get_term_by( 'slug', 'cereals', 'dish_category' );
+  //     $categories[] = $term->term_id;
+  //   } else if ( $cereals_product === 'exclude-breakfast' ) {
+  //     update_field( 'cereals_exclude_breakfast', true, $user_id );
+  //     $exclude_terms_breakfasts[] = 'cereals';
+  //   }
+  // }
 
   // $products_array = array_merge( $milk_products, $meat_products, $fish_products, $products );
 
   foreach ( $milk_products as $product ) {
-    $products_array[] = $product;
+    $products_array[] = $product === 'all' ? 'all-milk-products' : $product;
   }
   foreach ( $meat_products as $product ) {
-    $products_array[] = $product;
+    $products_array[] = $product === 'all' ? 'all-meat-products' : $product;
   }
   foreach ( $fish_products as $product ) {
-    $products_array[] = $product;
+    $products_array[] = $product === 'all' ? 'all-fish-products' : $product;
   }
   foreach ( $products as $product ) {
     $products_array[] = $product;
@@ -190,9 +201,50 @@ function questionnaire_send() {
 
   foreach ( $products_array as $slug ) {
     $exclude_terms[] = $slug;
-    $exclude_terms_breakfasts[] = $slug;
     $term = get_term_by( 'slug', $slug, 'dish_category' );
     $categories[] = $term->term_id;
+  }
+
+
+  /*
+
+  ОШИБКИ ПО ИСКЛЮЧЕНИЯМ
+
+  */
+
+  if ( $target === 'weight-gain' ) {
+    if ( in_array( 'all-milk-products', $products_array ) && in_array( 'all-meat-products', $products_array ) && in_array( 'all-fish-products', $products_array ) && in_array( 'eggs', $products_array ) ) {
+      echo false;
+      die();
+    }
+    $c = 0;
+    if ( in_array( 'all-milk-products', $products_array ) ) {
+      $c++;
+    }
+    if ( in_array( 'all-meat-products', $products_array ) ) {
+      $c++;
+    }
+    if ( in_array( 'all-fish-products', $products_array ) ) {
+      $c++;
+    }
+    if ( $c >= 2 ) {
+      echo false;
+      die();
+    }
+    if ( $children === 'y' ) {
+      echo false;
+      die();
+    }
+  }
+
+  if ( count( $products ) + in_array( 'all-milk-products', $products_array ) + in_array( 'all-meat-products', $products_array ) + in_array( 'all-fish-products', $products_array ) >= 5 ) {
+    echo false;
+    die();
+  }
+
+  if ( $children === 'y' && in_array( 'all-fish-products', $products_array ) && in_array( 'all-milk-products', $products_array ) && in_array( 'all-meat-products', $products_array ) && in_array( 'eggs', $products_array ) ) {
+    echo false;
+    die();
   }
 
   $breakfasts = get_posts( [
@@ -210,7 +262,8 @@ function questionnaire_send() {
         'operator'  => 'NOT IN',
         'taxonomy'  => 'dish_category',
         'field'     => 'slug',
-        'terms'     => $exclude_terms_breakfasts
+        // 'terms'     => $exclude_terms_breakfasts
+        'terms'     => $exclude_terms
       ]
     ],
     'meta_query' => [
@@ -308,7 +361,7 @@ function questionnaire_send() {
   ];
 
   $response['categories'] = $exclude_terms;
-  $response['categories_breakfasts'] = $exclude_terms_breakfasts;
+  // $response['categories_breakfasts'] = $exclude_terms_breakfasts;
 
   $response['bmr'] = $bmr;
   $response['breakfast_ccal'] = $breakfast_max_calories;
@@ -503,7 +556,7 @@ function questionnaire_send() {
   // $response['snack_2'] = fill_array( $response['snack_2'], 21 );
 
   $response['categories'] = $exclude_terms;
-  $response['categories_breakfasts'] = $exclude_terms_breakfasts;
+  // $response['categories_breakfasts'] = $exclude_terms_breakfasts;
 
   $response['bmr'] = $bmr;
   $response['breakfast_ccal'] = $breakfast_max_calories;
@@ -695,7 +748,7 @@ function questionnaire_send() {
 
 
   // !!! Убрать после тестов
-  update_field( 'show_diet_plan', true, $user_id );
+  // update_field( 'show_diet_plan', true, $user_id );
   // !!!
 
   $response['workout'] = $workout;
@@ -750,12 +803,17 @@ function questionnaire_send() {
   $questionnaire_time =  strtotime( $questionnaire_date );
   $questionnaire_dmy_time =  strtotime( $questionnaire_dmy_date );
 
-  // Время начала марафона в мс (следующий понедельник от даты прохождения анкеты)
-  $start_marathon_time = strtotime( 'next monday', $questionnaire_dmy_time );
-
   // Название дня прохождения анкеты: Sun || Mon || Tue || etc...
   $questionnaire_week_day = date( 'D', $questionnaire_time );
 
+  // Время начала марафона в мс (следующий понедельник от даты прохождения анкеты)
+  // или сегодня, если анкета пройдена в понедельник
+  if ( $questionnaire_week_day === 'Mon' ) {
+    $start_marathon_time = $questionnaire_dmy_time;
+  } else {
+    $start_marathon_time = strtotime( 'next monday', $questionnaire_dmy_time );
+  }
+  
   // Время открытия анкеты
   /*
     Если анкета пройдена в воскресенье или понедельник,
@@ -793,6 +851,7 @@ function questionnaire_send() {
   update_field( 'third_week_end_date', $third_week_end_date, $user_id );
 
   update_field( 'diet_plan_open_date', $diet_plan_open_date, $user_id );
+  update_field( 'diet_plan_open_time', $diet_plan_open_time, $user_id );
   update_field( 'start_marathon_time', $start_marathon_time, $user_id );
   update_field( 'finish_marathon_time', $finish_marathon_time, $user_id );
   update_field( 'start_marathon_date', $start_marathon_date, $user_id );

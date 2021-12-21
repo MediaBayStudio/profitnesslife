@@ -275,7 +275,7 @@ if ( !$questionnaire_complete ) : ?>
                     'height' => 60
                   ],
                   'checkbox' => [
-                    'title' => $categories[ $i ]->name,
+                    'title' => $categories[ $i ]->name . ( $categories[ $i ]->name === 'Крупы' ? ' на завтрак' : '' ),
                     'name' => 'categories[]',
                     'id' => $categories[ $i ]->slug,
                     'value' => $categories[ $i ]->slug,
@@ -307,18 +307,18 @@ if ( !$questionnaire_complete ) : ?>
                 break;
             }
           }
-          $cereals_products_checkboxes = [
-            [
-              'title' => 'Исключить крупы полностью',
-              'name' => 'cereals-products[]',
-              'value' => 'all-cereals'
-            ],
-            [
-              'title' => 'Исключить только на завтрак',
-              'name' => 'cereals-products[]',
-              'value' => 'exclude-breakfast'
-            ]
-          ] ?>
+          // $cereals_products_checkboxes = [
+          //   [
+          //     'title' => 'Исключить крупы полностью',
+          //     'name' => 'cereals-products[]',
+          //     'value' => 'all-cereals'
+          //   ],
+          //   [
+          //     'title' => 'Исключить только на завтрак',
+          //     'name' => 'cereals-products[]',
+          //     'value' => 'exclude-breakfast'
+          //   ]
+          // ] ?>
         </div>
       </div>
 
@@ -370,21 +370,23 @@ if ( !$questionnaire_complete ) : ?>
         ] ) ?>
       </div>
 
-      <div class="questionnaire-form__step extra-step with-next-button hide" data-question="categories[]" data-answer="cereals">
+      <!-- <div class="questionnaire-form__step extra-step with-next-button hide" data-question="categories[]" data-answer="cereals">
         <span class="questionnaire-form__step-title">Отметьте продукты, которые бы вы НЕ хотели видеть в своём меню</span>
-        <p class="questionnaire-form__step-descr">Уточните, пожалуйста, как именно вы бы хотели исключить крупы</p> <?php
-        questionnaire_card( [
-          'class' => 'questionnaire-card-products-checkboxes',
-          'checkboxes_class' => 'checkbox-red',
-          'img' => [
-            'url' => $template_directory_uri . '/img/questionnaire-cereals-img.svg',
-            'width' => 82,
-            'height' => 72,
-            'alt' => 'Изображение крупы'
-          ],
-          'checkboxes' => $cereals_products_checkboxes
-        ] ) ?>
-      </div>
+        <p class="questionnaire-form__step-descr">Уточните, пожалуйста, как именно вы бы хотели исключить крупы</p> -->
+        <?php
+        // questionnaire_card( [
+        //   'class' => 'questionnaire-card-products-checkboxes',
+        //   'checkboxes_class' => 'checkbox-red',
+        //   'img' => [
+        //     'url' => $template_directory_uri . '/img/questionnaire-cereals-img.svg',
+        //     'width' => 82,
+        //     'height' => 72,
+        //     'alt' => 'Изображение крупы'
+        //   ],
+        //   'checkboxes' => $cereals_products_checkboxes
+        // ] )
+         ?>
+      <!-- </div> -->
 
       <div class="questionnaire-form__step with-next-button hide">
         <span class="questionnaire-form__step-title">Какие физические ограничения у вас есть?</span>

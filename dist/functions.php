@@ -27,44 +27,91 @@ add_action( 'admin_color_scheme_picker', function() {
   echo '<button type="button" class="button" onclick="resetQuestionnaire()" id="clear-user-data-btn" data-user="' . $_GET['user_id'] . '">Запустить марафон еще раз</button>';
 } );
 
+add_filter( 'cron_schedules', 'wplb_cron_30s' );
+// Описываем функцию
+function wplb_cron_30s( $schedules ) { 
+    $schedules['30_seconds'] = array(
+        'interval' => 30,
+        'display'  => esc_html__( 'Каждые 30 секунд' )
+    );
+    return $schedules;
+}
+
+// add_action('init', function() {
+
+//     // Создаём событие нашего планировщика
+//     add_action( 'wplb_cron', 'wplb_run_cron' );
+    
+//     // Регистрируем событе на случай дективации
+
+//     // Добавляем наше событие в WP-Cron 
+//     if (! wp_next_scheduled ( 'wplb_cron' )) {
+//       wp_schedule_event( time(), '30_seconds', 'wplb_cron' );
+//     }
+// });
+// // Описываем функцию для планировщика
+// function wplb_run_cron() {
+//   update_field( 'telegram_chat', 'test', 'user_2' );
+// }
+
+// if ( is_admin() ) {
+  // wplb_run_cron();
+  // update_field( 'telegram_chat', 'test', 'user_2' );
+// }
+
 /*
   Расчеты времени после прохождения анкеты
 */
 
+  function set_user_role_started( $user_object ) {
+    if ( in_array( 'waiting', (array)$user_object->roles ) ) {
+      $user_object->set_role( 'started' );
+      update_field( 'role', 1, 'user_' . $user_object->ID );
+    }
+  }
+
+  function set_user_role_completed( $user_object ) {
+    if ( in_array( 'started', (array)$user_object->roles ) ) {
+      $user_object->set_role( 'completed' );
+      $user_id = 'user_' . $user_object->ID;
+      $marathons_count = get_field( 'marathons_count', $user_id );
+      update_field( 'role', 2, $user_id );
+      update_field( 'marathons_count', $marathons_count + 1, $user_id );
+    }
+  }
+
+// Текущее время в мс
+$current_time = strtotime( 'now' );
+
 // Дата прохождения анкеты (d.m.Y H:i:s)
 $questionnaire_date =  $user_data['questionnaire_time'];
+$questionnaire_dmy_date = date( 'd.m.Y', strtotime( $questionnaire_date ) );
+$questionnaire_dmy_time = strtotime( $questionnaire_dmy_date );
 // $questionnaire_date =  '12.09.2021 12:10:27'; // 3 неделя
 // $questionnaire_date =  '21.09.2021 12:10:27'; // 2 неделя
 
 // Если анкета пройдена, то считаем время
 if ( $questionnaire_date ) {
-  // Текущее время в мс
-  $current_time = strtotime( 'now' );
 
   $start_marathon_time = $user_data['start_marathon_time'];
   $finish_marathon_time = $user_data['finish_marathon_time'];
 
   // Пришло время показывать план питания или нет
   if ( !$user_data['show_diet_plan'] ) {
-    $show_diet_plan = $current_time >= $user_data['diet_plan_open_date'];
+    $show_diet_plan = $user_data['diet_plan_open_time'] <= $current_time;
     update_field( 'show_diet_plan', $show_diet_plan, 'user_' . $user_id );
+  } else {
+    $show_diet_plan = true;
   }
 
   // Марафон начался, меняем роль пользователя
   if ( $start_marathon_time <= $current_time && !is_super_admin() ) {
-    if ( in_array( 'waiting', (array)$user->roles ) ) {
-      $user->set_role( 'started' );
-      update_field( 'role', 1, 'user_' . $user_id );
-    }
+    set_user_role_started( $user );
   }
 
   // Марафон закончился, меняем роль пользователя
   if ( $finish_marathon_time <= $current_time && !is_super_admin() ) {
-    if ( in_array( 'started', (array)$user->roles ) ) {
-      $user->set_role( 'completed' );
-      update_field( 'role', 2, 'user_' . $user_id );
-      update_field( 'marathons_count', $user_data['marathons_count'] + 1, 'user_' . $user_id );
-    }
+    set_user_role_completed( $user );
   }
 
   // Концы каждой недели марафона (только дата, без времени)
@@ -150,6 +197,9 @@ add_filter( 'template_include', function( $template ) {
 // Редиректы пользователей
 require $template_directory . '/inc/redirects.php';
 
+// Удаление данных пользователей, которые завершили марафон
+require $template_directory . '/inc/remove-users-data.php';
+
 // Роли пользователей
 require $template_directory . '/inc/users-roles.php';
 
@@ -163,6 +213,9 @@ require $template_directory . '/inc/photo-send.php';
 require $template_directory . '/inc/measure-send.php';
 require $template_directory . '/inc/recalculate-products-cart.php';
 require $template_directory . '/inc/replace-dish.php';
+
+// Импорт
+require $template_directory . '/inc/import.php';
 
 // Создание карточек в анкете
 require $template_directory . '/components/questionnaire-card.php';
@@ -211,6 +264,50 @@ require $template_directory . '/inc/php-path-join.php';
 
 
 if ( is_super_admin() || is_admin_bar_showing() ) {
+
+  // Смена ролей пользователям
+  $waiting_users = get_users( [
+    'number' => -1,
+    'role' => 'waiting',
+    'meta_query' => [
+      [
+        'key' => 'start_marathon_time',
+        'value' => '',
+        'compare' => '!='
+      ],
+      [
+        'key' => 'start_marathon_time',
+        'value' => $current_time,
+        'compare' => '<='
+      ]
+    ]
+  ] );
+
+  foreach ( $waiting_users as $waiting_user ) {
+    set_user_role_started( $waiting_user );
+  }
+
+  // Смена ролей пользователям
+  $completed_users = get_users( [
+    'number' => -1,
+    'role' => 'started',
+    'meta_query' => [
+      [
+        'key' => 'finish_marathon_time',
+        'value' => '',
+        'compare' => '!='
+      ],
+      [
+        'key' => 'finish_marathon_time',
+        'value' => $current_time,
+        'compare' => '<='
+      ]
+    ]
+  ] );
+
+  foreach ( $completed_users as $completed_user ) {
+    set_user_role_completed( $completed_user );
+  }
 
   // Создание новых колонок в админке
   require $template_directory . '/inc/manage-posts-columns.php';

@@ -8,6 +8,7 @@
     $user_id,
     $user_data,
     $current_template,
+    $show_diet_plan,
     $questionnaire_complete,
     $template_directory_uri;
 

@@ -135,12 +135,12 @@ var browser = {
   thanksPopup,
   // Сокращение записи querySelector
   q = function(selector, element) {
-    element = element || body;
+    element = element || document.body;
     return element.querySelector(selector);
   },
   // Сокращение записи querySelectorAll + перевод в массив
   qa = function(selectors, element, toArray) {
-    element = element || body;
+    element = element || document.body;
     return toArray ? Array.prototype.slice.call(element.querySelectorAll(selectors)) : element.querySelectorAll(selectors);
   },
   // Сокращение записи getElementById

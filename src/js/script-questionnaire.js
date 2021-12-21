@@ -10,8 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //=include ../sections/error-popup/error-popup.js
 
-//=include ../sections/reset-questionnaire-popup/reset-questionnaire-popup.js
-
 //=include ../sections/footer/footer.js
 
 });

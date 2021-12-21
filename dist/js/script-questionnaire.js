@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // questionnaireForm.classList.add('complete');
             // console.log(response);
             // scrollToTarget('', '.questionnaire-incomplete-section__title');
-            location.href = siteUrl + '/diet-plan';
+            location.href = siteUrl + '/account';
 
             // id('reset').addEventListener('click', function() {
             //   let data = 'action=questionnaire_send&reset=reset',
@@ -184,11 +184,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // });
           })
           .catch(function(err) {
-            if (errorPopup) {
-              errorPopup.children[0].insertAdjacentHTML('beforeend', '<button type="button" id="error-popup-btn" class="btn btn-green" style="padding:10px 20px">Попробовать еще</button>');
-              id('error-popup-btn').addEventListener('click', resetQuestionnaire);
-              errorPopup.openPopup();
-            }
+            // if (errorPopup) {
+            //   errorPopup.children[0].insertAdjacentHTML('beforeend', '<button type="button" id="error-popup-btn" class="btn btn-green" style="padding:10px 20px">Попробовать еще</button>');
+            //   id('error-popup-btn').addEventListener('click', resetQuestionnaire);
+            //   errorPopup.openPopup();
+            // }
+            errorPopup.openPopup();
             console.log(err);
           });
       },
@@ -669,14 +670,7 @@ document.addEventListener('DOMContentLoaded', function() {
   errorPopup = new Popup('.error-popup', {
     closeButtons: '.error-popup__close'
   });
-})();
-
-;
-(function() {
-  // resetQuestionnairePopup = new Popup('.reset-questionnaire-popup', {
-  //   openButtons: '.questionnaire-complete-sect__reset-btn',
-  //   closeButtons: '.reset-questionnaire-popup__close, .reset-questionnaire-popup__cancel-btn'
-  // });
+  // errorPopup.openPopup();
 })();
 
 //=include ../sections/footer/footer.js

@@ -4,14 +4,35 @@
 
 .error-popup {
   align-items: center;
+
   &__cnt {
-    max-width: 320px;
+    max-width: 400px;
     text-align: center;
   }
 
   &__close {}
 
+  &__img {
+    margin: 0 0 25px;
+  }
+
+  &__title {}
+
   &__descr {
-    margin: 50px auto 30px;
+    // margin: 50px auto 30px;
+  }
+
+  &__buttons {
+    margin: 20px 0 0;
+    .btn {
+      width: 250px;
+      height: 45px;
+    }
+
+    .btn-green {}
+
+    .btn-ol:not(:only-child) {
+      margin: 15px 0 0;
+    }
   }
 }
