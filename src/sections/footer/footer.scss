@@ -71,6 +71,13 @@
     color: #555;
   }
 
+  &__doc {
+    margin: 10px 0 0;
+    color: #555;
+    border-bottom: 1px solid;
+    transition: border-bottom-color .5s;
+  }
+
   &__dev {
     margin: 20px 0 0 0;
     display: flex;

@@ -10,6 +10,7 @@
     $current_template,
     $show_diet_plan,
     $questionnaire_complete,
+    $template_directory,
     $template_directory_uri;
 
   if ( !$preload ) {
@@ -69,6 +70,7 @@
 <!DOCTYPE html>
 <html <?php language_attributes() ?>>
 <head>
+  <!-- <script async src="https://widget.cloudpayments.ru/bundles/cloudpayments.js"></script> -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=CustomEvent%2CIntersectionObserver%2CIntersectionObserverEntry%2CElement.prototype.closest%2CElement.prototype.dataset%2CHTMLPictureElement"></script>
   <meta charset="<?php bloginfo( 'charset' ) ?>" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover" />
@@ -109,13 +111,21 @@
     unset( $item );
     echo PHP_EOL;
   } ?>
-  <!-- favicons --> <?php
+  <!-- favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $site_url ?>/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="<?php echo $site_url ?>/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $site_url ?>/favicon-16x16.png" />
+  <link rel="manifest" href="<?php echo $site_url ?>/site.webmanifest" />
+  <link rel="mask-icon" href="<?php echo $site_url ?>/safari-pinned-tab.svg" color="#5bbad5" />
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <meta name="theme-color" content="#ffffff" /> <?php
   echo PHP_EOL;
   wp_head() ?>
 </head>
 
 <body <?php body_class() ?>> <?php
   wp_body_open() ?>
+  <!-- <button type="button" id="checkout" class="btn btn-green" style="width: 200px;height: 55px;">Оплатить</button> -->
   <noscript>
     <!-- <noindex> -->Для полноценного использования сайта включите JavaScript в настройках вашего браузера.<!-- </noindex> -->
   </noscript>

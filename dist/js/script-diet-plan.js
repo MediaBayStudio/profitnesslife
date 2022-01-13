@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  events[0].parentElement.setAttribute('data-week', 1);
-  events[1].parentElement.setAttribute('data-week', 3);
+  events[0]&&events[0].parentElement.setAttribute('data-week', 1);
+  events[1]&&events[1].parentElement.setAttribute('data-week', 3);
 
   if (calendarItems.length > 1) {
     calendarNav.classList.remove('hide');
@@ -425,6 +425,7 @@ document.addEventListener('DOMContentLoaded', function() {
   productsCartPopup.addEventListener('popupbeforeopen', function() {
     q('.products-cart-hero').classList.remove('attention');
   });
+  // productsCartPopup.openPopup();
 })();
 
 //=include ../sections/footer/footer.js

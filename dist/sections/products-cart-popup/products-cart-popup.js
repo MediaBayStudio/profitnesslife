@@ -6,4 +6,5 @@
   productsCartPopup.addEventListener('popupbeforeopen', function() {
     q('.products-cart-hero').classList.remove('attention');
   });
+  // productsCartPopup.openPopup();
 })();

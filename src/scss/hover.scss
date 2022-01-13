@@ -92,3 +92,9 @@
     }
   }
 }
+
+.ftr__doc {
+  &:hover {
+    border-bottom-color: transparent;
+  }
+}

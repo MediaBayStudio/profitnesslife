@@ -67,7 +67,7 @@ if ( $user_data['show_msg'] ) {
         $last_weight = end( $user_data['weight_timeline'] );
         $current_weight = $last_weight['weight'];
 
-        if ( strtotime( $last_weight['date'] ) >= strtotime( date( 'd.m.Y' ) ) ) {
+        if ( strtotime( $last_weight['date'] ) >= $current_time ) {
           $weight_form_class = ' disabled';
           $weight_form_placeholder = $current_weight;
         } else {

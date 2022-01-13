@@ -27,37 +27,33 @@ add_action( 'admin_color_scheme_picker', function() {
   echo '<button type="button" class="button" onclick="resetQuestionnaire()" id="clear-user-data-btn" data-user="' . $_GET['user_id'] . '">Запустить марафон еще раз</button>';
 } );
 
-add_filter( 'cron_schedules', 'wplb_cron_30s' );
-// Описываем функцию
-function wplb_cron_30s( $schedules ) { 
-    $schedules['30_seconds'] = array(
-        'interval' => 30,
-        'display'  => esc_html__( 'Каждые 30 секунд' )
-    );
-    return $schedules;
-}
-
-// add_action('init', function() {
-
-//     // Создаём событие нашего планировщика
-//     add_action( 'wplb_cron', 'wplb_run_cron' );
+add_action('init', function() {
+    // Создаём событие нашего планировщика
+    add_action( 'wplb_cron', 'wplb_run_cron' );
     
-//     // Регистрируем событе на случай дективации
+    // Регистрируем событе на случай дективации
 
-//     // Добавляем наше событие в WP-Cron 
-//     if (! wp_next_scheduled ( 'wplb_cron' )) {
-//       wp_schedule_event( time(), '30_seconds', 'wplb_cron' );
-//     }
-// });
-// // Описываем функцию для планировщика
-// function wplb_run_cron() {
-//   update_field( 'telegram_chat', 'test', 'user_2' );
-// }
+    // Добавляем наше событие в WP-Cron 
+    if ( ! wp_next_scheduled ( 'wplb_cron' ) ) {
+      wp_schedule_event( time(), 'weekly', 'wplb_cron' );
+    }
+});
 
-// if ( is_admin() ) {
-  // wplb_run_cron();
-  // update_field( 'telegram_chat', 'test', 'user_2' );
-// }
+// Описываем функцию для планировщика
+function wplb_run_cron() {
+  $users = get_users( [
+    'role__in' => 'completed',
+    'number' => -1
+  ] );
+
+  foreach ( $users as $user ) {
+    questionnaire_send( [
+      'reset' => true,
+      'user' => $user->ID,
+      'cron' => true // не менять роль и не удалять дату начала и окончания марафона
+    ] );
+  }
+}
 
 /*
   Расчеты времени после прохождения анкеты
@@ -82,6 +78,7 @@ function wplb_cron_30s( $schedules ) {
 
 // Текущее время в мс
 $current_time = strtotime( 'now' );
+// $current_time = strtotime( '30.12.2021 16:20:13' );
 
 // Дата прохождения анкеты (d.m.Y H:i:s)
 $questionnaire_date =  $user_data['questionnaire_time'];
@@ -261,7 +258,6 @@ require $template_directory . '/inc/theme-support-and-thumbnails.php';
 
 // Склеивание путей с правильным сепаратором
 require $template_directory . '/inc/php-path-join.php';
-
 
 if ( is_super_admin() || is_admin_bar_showing() ) {
 

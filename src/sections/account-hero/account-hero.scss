@@ -13,9 +13,27 @@
   border-radius: 30px;
 }
 
+.account-page-sections {
+  display: flex;
+  flex-flow: column;
+}
+
+.weight-chart-sect {
+  order: 2;
+}
+
+.measure-sect {
+  order: 3;
+}
+
+.photo-progress-sect {
+  order: 4;
+}
+
 .user-data {
   display: flex;
   flex-wrap: wrap;
+  order: 1;
 
   &__avatar-input {
     width: 100%;

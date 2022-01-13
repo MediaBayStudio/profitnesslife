@@ -17,7 +17,8 @@ if ( ! $typeform || $typeform == 'sign' )
   <?php $user_login  = (isset( $_REQUEST['user_login'] )) ? wp_strip_all_tags( $_REQUEST['user_login'], 0 ) : ''; ?>
   <?php $user_pass   = (isset( $_REQUEST['user_pass'] )) ? wp_strip_all_tags( $_REQUEST['user_pass'], 0 ) : ''; ?>
 
-  <form class="form-sign" action="<?php #rcl_form_action( 'login' ); ?>" method="post">
+  <!-- <form class="form-sign" action="<?php #rcl_form_action( 'login' ); ?>" method="post"> -->
+  <form class="form-sign" method="POST" onkeyup="if (event.keyCode === 13) {this.submit()}">
       <label class="form-sign__field field">
           <input required type="text" placeholder="<?php _e( 'Login', 'wp-recall' ); ?>" value="<?php echo $user_login; ?>" name="user_login" class="field__inp">
       </label>

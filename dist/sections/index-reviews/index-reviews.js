@@ -34,7 +34,6 @@
             option = true;
           }
         }
-
         $(reviewsSlider).slick('slickSetOption', 'swipe', option);
       },
       initReviewsSlider = function() {
@@ -61,10 +60,9 @@
                 return SLIDER.dot;
               }
             });
+            reviewsSlider.addEventListener('touchstart', changeSwipe);
+            reviewsSlider.addEventListener('touchend', changeSwipe);
           }
-
-          reviewsSlider.addEventListener('touchstart', changeSwipe);
-          reviewsSlider.addEventListener('touchend', changeSwipe);
           // $slider.on('afterChange', function() {
           //   qa('.review__photos', reviewsSlider).forEach(el => el.scrollLeft = 0);
           //   $slider.slick('slickSetOption', 'swipe', true);

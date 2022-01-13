@@ -89,6 +89,7 @@
           })
           .then(function(response) {
             response = JSON.parse(response);
+            console.log(response);
 
             // let breakfasts = '<h3>Завтрак:</h3>',
             //   lunches = '<h3>Обед:</h3>',

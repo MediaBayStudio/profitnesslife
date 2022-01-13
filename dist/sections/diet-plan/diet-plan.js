@@ -44,8 +44,8 @@
     }
   });
 
-  events[0].parentElement.setAttribute('data-week', 1);
-  events[1].parentElement.setAttribute('data-week', 3);
+  events[0]&&events[0].parentElement.setAttribute('data-week', 1);
+  events[1]&&events[1].parentElement.setAttribute('data-week', 3);
 
   if (calendarItems.length > 1) {
     calendarNav.classList.remove('hide');

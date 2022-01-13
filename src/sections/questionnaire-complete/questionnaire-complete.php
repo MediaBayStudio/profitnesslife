@@ -75,8 +75,6 @@ if ( $questionnaire_complete ) {
         <span class="questionnaire-complete-sect__li-left">Продукты, которые необходимо исключить из вашего меню:</span>
         <span class="questionnaire-complete-sect__li-right"><?php
         if ( $user_data['categories'] ) {
-          // $milk_products = $meat_products = $fish_products = false;
-
           $terms = get_terms( [
             'taxonomy' => 'dish_category',
             'include' => $user_data['categories']
@@ -88,72 +86,63 @@ if ( $questionnaire_complete ) {
 
           $terms_counts = [];
 
-          // var_dump( $terms );
-
           $terms_count = count( $terms );
 
           foreach ( $terms as $term ) {
             switch ( $term->parent ) {
               // milk-products
-              case 6:
+              case 223:
                 $milk_products[] = $term;
                 break;
               // meat-products
-              case 11:
+              case 391:
                 $meat_products[] = $term;
                 break;
               // fish-products
-              case 16:
+              case 230:
                 $fish_products[] = $term;
                 break;
-            }
-
-            switch ( $term->slug ) {
-              case 'milk-products':
-              case 'meat-products':
-              case 'fish-products':
-                $childs = get_term_children( $term->term_id, 'dish_category' );
-                $terms_counts[ $term->slug ] = count( $childs );
-                // for ( $i = 0; $i < $terms_count; $i++ ) {
-                //   if ( $terms[ $i ]->parent === $term->term_id ) {
-                //     unset( $terms[ $i ] );
-                //   }
-                // }
-                // $term->name .= ' полностью';
+              default:
+                $products[] = $term;
                 break;
             }
 
-            if ( $term->slug === 'cereals' ) {
-              $categories_text .= $term->name;
-              if ( $user_data['cereals_exclude_breakfast'] ) {
-                $categories_text .= ' исключены только на завтрак, ';
-              }
-              $categories_text .= ', ';
+            switch ( $term->term_id ) {
+              case 223: // milk
+              case 391: // meat
+              case 230: // fish
+                $childs = get_term_children( $term->term_id, 'dish_category' );
+                $terms_counts[ $term->term_id ] = count( $childs );
+                break;
             }
-          }
+          } // endforeach $terms as $term
 
-          if ( count( $milk_products ) === $terms_counts['milk-products'] ) {
-            $categories_text .= 'молочные продукты полностью, ';
+          if ( count( $milk_products ) === $terms_counts[223] ) {
+            // $categories_text .= 'молочные продукты полностью, ';
           } else {
             foreach ( $milk_products as $term ) {
               $categories_text .= $term->name . ', ';
             }
           }
 
-          if ( count( $meat_products ) === $terms_counts['meat-products'] ) {
-            $categories_text .= 'мясо полностью, ';
+          if ( count( $meat_products ) === $terms_counts[391] ) {
+            // $categories_text .= 'мясо полностью, ';
           } else {
             foreach ( $meat_products as $term ) {
               $categories_text .= $term->name . ', ';
             }
           }
 
-          if ( count( $fish_products ) === $terms_counts['fish-products'] ) {
-            $categories_text .= 'рыба полностью, ';
+          if ( count( $fish_products ) === $terms_counts[230] ) {
+            // $categories_text .= 'рыба полностью, ';
           } else {
             foreach ( $fish_products as $term ) {
               $categories_text .= $term->name . ', ';
             }
+          }
+
+          foreach ( $products as $product ) {
+            $categories_text .= ( $product->description ?: $product->name ) . ', ';
           }
 
           if ( $categories_text ) {
@@ -202,13 +191,15 @@ if ( $questionnaire_complete ) {
               echo ', ' . mb_strtolower( substr( $inventory_text, 0, -2) );
             }
           } ?></span>
-      </li>
-      <li class="questionnaire-complete-sect__li">
-        <span class="questionnaire-complete-sect__li-left">Каким проблемным местам вы хотите уделить внимание:</span>
-        <span class="questionnaire-complete-sect__li-right"><?php
-            echo mb_strtolower( implode( ', ', $user_data['body_parts'] ) ) ?>      
-        </span>
-      </li>
+      </li> <?php
+      if ( $user_data['body_parts'] ) : ?>
+        <li class="questionnaire-complete-sect__li">
+          <span class="questionnaire-complete-sect__li-left">Каким проблемным местам вы хотите уделить внимание:</span>
+          <span class="questionnaire-complete-sect__li-right"><?php
+              echo mb_strtolower( implode( ', ', $user_data['body_parts'] ) ) ?>      
+          </span>
+        </li> <?php
+      endif ?>
     </ul>
   </section> <?php
 }

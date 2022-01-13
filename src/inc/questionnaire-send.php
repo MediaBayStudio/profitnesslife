@@ -1,10 +1,15 @@
 <?php
-function questionnaire_send() {
-  if ( $_POST['reset'] ) {
+function questionnaire_send( $args ) {
 
-    if ( $_POST['user'] ) {
-      $user = new WP_User( $_POST['user'] );
-      $user_id = 'user_' . $_POST['user'];
+  if ( !$args ) {
+    $args = $_POST;
+  }
+
+  if ( $args['reset'] ) {
+
+    if ( $args['user'] ) {
+      $user = new WP_User( $args['user'] );
+      $user_id = 'user_' . $args['user'];
     } else {
       $user = wp_get_current_user();
       $user_id = 'user_' . $user->ID;
@@ -12,7 +17,7 @@ function questionnaire_send() {
 
     $user_data = get_fields( $user_id );
 
-    if ( $_POST['reset_by_user'] ) {
+    if ( $args['reset_by_user'] ) {
       update_field( 'reset', true, $user_id );
     } else {
       update_field( 'reset', false, $user_id );
@@ -40,7 +45,11 @@ function questionnaire_send() {
     }
 
     if ( $user_id !== 'user_1' ) {
-      $user->set_role( 'waiting' );
+      if ( $args['cron'] ) {
+        $user->set_role( 'completed' );
+      } else {
+        $user->set_role( 'waiting' );
+      }
     }
 
     // Удаление пользователя из телеграм чата
@@ -79,60 +88,52 @@ function questionnaire_send() {
     update_field( 'diet_plan_open_time', '', $user_id );
     update_field( 'start_marathon_time', '', $user_id );
     update_field( 'finish_marathon_time', '', $user_id );
-    update_field( 'start_marathon_date', '', $user_id );
-    update_field( 'finish_marathon_date', '', $user_id );
+    if ( !$agrs['cron'] ) {
+      update_field( 'start_marathon_date', '', $user_id );
+      update_field( 'finish_marathon_date', '', $user_id );
+    }
     update_field( 'questionnaire_time', '', $user_id );
 
-    die();
+    return 0;
   }
 
-  $user_id = $_POST['user-id'];
-  $target = $_POST['target'];
-  $sex = $_POST['sex'];
-  $current_weight = $_POST['current-weight'];
-  $target_weight = $_POST['target-weight'];
-  $height = $_POST['height'];
-  $age = $_POST['age'];
+  $user_id = $args['user-id'];
+  $target = $args['target'];
+  $sex = $args['sex'];
+  $current_weight = $args['current-weight'];
+  $target_weight = $args['target-weight'];
+  $height = $args['height'];
+  $age = $args['age'];
   // Есть ли дети на грудном вскармливании
-  $children = $_POST['children'] ?: 'children-n';
+  $children = $args['children'] ?: 'n';
   // Стаж тренировок
-  $training_experience = $_POST['training-experience'];
+  $training_experience = $args['training-experience'];
   // Активность
-  $activity = $_POST['activity'];
+  $activity = $args['activity'];
   // Ограничения в тренировках
-  $training_restrictions = $_POST['training-restrictions'];
+  $training_restrictions = $args['training-restrictions'];
   // Место для занятий (дом/зал)
-  $place = $_POST['place'];
+  $place = $args['place'];
   // Инвентарь
-  $inventory = $_POST['inventory'];
+  $inventory = $args['inventory'];
   // На чем хотите сделать акцент в тренировках
-  $body_parts = $_POST['body-parts'];
-  $products = $_POST['categories'];
-  // $cereals_products = $_POST['cereals-products'];
-  $milk_products = $_POST['milk-products'];
-  $meat_products = $_POST['meat-products'];
-  $fish_products = $_POST['fish-products'];
+  $body_parts = $args['body-parts'];
+  $products = $args['categories'];
+  $bmr_text = '';
+
+  $place = 'in-gym';
 
   // Расчет количества необходимых калорий в сутки
   if ( $sex === 'male' ) {
     $bmr = (66.5 + 13.75 * $current_weight + 5.003 * $height) - 6.775 * $age;
+    $initial_bmr = $bmr;
   } else if ( $sex === 'female' ) {
     $bmr = (655 + 9.563 * $current_weight + 1.85 * $height) - 4.676 * $age;
+    $initial_bmr = $bmr;
     if ( $children === 'y' ) {
-      $bmr += 400;
+      $bmr_text .= "<p>Дети на грудном вскармливании: <b>BMR +250 ккал</b></p>";
+      $bmr += 250;
     }
-  }
-
-  switch ( $activity ) {
-    case 'inactive':
-      $bmr *= 1.2;
-      break;
-    case 'medium-active':
-      $bmr *= 1.3;
-      break;
-    case 'high-active':
-      $bmr *= 1.4;
-      break;
   }
 
   switch ( $target ) {
@@ -141,60 +142,108 @@ function questionnaire_send() {
       $proteins = ($bmr * 0.4) / 4;
       $carbohydrates = ($bmr * 0.3) / 4;
       $fats = ($bmr * 0.3) / 9;
+      $target_slug = 'pohudenie';
+      $target_rus = 'Потеря веса';
+      $bmr_text .= "<p>Влияние цели на BMR: <b>-20%</b></p>";
+      switch ( $activity ) {
+        case 'inactive':
+          $bmr *= 1.2;
+          $bmr_text .= "<p>Влияние активности на BMR: <b>+20%</b></p>";
+          break;
+        case 'medium-active':
+          $bmr *= 1.25;
+          $bmr_text .= "<p>Влияние активности на BMR: <b>+25%</b></p>";
+          break;
+        case 'high-active':
+          $bmr *= 1.3;
+          $bmr_text .= "<p>Влияние активности на BMR: <b>+30%</b></p>";
+          break;
+      }
       break;
     case 'weight-gain':
       $bmr *= 1.2;
       $proteins = ($bmr * 0.3) / 4;
       $carbohydrates = ($bmr * 0.3) / 4;
       $fats = ($bmr * 0.4) / 9;
+      $target_slug = 'nabor';
+      $target_rus = 'Набор веса';
+      $bmr_text .= "<p>Влияние цели на BMR: <b>+20%</b></p>";
+      switch ( $activity ) {
+        case 'inactive':
+          $bmr *= 1.35;
+          $bmr_text .= "<p>Влияние активности на BMR: <b>+35%</b></p>";
+          break;
+        case 'medium-active':
+          $bmr *= 1.4;
+          $bmr_text .= "<p>Влияние активности на BMR: <b>+40%</b></p>";
+          break;
+        case 'high-active':
+          $bmr *= 1.5;
+          $bmr_text .= "<p>Влияние активности на BMR: <b>+50%</b></p>";
+          break;
+      }
       break;
     default:
       $proteins = ($bmr * 0.4) / 4;
       $carbohydrates = ($bmr * 0.2) / 4;
       $fats = ($bmr * 0.4) / 9;
+      $target_slug = 'podderzhanie';
+      $target_rus = 'Поддержание веса';
+      $bmr_text .= "<p>Влияние цели на BMR: <b>не влияет</b></p>";
+      switch ( $activity ) {
+        case 'inactive':
+          $bmr *= 1.25;
+          $bmr_text .= "<p>Влияние активности на BMR: <b>+25%</b></p>";
+          break;
+        case 'medium-active':
+          $bmr *= 1.3;
+          $bmr_text .= "<p>Влияние активности на BMR: <b>+30%</b></p>";
+          break;
+        case 'high-active':
+        $bmr_text .= "<p>Влияние активности на BMR: <b>+35%</b></p>";
+          $bmr *= 1.35;
+          break;
+      }
       break;
   }
 
-  // Дневная норма для каждого приема пищи
-  $breakfast_norm = 0.25;
-  $snack_1_norm = 0.10;
-  $luch_norm = 0.35;
-  $snack_2_norm = 0.10;
-  $dinner_norm = 0.20;
+  if ( $target === 'weight-gain' ) {
+    $breakfast_norm = 0.20;
+    $snack_1_norm = 0.10;
+    $luch_norm = 0.30;
+    $snack_2_norm = 0.20;
+    $dinner_norm = 0.20;
+  } else {
+    $breakfast_norm = 0.25;
+    $snack_1_norm = 0.10;
+    $luch_norm = 0.35;
+    $snack_2_norm = 0.10;
+    $dinner_norm = 0.20;
+  }
 
   $breakfast_max_calories = $bmr * $breakfast_norm;
   $lunch_max_calories = $bmr * $luch_norm;
   $dinner_max_calories = $bmr * $dinner_norm;
+  $snack_1_max_calories = $bmr * $snack_1_norm;
+  $snack_2_max_calories = $bmr * $snack_2_norm;
 
-  $categories = [];
+  if ( $target === 'weight-gain' ) {
+    $calories_on_breakfast = "<p>Калорий на завтрак: <b>{$breakfast_max_calories}</b> (20% от BMR)</p>";
+    $calories_on_lunch = "<p>Калорий на обед: <b>{$lunch_max_calories}</b> (30% от BMR)</p>";
+    $calories_on_dinner = "<p>Калорий на ужин: <b>{$dinner_max_calories}</b> (20% от BMR)</p>";
+    $calories_on_snack_1 = "<p>Калорий на перекус 1: <b>{$snack_1_max_calories}</b> (10% от BMR)</p>";
+    $calories_on_snack_2 = "<p>Калорий на перекус 2: <b>{$snack_2_max_calories}</b> (20% от BMR)</p>";
+  } else {
+    $calories_on_breakfast = "<p>Калорий на завтрак: <b>{$breakfast_max_calories}</b> (25% от BMR)</p>";
+    $calories_on_lunch = "<p>Калорий на обед: <b>{$lunch_max_calories}</b> (35% от BMR)</p>";
+    $calories_on_dinner = "<p>Калорий на ужин: <b>{$dinner_max_calories}</b> (20% от BMR)</p>";
+    $calories_on_snack_1 = "<p>Калорий на перекус 1: <b>{$snack_1_max_calories}</b> (10% от BMR)</p>";
+    $calories_on_snack_2 = "<p>Калорий на перекус 2: <b>{$snack_2_max_calories}</b> (10% от BMR)</p>";
+  }
+
+  $terms = [];
   $exclude_terms = [];
-  // $exclude_terms_breakfasts = [];
 
-  // Категории для исключения
-  // исключение круп
-  // foreach ( $cereals_products as $cereals_product ) {
-  //   if ( $cereals_product === 'all-cereals' ) {
-  //     $exclude_terms[] = 'cereals';
-  //     $exclude_terms_breakfasts[] = 'cereals';
-  //     $term = get_term_by( 'slug', 'cereals', 'dish_category' );
-  //     $categories[] = $term->term_id;
-  //   } else if ( $cereals_product === 'exclude-breakfast' ) {
-  //     update_field( 'cereals_exclude_breakfast', true, $user_id );
-  //     $exclude_terms_breakfasts[] = 'cereals';
-  //   }
-  // }
-
-  // $products_array = array_merge( $milk_products, $meat_products, $fish_products, $products );
-
-  foreach ( $milk_products as $product ) {
-    $products_array[] = $product === 'all' ? 'all-milk-products' : $product;
-  }
-  foreach ( $meat_products as $product ) {
-    $products_array[] = $product === 'all' ? 'all-meat-products' : $product;
-  }
-  foreach ( $fish_products as $product ) {
-    $products_array[] = $product === 'all' ? 'all-fish-products' : $product;
-  }
   foreach ( $products as $product ) {
     $products_array[] = $product;
   }
@@ -202,9 +251,37 @@ function questionnaire_send() {
   foreach ( $products_array as $slug ) {
     $exclude_terms[] = $slug;
     $term = get_term_by( 'slug', $slug, 'dish_category' );
-    $categories[] = $term->term_id;
+    $terms[] = $term->term_id;
+    $exclude_terms_rus[] = $term->name . ( $term->name === 'Крупа' ? ' (только на завтрак)' : '' );
   }
 
+  // print_r( $terms );
+
+  // echo "<div class=\"container\">";
+  // echo "<h2>Данные анкеты:</h2>";
+  // echo "<p>Цель: <b>{$target_rus}</b></p>";
+  // echo "<p>Пол: <b>{$args['sex']}</b></p>";
+  // echo "<p>Дети: <b>" . ($args['children'] === 'y' ? 'Есть' : 'Нет')  . "</b></p>";
+  // echo "<p>Текущий вес: <b>{$args['current-weight']}</b></p>";
+  // echo "<p>Рост: <b>{$args['height']}</b></p>";
+  // echo "<p>Возраст: <b>{$args['age']}</b></p>";
+  // echo "<p>Первоначальный BMR: <b>{$initial_bmr}</b></p>";
+  // echo $bmr_text;
+  // echo "<p>BMR: <b>{$bmr}</b></p>";
+  // echo "<br>";
+  // echo $calories_on_breakfast;
+  // echo "<p>Поиск в интервале калорий от <i>" . ($breakfast_max_calories - 50) . "</i> до <i>" . ($breakfast_max_calories + 50) . "</i></p>";
+  // echo $calories_on_lunch;
+  // echo "<p>Поиск в интервале калорий от <i>" . ($lunch_max_calories - 50) . "</i> до <i>" . ($lunch_max_calories + 50) . "</i></p>";
+  // echo $calories_on_dinner;
+  // echo "<p>Поиск в интервале калорий от <i>" . ($dinner_max_calories - 50) . "</i> до <i>" . ($dinner_max_calories + 50) . "</i></p>";
+  // echo $calories_on_snack_1;
+  // echo "<p>Поиск в интервале калорий от <i>" . ($snack_1_max_calories - 100) . "</i> до <i>" . ($snack_1_max_calories + 100) . "</i></p>";
+  // echo $calories_on_snack_2;
+  // echo "<p>Поиск в интервале калорий от <i>" . ($snack_2_max_calories - 100) . "</i> до <i>" . ($snack_2_max_calories + 100) . "</i></p>";
+  // echo "<br>";
+  // echo "<p>Исключения: <b>" . ($exclude_terms_rus ? implode( ', ', $exclude_terms_rus ) : 'нет') . "</b></p>";
+  // echo "<br>";
 
   /*
 
@@ -213,58 +290,184 @@ function questionnaire_send() {
   */
 
   if ( $target === 'weight-gain' ) {
-    if ( in_array( 'all-milk-products', $products_array ) && in_array( 'all-meat-products', $products_array ) && in_array( 'all-fish-products', $products_array ) && in_array( 'eggs', $products_array ) ) {
-      echo false;
-      die();
-    }
-    $c = 0;
-    if ( in_array( 'all-milk-products', $products_array ) ) {
-      $c++;
-    }
-    if ( in_array( 'all-meat-products', $products_array ) ) {
-      $c++;
-    }
-    if ( in_array( 'all-fish-products', $products_array ) ) {
-      $c++;
-    }
-    if ( $c >= 2 ) {
-      echo false;
-      die();
-    }
+    // Набор веса + грудное вскармливание
     if ( $children === 'y' ) {
-      echo false;
-      die();
+      // echo '<p><b>ОШИБКА:</b> Набор веса + грудное вскармливание</p>';
+      return;
+    }
+
+    // Набор веса + исключение всех белков
+    if ( in_array( 'molochnye-produkty', $products_array ) && in_array( 'myaso', $products_array ) && in_array( 'ryba', $products_array ) && in_array( 'yajcza', $products_array ) ) {
+      // echo '<p><b>ОШИБКА:</b> Набор веса + исключение всех белков</p>';
+      return;
+    }
+    $products_slugs = [
+      'molochnye-produkty',
+      'myaso',
+      'ryba'
+    ];
+    $count = 0;
+    foreach ( $products_slugs as $products_slug ) {
+      $count += in_array( $products_slug, $products_array );
+    }
+    // Набор веса + Выбрано 2 из "рыба, мясо, молоко"
+    if ( $count >= 2 ) {
+      // echo "<p><b>ОШИБКА:</b> Набор веса + Выбрано 2 из \"рыба, мясо, молоко\"</p>";
+      return;
     }
   }
 
-  if ( count( $products ) + in_array( 'all-milk-products', $products_array ) + in_array( 'all-meat-products', $products_array ) + in_array( 'all-fish-products', $products_array ) >= 5 ) {
-    echo false;
-    die();
+  // Исключено 5 и более категорий продуктов
+  if ( count( $products ) >= 5 ) {
+    // echo "<p><b>ОШИБКА:</b> Исключено 5 и более категорий продуктов</p>";
+    return;
   }
 
-  if ( $children === 'y' && in_array( 'all-fish-products', $products_array ) && in_array( 'all-milk-products', $products_array ) && in_array( 'all-meat-products', $products_array ) && in_array( 'eggs', $products_array ) ) {
-    echo false;
-    die();
+  // Грудное вскармливание + исключено все белковое
+  if ( $children === 'y' && in_array( 'ryba', $products_array ) && in_array( 'molochnye-produkty', $products_array ) && in_array( 'myaso', $products_array ) && in_array( 'yajcza', $products_array ) ) {
+    // echo "<p><b>ОШИБКА:</b> Грудное вскармливание + исключено все белковое</p>";
+    return;
   }
 
-  $breakfasts = get_posts( [
+  if ( $target === 'weight-loss' || $target === 'weight-maintaining' ) {
+    $products_slugs = [
+      'molochnye-produkty',
+      'myaso',
+      'ryba',
+      'yajcza',
+      'subprodukty'
+    ];
+
+    $count = 0;
+    foreach ( $products_slugs as $products_slug ) {
+      $count += in_array( $products_slug, $products_array );
+    }
+
+    if ( $count >= 4 ) {
+      $exclude_terms = [
+        'molochnye-produkty',
+        'jogurt',
+        'kefir',
+        'korove-moloko',
+        'tvorog',
+        'moreprodukty',
+        'myaso',
+        'govyadina-telyatina',
+        'indejka',
+        'kuricza',
+        'ryba',
+        'ryba-belaya',
+        'ryba-krasnaya',
+        'subprodukty',
+        'yajcza'
+      ];
+      $exclude_terms_rus = [
+        'Молочные продукты',
+        'Йогурт',
+        'Кефир',
+        'Коровье молоко',
+        'Творог',
+        'Морепродукты',
+        'Мясо',
+        'Говядина/телятина',
+        'Индейка',
+        'Курица',
+        'Рыба',
+        'Рыба белая',
+        'Рыба красная',
+        'Субпродукты',
+        'Яйца'
+      ];
+      $vegan = true;
+      // echo '<p>Исключено много белкового, добавляем исключения: ' . implode( ', ', $exclude_terms_rus ) . '</p>';
+    }
+
+    $products_slugs = [
+      'myaso',
+      'ryba',
+      'yajcza'
+    ];
+
+    $count = 0;
+    foreach ( $products_slugs as $products_slug ) {
+      $count += in_array( $products_slug, $products_array );
+    }
+    if ( $count === 3 ) {
+      $vegan = true;
+      // echo '<p>Исключено много белкового</p>';
+    }
+  }
+
+  function fill_array( $array ) {
+    $array_count = count( $array );
+
+    if ( $array_count < 21 ) {
+      $array = array_merge( $array, array_slice( $array, 0, 21 - $array_count ) );
+      shuffle( $array );
+      $array = fill_array( $array );
+    } else {
+      return $array;
+    }
+
+    return $array;
+  }
+
+  if ( !$vegan ) {
+    $excluded_ingredients = [];
+    if ( $target === 'weight-loss' || $target === 'weight-maintaining' ) {
+
+      if ( in_array( 'ryba', $products_array ) && in_array( 'myaso', $products_array )) {
+        // echo '<p>Исключены рыба и мясо, в приемах пищи может быть тофу</p>';
+        $excluded_ingredients[] = 'soevyj-protein-pure-protein';
+      } else if ( in_array( 'yajcza', $products_array ) && in_array( 'myaso', $products_array ) && in_array( 'ryba', $products_array ) ) {
+        // echo '<p>Исключены рыба, мясо и яйца, в приемах пищи может быть тофу и соевый протеин</p>';
+      } else {
+        // echo '<p>Приемы пищи с соевым протеином и тофу исключены</p>';
+        $excluded_ingredients = ['soevyj-protein-pure-protein', 'tofu'];  
+      }
+
+    } else {
+      // echo '<p>Приемы пищи с соевым протеином и тофу исключены</p>';
+      $excluded_ingredients = ['soevyj-protein-pure-protein', 'tofu'];
+    }
+
+    if ( $excluded_ingredients ) {
+      $tax_query_ingredients = [
+        'operator' => 'NOT IN',
+        'taxonomy' => 'dish_ingredients',
+        'field' => 'slug',
+        'terms' => $excluded_ingredients
+      ];
+    }
+
+  } else {
+    // echo '<p>Исключено много белкового, добавлены приемы пищи с соевым протеином и тофу</p>';
+  }
+
+  $breakfasts_args = [
     'post_type'   => 'dish',
-    'numberposts' => -1,
+    'numberposts' => 21,
+    // 'numberposts' => -1,
     'orderby' => 'rand',
     'tax_query'   => [
+      [
+        'taxonomy' => 'dish_target',
+        'field' => 'slug',
+        'terms' => $target_slug
+      ],
       [
         'taxonomy'  => 'dish_type',
         'field'     => 'slug',
         'terms'     => 'breakfast',
-        'orderby' => 'rand',
+        'orderby' => 'rand'
       ],
       [
         'operator'  => 'NOT IN',
         'taxonomy'  => 'dish_category',
         'field'     => 'slug',
-        // 'terms'     => $exclude_terms_breakfasts
         'terms'     => $exclude_terms
-      ]
+      ],
+      $tax_query_ingredients
     ],
     'meta_query' => [
       [
@@ -275,25 +478,26 @@ function questionnaire_send() {
         'orderby' => 'rand',
       ]
     ]
-  ] );
+  ];
 
-  $lunches = get_posts( [
+  $lunches_args = [
     'post_type'   => 'dish',
-    'numberposts' => -1,
+    'numberposts' => 21,
+    // 'numberposts' => -1,
     'orderby' => 'rand',
     'tax_query'   => [
+      [
+        'taxonomy' => 'dish_target',
+        'field' => 'slug',
+        'terms' => $target_slug
+      ],
       [
         'taxonomy'  => 'dish_type',
         'field'     => 'slug',
         'terms'     => 'lunch',
         'orderby' => 'rand'
       ],
-      [
-        'operator'  => 'NOT IN',
-        'taxonomy'  => 'dish_category',
-        'field'     => 'slug',
-        'terms'     => $exclude_terms
-      ]
+      $tax_query_ingredients
     ],
     'meta_query' => [
       [
@@ -304,25 +508,153 @@ function questionnaire_send() {
         'orderby' => 'rand',
       ]
     ]
-  ] );
+  ];
 
-  $dinners = get_posts( [
+  if ( $exclude_terms ) {
+    $carelas_index = array_search( 'krupa', $exclude_terms );
+
+    if ( $carelas_index ) {
+      $carelas_exclude_terms = array_splice( $exclude_terms, $carelas_index, 1);
+    }
+
+    $lunches_args['tax_query'][] = [
+      'operator'  => 'NOT IN',
+      'taxonomy'  => 'dish_category',
+      'field'     => 'slug',
+      'terms'     => $exclude_terms
+    ];
+  }
+
+  $breakfasts = get_posts( $breakfasts_args );
+  $lunches = get_posts( $lunches_args );
+
+  if ( $breakfasts ) {
+    $breakfasts_count = count( $breakfasts );
+    // echo "<h3>Завтраки" . ( $breakfasts_count < 21 ? ' (уникальных подобралось ' . $breakfasts_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
+    // echo "<table style=\"width:100%\">";
+    // echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
+    $breakfasts = fill_array( $breakfasts );
+    // $i = 1;
+    // foreach ( $breakfasts as $breakfast ) {
+    //   $ccal = get_field( 'calories', $breakfast->ID );
+    //   $targets = get_field( 'target', $breakfast->ID );
+    //   // $categories = get_field( 'categories', $breakfast->ID );
+    //   $categories = get_the_terms( $breakfast->ID, 'dish_category' );
+    //   $ingredients = get_field( 'ingredients', $breakfast->ID );
+    //   $recipe = get_field( 'text', $breakfast->ID );
+    //   $ingredients_str = [];
+    //   $targets_str = [];
+    //   foreach ( $targets as $t ) {
+    //     if ( $t->slug === $target_slug ) {
+    //       $targets_str[] = "<b>{$t->name}</b>";
+    //     } else {
+    //       $targets_str[] = $t->name;
+    //     }
+    //   }
+    //   $categories_str = [];
+    //   foreach ( $categories as $c ) {
+    //     $categories_str[] = $c->name;
+    //   }
+    //   foreach ( $ingredients as $ingredient ) {
+    //     $ingredient_text = $ingredient['title']->name;
+    //     if ( $ingredient['number'] ) {
+    //       $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
+    //     }
+    //     $ingredients_str[] = $ingredient_text;
+    //   }
+    //   // echo "<tr>";
+    //   // echo "<td style=\"font-size:0.75em\">{$i}</td>";
+    //   // echo "<td style=\"font-size:0.9em\">{$breakfast->post_title}</td>";
+    //   // echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
+    //   // echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
+    //   // echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
+    //   // echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
+    //   // echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
+    //   // echo "</tr>";
+    //   $i++;
+    // }
+    // echo "</table>";
+  } else {
+    return;
+    // echo "<p>Не удалось подобрать завтраки</p>";
+    // echo "<p>Цель: {$target_rus}</p>";
+  }
+
+  // echo "<br>";
+  
+  if ( $lunches ) {
+    $lunches_count = count( $lunches );
+    // echo "<h3>Обеды" . ( $lunches_count < 21 ? ' (уникальных подобралось ' . $lunches_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
+    // echo "<table style=\"width:100%\">";
+    // echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
+    $lunches = fill_array( $lunches );
+    // $i = 1;
+    // foreach ( $lunches as $lunch ) {
+    //   $ccal = get_field( 'calories', $lunch->ID );
+    //   $targets = get_field( 'target', $lunch->ID );
+    //   // $categories = get_field( 'categories', $lunch->ID );
+    //   $categories = get_the_terms( $lunch->ID, 'dish_category' );
+    //   $ingredients = get_field( 'ingredients', $lunch->ID );
+    //   $recipe = get_field( 'text', $lunch->ID );
+    //   $ingredients_str = [];
+    //   $targets_str = [];
+    //   foreach ( $targets as $t ) {
+    //     if ( $t->slug === $target_slug ) {
+    //       $targets_str[] = "<b>{$t->name}</b>";
+    //     } else {
+    //       $targets_str[] = $t->name;
+    //     }
+    //   }
+    //   $categories_str = [];
+    //   foreach ( $categories as $c ) {
+    //     $categories_str[] = $c->name;
+    //   }
+    //   foreach ( $ingredients as $ingredient ) {
+    //     $ingredient_text = $ingredient['title']->name;
+    //     if ( $ingredient['number'] ) {
+    //       $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
+    //     }
+    //     $ingredients_str[] = $ingredient_text;
+    //   }
+    //   echo "<tr>";
+    //   echo "<td style=\"font-size:0.75em\">{$i}</td>";
+    //   echo "<td style=\"font-size:0.9em\">{$lunch->post_title}</td>";
+    //   echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
+    //   echo "</tr>";
+    //   $i++;
+    // }
+    // echo "</table>";
+  } else {
+    // Не удалось подобрать обеды
+    return;
+    // echo "<p>Не удалось подобрать обеды</p>";
+    // echo "<p>Цель: {$target_rus}</p>";
+  }
+
+  // echo "<br>";
+
+  $dinners_args = [
     'post_type'   => 'dish',
-    'numberposts' => -1,
+    'numberposts' => 21,
+    // 'numberposts' => -1,
     'orderby' => 'rand',
     'tax_query'   => [
+      [
+        'taxonomy' => 'dish_target',
+        'field' => 'slug',
+        'terms' => $target_slug
+      ],
       [
         'taxonomy'  => 'dish_type',
         'field'     => 'slug',
         'terms'     => 'dinner',
         'orderby' => 'rand'
       ],
-      [
-        'operator'  => 'NOT IN',
-        'taxonomy'  => 'dish_category',
-        'field'     => 'slug',
-        'terms'     => $exclude_terms
-      ]
+      $y
     ],
     'meta_query' => [
       [
@@ -333,75 +665,313 @@ function questionnaire_send() {
         'orderby' => 'rand',
       ]
     ]
-  ] );
-
-  $initial_breakfasts = $breakfasts;
-  $initial_lunches = $lunches;
-  $initial_dinners = $dinners;
-
-  if ( count( $breakfasts ) > 21 ) {
-    $replacement_breakfasts = array_slice( $breakfasts, 21 );
-  }
-
-  if ( count( $lunches ) > 21 ) {
-    $replacement_lunches = array_slice( $lunches, 21 );
-  }
-
-  if ( count( $dinners ) > 21 ) {
-    $replacement_dinners = array_slice( $dinners, 21 );
-  }
-
-  $response['data'] = [
-    'replacement_breakfasts' => $replacement_breakfasts,
-    'replacement_lucnhes' => $replacement_lunches,
-    'replacement_dinners' => $replacement_dinners,
-    'count_breakfasts' => count( $breakfasts ),
-    'count_lucnhes' => count( $lunches ),
-    'count_dinners' => count( $dinners )
   ];
 
-  $response['categories'] = $exclude_terms;
+  if ( $exclude_terms ) {
+    $dinners_args['tax_query'][] = [
+      'operator'  => 'NOT IN',
+      'taxonomy'  => 'dish_category',
+      'field'     => 'slug',
+      'terms'     => $exclude_terms
+    ];
+  }
+
+  if ( $target === 'weight-gain' ) {
+    $dinners_args['tax_query'][] = [
+      'taxonomy'  => 'dish_category',
+      'field'     => 'slug',
+      'terms'     => ['krupa']
+    ];
+    // echo '<p>Все ужины только из категории <b>крупа</b></p>';
+  }
+
+  $dinners = get_posts( $dinners_args );
+
+  if ( $dinners ) {
+    $dinners_count = count( $dinners );
+    // echo "<h3>Ужины" . ( $dinners_count < 21 ? ' (уникальных подобралось ' . $dinners_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
+    // echo "<table style=\"width:100%\">";
+    $dinners = fill_array( $dinners );
+    // $i = 1;
+    // echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
+    // foreach ( $dinners as $dinner ) {
+    //   $ccal = get_field( 'calories', $dinner->ID );
+    //   $targets = get_field( 'target', $dinner->ID );
+    //   // $categories = get_field( 'categories', $dinner->ID );
+    //   $categories = get_the_terms( $dinner->ID, 'dish_category' );
+    //   $ingredients = get_field( 'ingredients', $dinner->ID );
+    //   $recipe = get_field( 'text', $dinner->ID );
+    //   $ingredients_str = [];
+    //   $targets_str = [];
+    //   foreach ( $targets as $t ) {
+    //     if ( $t->slug === $target_slug ) {
+    //       $targets_str[] = "<b>{$t->name}</b>";
+    //     } else {
+    //       $targets_str[] = $t->name;
+    //     }
+    //   }
+    //   $categories_str = [];
+    //   foreach ( $categories as $c ) {
+    //     if ( $target === 'weight-gain' && $c->slug === 'krupa' ) {
+    //       $categories_str[] = "<span style=\"color:green\"><b>$c->name</b></span>";
+    //     } else {
+    //       $categories_str[] = $c->name;
+    //     }
+    //   }
+    //   foreach ( $ingredients as $ingredient ) {
+    //     $ingredient_text = $ingredient['title']->name;
+    //     if ( $ingredient['number'] ) {
+    //       $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
+    //     }
+    //     $ingredients_str[] = $ingredient_text;
+    //   }
+    //   echo "<tr>";
+    //   echo "<td style=\"font-size:0.75em\">{$i}</td>";
+    //   echo "<td style=\"font-size:0.9em\">{$dinner->post_title}</td>";
+    //   echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
+    //   echo "</tr>";
+    //   $i++;
+    // }
+    // echo "</table>";
+  } else {
+    // Не удалось подобрать ужины
+    return;
+    // echo "<p>Не удалось подобрать ужины</p>";
+    // echo "<p>Цель: {$target_rus}</p>";
+    // echo "<p>Разбег калорий от " . ($dinner_max_calories - 50) . " до " . ($dinner_max_calories + 50) . "</p>";
+  }
+
+  // echo "<br>";
+
+  $args_snack_1 = [
+    'post_type'   => 'dish',
+    'numberposts' => 21,
+    // 'numberposts' => -1,
+    'orderby' => 'rand',
+    'tax_query'   => [
+      [
+        'taxonomy' => 'dish_target',
+        'field' => 'slug',
+        'terms' => $target_slug
+      ],
+      [
+        'taxonomy'  => 'dish_type',
+        'field'     => 'slug',
+        'terms'     => 'snack_1',
+        'orderby' => 'rand'
+      ],
+      $tax_query_ingredients
+    ],
+    'meta_query' => [
+      [
+        'key' => 'calories',
+        'value' => [$snack_1_max_calories - 100, $snack_1_max_calories + 100],
+        'compare' => 'between',
+        'type' => 'numeric',
+        'orderby' => 'rand'
+      ]
+    ]
+  ];
+
+  if ( $exclude_terms ) {
+    $args_snack_1['tax_query'][] = [
+      'operator'  => 'NOT IN',
+      'taxonomy'  => 'dish_category',
+      'field'     => 'slug',
+      'terms'     => $exclude_terms
+    ];
+  }
+
+  $snacks_1 = get_posts( $args_snack_1 );
+
+  if ( $snacks_1 ) {
+    $snacks_1_count = count( $snacks_1 );
+    // echo "<h3>Перекусы 1" . ( $snacks_1_count < 21 ? ' (уникальных подобралось ' . $snacks_1_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
+    // echo "<table style=\"width:100%\">";
+    $snacks_1 = fill_array( $snacks_1 );
+    // $i = 1;
+    // echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
+    // foreach ( $snacks_1 as $snack_1 ) {
+    //   $ccal = get_field( 'calories', $snack_1->ID );
+    //   $targets = get_field( 'target', $snack_1->ID );
+    //   $categories = get_field( 'categories', $snack_1->ID );
+    //   $ingredients = get_field( 'ingredients', $snack_1->ID );
+    //   $recipe = get_field( 'text', $snack_1->ID );
+    //   $ingredients_str = [];
+    //   $targets_str = [];
+    //   foreach ( $targets as $t ) {
+    //     if ( $t->slug === $target_slug ) {
+    //       $targets_str[] = "<b>{$t->name}</b>";
+    //     } else {
+    //       $targets_str[] = $t->name;
+    //     }
+    //   }
+    //   $categories_str = [];
+    //   foreach ( $categories as $c ) {
+    //     if ( $target === 'weight-gain' && $c->slug === 'krupa' ) {
+    //       $categories_str[] = "<span style=\"color:green\"><b>$c->name</b></span>";
+    //     } else {
+    //       $categories_str[] = $c->name;
+    //     }
+    //   }
+    //   foreach ( $ingredients as $ingredient ) {
+    //     $ingredient_text = $ingredient['title']->name;
+    //     if ( $ingredient['number'] ) {
+    //       $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
+    //     }
+    //     $ingredients_str[] = $ingredient_text;
+    //   }
+    //   echo "<tr>";
+    //   echo "<td style=\"font-size:0.75em\">{$i}</td>";
+    //   echo "<td style=\"font-size:0.9em\">{$snack_1->post_title}</td>";
+    //   echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
+    //   echo "</tr>";
+    //   $i++;
+    // }
+    // echo "</table>";
+  } else {
+    // Не удалось подобрать перекусы 1
+    return;
+    // echo "<p>Не удалось подобрать перекусы 1</p>";
+    // echo "<p>Цель: {$target_rus}</p>";
+    // echo "<p>Разбег калорий от " . ($dinner_max_calories - 100) . " до " . ($dinner_max_calories + 100) . "</p>";
+  }
+
+  $args_snack_2 = [
+    'post_type'   => 'dish',
+    'numberposts' => 21,
+    // 'numberposts' => -1,
+    'orderby' => 'rand',
+    'tax_query'   => [
+      [
+        'taxonomy' => 'dish_target',
+        'field' => 'slug',
+        'terms' => $target_slug
+      ],
+      [
+        'taxonomy'  => 'dish_type',
+        'field'     => 'slug',
+        'terms'     => 'snack_2',
+        'orderby' => 'rand'
+      ],
+      $tax_query_ingredients
+    ],
+    'meta_query' => [
+      [
+        'key' => 'calories',
+        'value' => [$snack_2_max_calories - 100, $snack_2_max_calories + 100],
+        'compare' => 'between',
+        'type' => 'numeric',
+        'orderby' => 'rand'
+      ]
+    ]
+  ];
+
+  if ( $exclude_terms ) {
+    $args_snack_2['tax_query'][] = [
+      'operator'  => 'NOT IN',
+      'taxonomy'  => 'dish_category',
+      'field'     => 'slug',
+      'terms'     => $exclude_terms
+    ];
+  }
+
+  if ( $target === 'weight-gain' ) {
+    $args_snack_2['tax_query'][] = [
+      'taxonomy' => 'dish_ingredients',
+      'field' => 'slug',
+      'terms' => ['gejner-serious-mass']
+    ];
+    // echo '<p>Цель набор веса, добавялем на второй перекус только гейнер</p>';
+  }
+
+  $snacks_2 = get_posts( $args_snack_2 );
+
+  if ( $snacks_2 ) {
+    $snacks_2_count = count( $snacks_2 );
+    // echo "<h3>Перекусы 2" . ( $snacks_2_count < 21 ? ' (уникальных подобралось ' . $snacks_2_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
+    // echo "<table style=\"width:100%\">";
+    $snacks_2 = fill_array( $snacks_2 );
+    // $i = 1;
+    // echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
+    // foreach ( $snacks_2 as $snack_2 ) {
+    //   $ccal = get_field( 'calories', $snack_2->ID );
+    //   $targets = get_field( 'target', $snack_2->ID );
+    //   $categories = get_field( 'categories', $snack_2->ID );
+    //   $ingredients = get_field( 'ingredients', $snack_2->ID );
+    //   $recipe = get_field( 'text', $snack_2->ID );
+    //   $ingredients_str = [];
+    //   $targets_str = [];
+    //   foreach ( $targets as $t ) {
+    //     if ( $t->slug === $target_slug ) {
+    //       $targets_str[] = "<b>{$t->name}</b>";
+    //     } else {
+    //       $targets_str[] = $t->name;
+    //     }
+    //   }
+    //   $categories_str = [];
+    //   foreach ( $categories as $c ) {
+    //     if ( $target === 'weight-gain' && $c->slug === 'krupa' ) {
+    //       $categories_str[] = "<span style=\"color:green\"><b>$c->name</b></span>";
+    //     } else {
+    //       $categories_str[] = $c->name;
+    //     }
+    //   }
+    //   foreach ( $ingredients as $ingredient ) {
+    //     $ingredient_text = $ingredient['title']->name;
+    //     if ( $ingredient['number'] ) {
+    //       $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
+    //     }
+    //     $ingredients_str[] = $ingredient_text;
+    //   }
+    //   echo "<tr>";
+    //   echo "<td style=\"font-size:0.75em\">{$i}</td>";
+    //   echo "<td style=\"font-size:0.9em\">{$snack_2->post_title}</td>";
+    //   echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
+    //   echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
+    //   echo "</tr>";
+    //   $i++;
+    // }
+    // echo "</table>";
+  } else {
+    // Не удалось подобрать перекусы 2
+    return;
+    // echo "<p>Не удалось подобрать перекусы 2</p>";
+    // echo "<p>Цель: {$target_rus}</p>";
+    // echo "<p>Разбег калорий от " . ($dinner_max_calories - 100) . " до " . ($dinner_max_calories + 100) . "</p>";
+  }
+
+  // echo "<br>";
+
+  // echo "</div>";
+
+  if ( $carelas_index ) {
+    $exclude_terms = array_merge( $exclude_terms, $carelas_exclude_terms );
+  }
+
+  // return;
+
+  // $response['categories'] = $exclude_terms;
   // $response['categories_breakfasts'] = $exclude_terms_breakfasts;
 
-  $response['bmr'] = $bmr;
-  $response['breakfast_ccal'] = $breakfast_max_calories;
-  $response['lunch_ccal'] = $lunch_max_calories;
-  $response['dinner_ccal'] = $dinner_max_calories;
-  $response['terms'] = $categories;
+  // $response['bmr'] = $bmr;
+  // $response['breakfast_ccal'] = $breakfast_max_calories;
+  // $response['lunch_ccal'] = $lunch_max_calories;
+  // $response['dinner_ccal'] = $dinner_max_calories;
+  // $response['terms'] = $categories;
 
   // var_dump( $response );
-
-  function fill_array( $array, $max ) {
-    $count = count( $array );
-    if ( $count < $max ) {
-      shuffle( $array );
-      for ( $i = 0; $i < $count; $i++ ) {
-        if ( $array[ $i ] ) {
-          $array[] = $array[ $i ];
-        }
-      }
-      $new_count = count( $array );
-      if ( $new_count < $max ) {
-        return fill_array( $array, $max );
-      } else {
-        return array_slice( $array, 0, $max );   
-      }
-    } else {
-      return array_slice( $array, 0, $max );
-    }
-  }
-
-  if ( count( $breakfasts ) < 21 ) {
-    $breakfasts = fill_array( $breakfasts, 21 );  
-  }
-
-  if ( count( $lunches ) < 21 ) {
-    $lunches = fill_array( $lunches, 21 );
-  }
-
-  if ( count( $dinners ) < 21 ) {
-    $dinners = fill_array( $dinners, 21 );
-  }
 
   foreach ( $breakfasts as $breakfast ) {
     $breakfasts_ids[] = $breakfast->ID;
@@ -415,154 +985,23 @@ function questionnaire_send() {
     $dinners_ids[] = $dinner->ID;
   }
 
-  for ( $i = 0; $i < 21; $i++ ) {
-    $breakfast_daily_calories = get_field( 'calories', $breakfasts[ $i ] );
-    $lunch_daily_calories = get_field( 'calories', $lunches[ $i ] );
-    $dinner_daily_calories = get_field( 'calories', $dinners[ $i ] );
-
-    $daily_calories = $breakfast_daily_calories + $lunch_daily_calories + $dinner_daily_calories;
-
-    $snack_calories = ( $bmr - $daily_calories ) / 2;
-
-    $args_snack_1 = [
-      'post_type'   => 'dish',
-      'numberposts' => 1,
-      'orderby' => 'rand',
-      'tax_query'   => [
-        [
-          'taxonomy'  => 'dish_type',
-          'field'     => 'slug',
-          'terms'     => 'snack_1',
-          'orderby' => 'rand'
-        ],
-        [
-          'operator'  => 'NOT IN',
-          'taxonomy'  => 'dish_category',
-          'field'     => 'slug',
-          'terms'     => $exclude_terms
-        ]
-      ],
-      'meta_query' => [
-        [
-          'key' => 'calories',
-          // 'value' => ( $bmr - $daily_calories ) / 2,
-          // 'compare' => '<=',
-          // 'type' => 'numeric',
-
-          'value' => [$snack_calories - 50, $snack_calories + 50],
-          'compare' => 'between',
-          'type' => 'numeric',
-
-          'orderby' => 'rand'
-        ]
-      ]
-    ];
-
-    $args_snack_2 = [
-      'post_type'   => 'dish',
-      'numberposts' => 1,
-      'orderby' => 'rand',
-      'tax_query'   => [
-        'relation' => 'AND',
-        [
-          'taxonomy'  => 'dish_type',
-          'field'     => 'slug',
-          'terms'     => 'snack_2',
-          'orderby' => 'rand'
-        ],
-        [
-          'operator'  => 'NOT IN',
-          'taxonomy'  => 'dish_category',
-          'field'     => 'slug',
-          'terms'     => $exclude_terms
-        ]
-      ],
-      'meta_query' => [
-        [
-          'key' => 'calories',
-          // 'value' => ( $bmr - $daily_calories ) / 2,
-          // 'compare' => '<=',
-          // 'type' => 'numeric',
-
-          'value' => [$snack_calories - 50, $snack_calories + 50],
-          'compare' => 'between',
-          'type' => 'numeric',
-
-          'orderby' => 'rand'
-        ]
-      ]
-    ];
- 
-    $daily_snack_1 = get_posts( $args_snack_1 );
-    $daily_snack_2 = get_posts( $args_snack_2 );
-
-    if ( !$daily_snack_1[0] ) {
-      $daily_snack_1 = get_posts( $args_snack_1[
-        'meta_query' ] = [
-          [
-            'key' => 'calories',
-            'value' => $snack_calories,
-            'compare' => '<=',
-            'type' => 'numeric'
-          ]
-        ] );
-    }
-
-    if ( !$daily_snack_2[0] ) {
-      $daily_snack_2 = get_posts( $args_snack_2[
-        'meta_query' ] = [
-          [
-            'key' => 'calories',
-            'value' => $snack_calories,
-            'compare' => '<=',
-            'type' => 'numeric'
-          ]
-        ] );
-    }
-
-    $snacks_1_ids[] = $daily_snack_1[0]->ID;
-    $snacks_2_ids[] = $daily_snack_2[0]->ID;
-
-    $response['breakfasts'][] = [
-      'title' => $breakfasts[ $i ]->post_title,
-      'calories' => $breakfast_daily_calories
-    ];
-
-    $response['lunches'][] = [
-      'title' => $lunches[ $i ]->post_title,
-      'calories' => $lunch_daily_calories
-    ];
-
-    $response['dinners'][] = [
-      'title' => $dinners[ $i ]->post_title,
-      'calories' => $dinner_daily_calories
-    ];
-
-    $response['snack_1'][] = [
-      'title' => $daily_snack_1[0]->post_title,
-      'calories' => get_field( 'calories', $daily_snack_1[0] )
-    ];
-
-    $response['snack_2'][] = [
-      'title' => $daily_snack_2[0]->post_title,
-      'calories' => get_field( 'calories', $daily_snack_2[0] )
-    ];
+  foreach ( $snacks_1 as $snack_1 ) {
+    $snacks_1_ids[] = $snack_1->ID;
   }
 
-  // $snacks_1_ids = fill_array( $snacks_1_ids, 21 );
-  // $snacks_2_ids = fill_array( $snacks_2_ids, 21 );
+  foreach ( $snacks_2 as $snack_2 ) {
+    $snacks_2_ids[] = $snack_2->ID;
+  }
 
-  // $response['snack_1'] = fill_array( $response['snack_1'], 21 );
-  // $response['snack_2'] = fill_array( $response['snack_2'], 21 );
+  
 
-  $response['categories'] = $exclude_terms;
-  // $response['categories_breakfasts'] = $exclude_terms_breakfasts;
+  // $response['categories'] = $exclude_terms;
 
-  $response['bmr'] = $bmr;
-  $response['breakfast_ccal'] = $breakfast_max_calories;
-  $response['lunch_ccal'] = $lunch_max_calories;
-  $response['dinner_ccal'] = $dinner_max_calories;
-  $response['terms'] = $categories;
+  // $response['bmr'] = $bmr;
+  // $response['breakfast_ccal'] = $breakfast_max_calories;
+  // $response['lunch_ccal'] = $lunch_max_calories;
+  // $response['dinner_ccal'] = $dinner_max_calories;
+  // $response['terms'] = $terms;
 
 
   $tax_query = [
@@ -751,18 +1190,23 @@ function questionnaire_send() {
   // update_field( 'show_diet_plan', true, $user_id );
   // !!!
 
-  $response['workout'] = $workout;
-  $response['data']['cardio_abs_up'] = $cardio_abs_up;
-  $response['data']['cardio_abs_down_all'] = $cardio_abs_down_all;
-  $response['data']['cardio_abs_down'] = $cardio_abs_down;
-  $response['data']['up'] = $up;
-  $response['data']['down'] = $down;
-  $response['data']['up_down_all_abs'] = $up_down_all_abs;
-  $response['data']['inventory_array'] = $inventory_array;
-  $response['data']['training_restrictions_array'] = $training_restrictions_array;
-  $response['workout_week_1'] = $workout_week_1;
-  $response['workout_week_2'] = $workout_week_2;
-  $response['workout_week_3'] = $workout_week_3;
+  // $response['user_id'] = $user_id;
+  // $response['workout'] = $workout;
+  // $response['data']['cardio_abs_up'] = $cardio_abs_up;
+  // $response['data']['cardio_abs_down_all'] = $cardio_abs_down_all;
+  // $response['data']['cardio_abs_down'] = $cardio_abs_down;
+  // $response['data']['up'] = $up;
+  // $response['data']['down'] = $down;
+  // $response['data']['up_down_all_abs'] = $up_down_all_abs;
+  // $response['data']['inventory_array'] = $inventory_array;
+  // $response['data']['training_restrictions_array'] = $training_restrictions_array;
+  // $response['workout_week_1'] = $workout_week_1;
+  // $response['workout_week_2'] = $workout_week_2;
+  // $response['workout_week_3'] = $workout_week_3;
+
+  // echo "<script data-json=\"" . htmlspecialchars( json_encode( $response ) ) . "\"></script>";
+  // echo $user_id;
+  // return;
 
   update_field( 'workout_week_1', $workout_week_1, $user_id );
   update_field( 'workout_week_2', $workout_week_2, $user_id );
@@ -842,6 +1286,24 @@ function questionnaire_send() {
   $finish_marathon_time = $third_week_end_time;
   $finish_marathon_date = $third_week_end_date;
 
+  // var_dump( "questionnaire_date: {$questionnaire_date}" );
+  // var_dump( "questionnaire_dmy_date: {$questionnaire_dmy_date}" );
+  // var_dump( "questionnaire_time: {$questionnaire_time}" );
+  // var_dump( "questionnaire_dmy_time: {$questionnaire_dmy_time}" );
+  // var_dump( "questionnaire_week_day: {$questionnaire_week_day}" );
+  // var_dump( "start_marathon_time: {$start_marathon_time}" );
+  // var_dump( "diet_plan_open_time: {$diet_plan_open_time}" );
+  // var_dump( "diet_plan_open_date: {$diet_plan_open_date}" );
+  // var_dump( "first_week_end_time: {$first_week_end_time}" );
+  // var_dump( "second_week_end_time: {$second_week_end_time}" );
+  // var_dump( "third_week_end_time: {$third_week_end_time}" );
+  // var_dump( "first_week_end_date: {$first_week_end_date}" );
+  // var_dump( "second_week_end_date: {$second_week_end_date}" );
+  // var_dump( "third_week_end_date: {$third_week_end_date}" );
+  // var_dump( "start_marathon_date: {$start_marathon_date}" );
+  // var_dump( "finish_marathon_time: {$finish_marathon_time}" );
+  // var_dump( "finish_marathon_date: {$finish_marathon_date}" );
+
   update_field( 'first_week_end_time', $first_week_end_time, $user_id );
   update_field( 'second_week_end_time', $second_week_end_time, $user_id );
   update_field( 'third_week_end_time', $third_week_end_time, $user_id );
@@ -874,7 +1336,11 @@ function questionnaire_send() {
   update_field( 'diet_plan', $diet_plan, $user_id );
   // update_field( 'show_diet_plan', true, $user_id );
 
+  // echo "<script data-json=\"" . htmlspecialchars( json_encode( $response ) ) . "\"></script>";
+
   echo json_encode( $response );
+  // return;
+
 
   die();
 }

@@ -23,6 +23,10 @@
 
   &__copy {}
 
+  &__doc {
+    left: calc(50vw - 580px);
+  }
+
   &__dev-link {}
 
   &__dev-logo {}

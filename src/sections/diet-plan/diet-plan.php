@@ -1,5 +1,5 @@
 <?php
-  $today_day = date( 'j', $current_time - $start_marathon_time );
+  $today_day = $start_marathon_time ? date( 'j', $current_time - $start_marathon_time ) : 1;
   // $today_day = 2;
   // echo '<p>Время прохождения анкеты: ' . date( 'd.m.Y H:i:s', $questionnaire_dmy_time ) . '</p>';
   // echo '<p>Старт марафона: ' . date( 'd.m.Y H:i:s', $start_marathon_time ) . '</p>';
@@ -7,6 +7,8 @@
   // echo '<p>first_week_end_time: ' . date( 'd.m.Y H:i:s', $first_week_end_time ) . '</p>';
   // echo '<p>second_week_end_time: ' . date( 'd.m.Y H:i:s', $second_week_end_time ) . '</p>';
   // echo '<p>third_week_end_time: ' . date( 'd.m.Y H:i:s', $third_week_end_time ) . '</p>';
+  // $products_cart_popup = recalculate_products_cart();
+  // var_dump( $products_cart_popup );
  ?>
 
 <section class="diet-plan">
@@ -20,10 +22,12 @@
           <button type="button" class="diet-plan__calendar-prev"></button>
           <button type="button" class="diet-plan__calendar-next"></button>
         </div> <?php
+        if ( $start_marathon_time ) {
           echo Calendar::getInterval( date( 'n.Y', $start_marathon_time ), date( 'n.Y', strtotime( '-1day', $finish_marathon_time ) ), [
             date( 'd.m', $start_marathon_time ) => 'Начало марафона',
             date( 'd.m', strtotime( '-1day', $finish_marathon_time ) ) => 'Окончание марафона'
-          ] ) ?>
+          ] );
+        } ?>
         </div>
       </div>
     </div>

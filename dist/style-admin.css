@@ -22,6 +22,10 @@
   display: none;
 }
 
+.toplevel_page_manage-wprecall {
+  display: none !important;
+}
+
 #your-profile h2:first-of-type,
 #your-profile tr.user-rich-editing-wrap,
 #your-profile tr.user-syntax-highlighting-wrap,
@@ -40,4 +44,466 @@
   content: "Сброс анкеты";
   display: inline-block;
   color: #1d2327;
+}
+
+#acf-form-data + .form-table > tbody {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#user-photo,
+#target,
+#sex,
+#age,
+#height,
+#training-experience,
+#activity,
+#place,
+#inventory,
+#training-restrictions,
+#body-parts,
+#children,
+#categories,
+#calories,
+#proteins,
+#fats,
+#carbohydrates,
+#target-weight,
+#start-weight,
+#current-weight,
+#weight-timeline,
+#initial-measure-chest,
+#initial-measure-waist,
+#initial-measure-hip,
+#initial-measure-date,
+#measure-timeline,
+#photo-progress,
+#show-msg,
+#workout-week-1,
+#workout-week-2,
+#workout-week-3,
+#diet-plan {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+#user-photo > .acf-label,
+#target > .acf-label,
+#sex > .acf-label,
+#age > .acf-label,
+#height > .acf-label,
+#training-experience > .acf-label,
+#activity > .acf-label,
+#place > .acf-label,
+#inventory > .acf-label,
+#training-restrictions > .acf-label,
+#body-parts > .acf-label,
+#children > .acf-label,
+#categories > .acf-label,
+#calories > .acf-label,
+#proteins > .acf-label,
+#fats > .acf-label,
+#carbohydrates > .acf-label,
+#target-weight > .acf-label,
+#start-weight > .acf-label,
+#current-weight > .acf-label,
+#weight-timeline > .acf-label,
+#initial-measure-chest > .acf-label,
+#initial-measure-waist > .acf-label,
+#initial-measure-hip > .acf-label,
+#initial-measure-date > .acf-label,
+#measure-timeline > .acf-label,
+#photo-progress > .acf-label,
+#show-msg > .acf-label,
+#workout-week-1 > .acf-label,
+#workout-week-2 > .acf-label,
+#workout-week-3 > .acf-label,
+#diet-plan > .acf-label {
+  padding: 0;
+}
+#user-photo > .acf-input,
+#target > .acf-input,
+#sex > .acf-input,
+#age > .acf-input,
+#height > .acf-input,
+#training-experience > .acf-input,
+#activity > .acf-input,
+#place > .acf-input,
+#inventory > .acf-input,
+#training-restrictions > .acf-input,
+#body-parts > .acf-input,
+#children > .acf-input,
+#categories > .acf-input,
+#calories > .acf-input,
+#proteins > .acf-input,
+#fats > .acf-input,
+#carbohydrates > .acf-input,
+#target-weight > .acf-input,
+#start-weight > .acf-input,
+#current-weight > .acf-input,
+#weight-timeline > .acf-input,
+#initial-measure-chest > .acf-input,
+#initial-measure-waist > .acf-input,
+#initial-measure-hip > .acf-input,
+#initial-measure-date > .acf-input,
+#measure-timeline > .acf-input,
+#photo-progress > .acf-input,
+#show-msg > .acf-input,
+#workout-week-1 > .acf-input,
+#workout-week-2 > .acf-input,
+#workout-week-3 > .acf-input,
+#diet-plan > .acf-input {
+  margin: 0 0 25px;
+  padding: 0;
+}
+#user-photo .acf-radio-list ul.children,
+#user-photo .acf-checkbox-list ul.children,
+#target .acf-radio-list ul.children,
+#target .acf-checkbox-list ul.children,
+#sex .acf-radio-list ul.children,
+#sex .acf-checkbox-list ul.children,
+#age .acf-radio-list ul.children,
+#age .acf-checkbox-list ul.children,
+#height .acf-radio-list ul.children,
+#height .acf-checkbox-list ul.children,
+#training-experience .acf-radio-list ul.children,
+#training-experience .acf-checkbox-list ul.children,
+#activity .acf-radio-list ul.children,
+#activity .acf-checkbox-list ul.children,
+#place .acf-radio-list ul.children,
+#place .acf-checkbox-list ul.children,
+#inventory .acf-radio-list ul.children,
+#inventory .acf-checkbox-list ul.children,
+#training-restrictions .acf-radio-list ul.children,
+#training-restrictions .acf-checkbox-list ul.children,
+#body-parts .acf-radio-list ul.children,
+#body-parts .acf-checkbox-list ul.children,
+#children .acf-radio-list ul.children,
+#children .acf-checkbox-list ul.children,
+#categories .acf-radio-list ul.children,
+#categories .acf-checkbox-list ul.children,
+#calories .acf-radio-list ul.children,
+#calories .acf-checkbox-list ul.children,
+#proteins .acf-radio-list ul.children,
+#proteins .acf-checkbox-list ul.children,
+#fats .acf-radio-list ul.children,
+#fats .acf-checkbox-list ul.children,
+#carbohydrates .acf-radio-list ul.children,
+#carbohydrates .acf-checkbox-list ul.children,
+#target-weight .acf-radio-list ul.children,
+#target-weight .acf-checkbox-list ul.children,
+#start-weight .acf-radio-list ul.children,
+#start-weight .acf-checkbox-list ul.children,
+#current-weight .acf-radio-list ul.children,
+#current-weight .acf-checkbox-list ul.children,
+#weight-timeline .acf-radio-list ul.children,
+#weight-timeline .acf-checkbox-list ul.children,
+#initial-measure-chest .acf-radio-list ul.children,
+#initial-measure-chest .acf-checkbox-list ul.children,
+#initial-measure-waist .acf-radio-list ul.children,
+#initial-measure-waist .acf-checkbox-list ul.children,
+#initial-measure-hip .acf-radio-list ul.children,
+#initial-measure-hip .acf-checkbox-list ul.children,
+#initial-measure-date .acf-radio-list ul.children,
+#initial-measure-date .acf-checkbox-list ul.children,
+#measure-timeline .acf-radio-list ul.children,
+#measure-timeline .acf-checkbox-list ul.children,
+#photo-progress .acf-radio-list ul.children,
+#photo-progress .acf-checkbox-list ul.children,
+#show-msg .acf-radio-list ul.children,
+#show-msg .acf-checkbox-list ul.children,
+#workout-week-1 .acf-radio-list ul.children,
+#workout-week-1 .acf-checkbox-list ul.children,
+#workout-week-2 .acf-radio-list ul.children,
+#workout-week-2 .acf-checkbox-list ul.children,
+#workout-week-3 .acf-radio-list ul.children,
+#workout-week-3 .acf-checkbox-list ul.children,
+#diet-plan .acf-radio-list ul.children,
+#diet-plan .acf-checkbox-list ul.children {
+  margin: 10px 0 0;
+}
+#user-photo .acf-radio-list li:not(:last-child),
+#user-photo .acf-checkbox-list li:not(:last-child),
+#target .acf-radio-list li:not(:last-child),
+#target .acf-checkbox-list li:not(:last-child),
+#sex .acf-radio-list li:not(:last-child),
+#sex .acf-checkbox-list li:not(:last-child),
+#age .acf-radio-list li:not(:last-child),
+#age .acf-checkbox-list li:not(:last-child),
+#height .acf-radio-list li:not(:last-child),
+#height .acf-checkbox-list li:not(:last-child),
+#training-experience .acf-radio-list li:not(:last-child),
+#training-experience .acf-checkbox-list li:not(:last-child),
+#activity .acf-radio-list li:not(:last-child),
+#activity .acf-checkbox-list li:not(:last-child),
+#place .acf-radio-list li:not(:last-child),
+#place .acf-checkbox-list li:not(:last-child),
+#inventory .acf-radio-list li:not(:last-child),
+#inventory .acf-checkbox-list li:not(:last-child),
+#training-restrictions .acf-radio-list li:not(:last-child),
+#training-restrictions .acf-checkbox-list li:not(:last-child),
+#body-parts .acf-radio-list li:not(:last-child),
+#body-parts .acf-checkbox-list li:not(:last-child),
+#children .acf-radio-list li:not(:last-child),
+#children .acf-checkbox-list li:not(:last-child),
+#categories .acf-radio-list li:not(:last-child),
+#categories .acf-checkbox-list li:not(:last-child),
+#calories .acf-radio-list li:not(:last-child),
+#calories .acf-checkbox-list li:not(:last-child),
+#proteins .acf-radio-list li:not(:last-child),
+#proteins .acf-checkbox-list li:not(:last-child),
+#fats .acf-radio-list li:not(:last-child),
+#fats .acf-checkbox-list li:not(:last-child),
+#carbohydrates .acf-radio-list li:not(:last-child),
+#carbohydrates .acf-checkbox-list li:not(:last-child),
+#target-weight .acf-radio-list li:not(:last-child),
+#target-weight .acf-checkbox-list li:not(:last-child),
+#start-weight .acf-radio-list li:not(:last-child),
+#start-weight .acf-checkbox-list li:not(:last-child),
+#current-weight .acf-radio-list li:not(:last-child),
+#current-weight .acf-checkbox-list li:not(:last-child),
+#weight-timeline .acf-radio-list li:not(:last-child),
+#weight-timeline .acf-checkbox-list li:not(:last-child),
+#initial-measure-chest .acf-radio-list li:not(:last-child),
+#initial-measure-chest .acf-checkbox-list li:not(:last-child),
+#initial-measure-waist .acf-radio-list li:not(:last-child),
+#initial-measure-waist .acf-checkbox-list li:not(:last-child),
+#initial-measure-hip .acf-radio-list li:not(:last-child),
+#initial-measure-hip .acf-checkbox-list li:not(:last-child),
+#initial-measure-date .acf-radio-list li:not(:last-child),
+#initial-measure-date .acf-checkbox-list li:not(:last-child),
+#measure-timeline .acf-radio-list li:not(:last-child),
+#measure-timeline .acf-checkbox-list li:not(:last-child),
+#photo-progress .acf-radio-list li:not(:last-child),
+#photo-progress .acf-checkbox-list li:not(:last-child),
+#show-msg .acf-radio-list li:not(:last-child),
+#show-msg .acf-checkbox-list li:not(:last-child),
+#workout-week-1 .acf-radio-list li:not(:last-child),
+#workout-week-1 .acf-checkbox-list li:not(:last-child),
+#workout-week-2 .acf-radio-list li:not(:last-child),
+#workout-week-2 .acf-checkbox-list li:not(:last-child),
+#workout-week-3 .acf-radio-list li:not(:last-child),
+#workout-week-3 .acf-checkbox-list li:not(:last-child),
+#diet-plan .acf-radio-list li:not(:last-child),
+#diet-plan .acf-checkbox-list li:not(:last-child) {
+  margin: 0 0 10px;
+}
+#user-photo img,
+#target img,
+#sex img,
+#age img,
+#height img,
+#training-experience img,
+#activity img,
+#place img,
+#inventory img,
+#training-restrictions img,
+#body-parts img,
+#children img,
+#categories img,
+#calories img,
+#proteins img,
+#fats img,
+#carbohydrates img,
+#target-weight img,
+#start-weight img,
+#current-weight img,
+#weight-timeline img,
+#initial-measure-chest img,
+#initial-measure-waist img,
+#initial-measure-hip img,
+#initial-measure-date img,
+#measure-timeline img,
+#photo-progress img,
+#show-msg img,
+#workout-week-1 img,
+#workout-week-2 img,
+#workout-week-3 img,
+#diet-plan img {
+  max-width: 250px;
+}
+
+#wp-admin-bar-wp-logo,
+#wp-admin-bar-comments,
+#wp-admin-bar-new-content {
+  display: none;
+}
+
+#wpadminbar #wp-admin-bar-root-default > li#wp-admin-bar-wpshapere_site_title {
+  margin: 0 5px 0 20px;
+}
+#wpadminbar #wp-admin-bar-root-default > li#wp-admin-bar-wpshapere_site_title > .ab-item {
+  margin: 3px 0 0;
+}
+
+#reset,
+#questionnaire-complete,
+#show-diet-plan {
+  margin: 0 0 25px;
+  width: 100%;
+}
+#reset > .acf-label,
+#questionnaire-complete > .acf-label,
+#show-diet-plan > .acf-label {
+  display: none;
+}
+#reset > .acf-input,
+#questionnaire-complete > .acf-input,
+#show-diet-plan > .acf-input {
+  padding: 0;
+}
+
+#telegram-chat,
+#role-number,
+#marathons-count,
+#questionnaire-date,
+#start-marathon-date,
+#start-marathon-time,
+#finish-marathon-date,
+#finish-marathon-time,
+#diet-plan-open-date,
+#diet-plan-open-time,
+#first-week-end-date,
+#first-week-end-time,
+#second-week-end-date,
+#second-week-end-time,
+#third-week-end-date,
+#third-week-end-time {
+  margin: 0 0 25px;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+#telegram-chat td,
+#role-number td,
+#marathons-count td,
+#questionnaire-date td,
+#start-marathon-date td,
+#start-marathon-time td,
+#finish-marathon-date td,
+#finish-marathon-time td,
+#diet-plan-open-date td,
+#diet-plan-open-time td,
+#first-week-end-date td,
+#first-week-end-time td,
+#second-week-end-date td,
+#second-week-end-time td,
+#third-week-end-date td,
+#third-week-end-time td {
+  padding: 0;
+}
+
+#start-marathon-time,
+#finish-marathon-time,
+#diet-plan-open-time,
+#first-week-end-time,
+#second-week-end-time,
+#third-week-end-time {
+  opacity: 0.5;
+}
+
+@media (min-width: 992px) {
+  #start-marathon-date,
+#start-marathon-time,
+#finish-marathon-date,
+#finish-marathon-time,
+#diet-plan-open-date,
+#diet-plan-open-time,
+#first-week-end-date,
+#first-week-end-time,
+#second-week-end-date,
+#second-week-end-time,
+#third-week-end-date,
+#third-week-end-time,
+#age,
+#height {
+    margin: 0 25px 25px 0;
+    width: 350px;
+  }
+
+  #calories,
+#proteins,
+#fats,
+#carbohydrates,
+#target-weight,
+#start-weight,
+#current-weight,
+#initial-measure-chest,
+#initial-measure-waist,
+#initial-measure-hip,
+#initial-measure-date {
+    width: calc((100% - 30px) / 4);
+  }
+
+  #calories,
+#proteins,
+#fats,
+#target-weight,
+#start-weight,
+#initial-measure-chest,
+#initial-measure-waist,
+#initial-measure-hip {
+    margin-right: 10px;
+  }
+}
+@media (min-width: 1300px) {
+  #start-marathon-time,
+#finish-marathon-time,
+#diet-plan-open-time,
+#first-week-end-time,
+#second-week-end-time,
+#third-week-end-time {
+    margin-right: 30%;
+  }
+
+  #calories,
+#proteins,
+#fats,
+#carbohydrates,
+#target-weight,
+#start-weight,
+#current-weight,
+#initial-measure-chest,
+#initial-measure-waist,
+#initial-measure-hip,
+#initial-measure-date {
+    width: calc((100% - 75px) / 4);
+  }
+
+  #calories,
+#proteins,
+#fats,
+#target-weight,
+#start-weight,
+#initial-measure-chest,
+#initial-measure-waist,
+#initial-measure-hip {
+    margin-right: 25px;
+  }
+}
+@media (min-width: 1675px) {
+  #start-marathon-time,
+#finish-marathon-time,
+#diet-plan-open-time,
+#first-week-end-time,
+#second-week-end-time,
+#third-week-end-time {
+    margin-right: 45%;
+  }
+
+  #calories,
+#proteins,
+#fats,
+#carbohydrates,
+#target-weight,
+#start-weight,
+#current-weight,
+#initial-measure-chest,
+#initial-measure-waist,
+#initial-measure-hip,
+#initial-measure-date {
+    width: 350px;
+  }
 }

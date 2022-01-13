@@ -22,6 +22,7 @@
         ] ) ?>
         <!-- <div class="ftr__bottom"> -->
           <span class="ftr__copy">&copy; Profitness Life, 2010&#8209;2021. Все&nbsp;права защищены.</span>
+          <a href="<?php echo $site_url ?>/oferta.pdf" target="_blank" class="ftr__doc">Договор публичной оферты</a>
           <div class="ftr__dev">
             <span>Разработка сайта</span>
             <a href="https://media-bay.ru" title="Перейти на сайт разработчика" target="_blank" class="ftr__dev-link">
@@ -34,5 +35,39 @@
       <div id="fake-scrollbar"></div> <?php
       wp_footer() ?>
     </div>
+     <!-- <script>
+      this.pay = function () {
+       var widget = new cp.CloudPayments();
+          widget.pay('charge', // или 'auth'
+              { //options
+                  publicId: 'test_api_00000000000000000000001', //id из личного кабинета
+                  description: 'Оплата марафона стройности', //назначение
+                  amount: 1499, //сумма
+                  currency: 'RUB', //валюта
+                  // accountId: 'user@example.com', //идентификатор плательщика (необязательно)
+                  // invoiceId: '1234567', //номер заказа  (необязательно)
+                  // email: 'user@example.com', //email плательщика (необязательно)
+                  // skin: "mini", //дизайн виджета (необязательно)
+                  data: {
+                      myProp: 'myProp value'
+                  }
+              },
+              {
+                  onSuccess: function (options) { // success
+                      //действие при успешной оплате
+                  },
+                  onFail: function (reason, options) { // fail
+                      //действие при неуспешной оплате
+                  },
+                  onComplete: function (paymentResult, options) { //Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
+                      //например вызов вашей аналитики Facebook Pixel
+                  }
+              }
+          )
+      };
+    document.addEventListener('DOMContentLoaded', function() {
+      $('#checkout').click(pay);      
+    });
+  </script> -->
   </body>
 </html>

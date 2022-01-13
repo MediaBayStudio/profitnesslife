@@ -25,6 +25,7 @@ add_action( 'init', function () {
 		'menu_icon' => null,
 		'hierarchical' => false,
 		'supports' => ['title'],
+		'menu_icon' => 'dashicons-admin-comments',
 		'taxonomies' => [],
 	] );
 
@@ -52,6 +53,7 @@ add_action( 'init', function () {
 		'hierarchical' => false,
 		'supports' => ['title'],
 		'taxonomies' => [],
+		'menu_icon' => 'dashicons-instagram'
 	] );
 
 	register_post_type( 'dish', [
@@ -77,7 +79,8 @@ add_action( 'init', function () {
 		'menu_icon' => null,
 		'hierarchical' => false,
 		'supports' => ['title'],
-		'taxonomies' => ['dish_category', 'dish_type', 'dish_ingredients']
+		'taxonomies' => ['dish_category', 'dish_type', 'dish_ingredients', 'dish_target'],
+		'menu_icon' => 'dashicons-food'
 	] );
 
 	register_post_type( 'workout', [
@@ -103,7 +106,8 @@ add_action( 'init', function () {
 		'menu_icon' => null,
 		'hierarchical' => false,
 		'supports' => ['title'],
-		'taxonomies' => ['workout_category', 'workout_type', 'workout_inventory', 'muscle_groups']
+		'taxonomies' => ['workout_category', 'workout_type', 'workout_inventory', 'muscle_groups'],
+		'menu_icon' => 'dashicons-video-alt2'
 	] );
 
 	register_taxonomy( 'workout_category', ['workout'], [
@@ -222,6 +226,26 @@ add_action( 'init', function () {
 			'add_new_item' => 'Добавить',
 			'new_item_name' => 'Добавить',
 			'menu_name' => 'Типы'
+		],
+		'hierarchical' => false,
+		'meta_box_cb' => false
+	] );
+
+	register_taxonomy( 'dish_target', ['dish'], [
+		'label' => '',
+		'labels' => [
+			'name' => 'Цели',
+			'singular_name' => 'Цель',
+			'search_items' => 'Найти',
+			'all_items' => 'Все',
+			'view_item ' => 'Показать',
+			'parent_item' => 'Родитель',
+			'parent_item_colon' => 'Родитель:',
+			'edit_item' => 'Изменить',
+			'update_item' => 'Обновить',
+			'add_new_item' => 'Добавить',
+			'new_item_name' => 'Добавить',
+			'menu_name' => 'Цели'
 		],
 		'hierarchical' => false,
 		'meta_box_cb' => false

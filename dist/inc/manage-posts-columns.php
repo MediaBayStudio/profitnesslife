@@ -4,11 +4,11 @@ add_filter( 'manage_dish_posts_columns', function( $columns ) {
 
   $new_columns = [
     'title' => 'Название',
-    'calories' => 'Калорийность',
-    // 'terms' => 'terms',
+    'calories' => 'Калории',
     'ingredients' => 'Ингредиенты',
     'terms' => 'Категории',
     'type' => 'Тип',
+    'target' => 'Цель',
     'date' => 'Дата публикации'
   ];
 
@@ -20,22 +20,21 @@ add_action( 'manage_dish_posts_custom_column', function( $colname, $post_id ) {
   global $site_url;
 
   switch ( $colname ) {
-    // case 'terms':
-    //   $terms = get_the_terms( $post_id, 'dish_ingredients' );
+    case 'target':
+      $terms = get_the_terms( $post_id, 'dish_target' );
 
-    //   foreach ( $terms as $ingredient ) {
-    //     $ingredients_text .= $ingredient->name;
-    //     $ingredients_text .= ', ';
-    //   }
-    //   echo '<p>' . substr( $ingredients_text, 0, -2 ) . '</p>';
-    //   break;
+      foreach ( $terms as $target ) {
+        $target_text .= '<a href="' . $site_url . '/wp-admin/edit.php?dish_target=' . $target->slug . '&post_type=dish" title="Показать все приемы пищи с ' . $target->name . '">' . $target->name . '</a>, ';
+      }
+      echo '<p>' . substr( $target_text, 0, -2 ) . '</p>';
+      break;
     case 'calories':
       echo get_field( 'calories', $post_id );
       break;
     case 'ingredients':
       $ingredients = get_field( 'ingredients', $post_id );
       foreach ( $ingredients as $ingredient ) {
-        $ingredients_text .= $ingredient['title']->name;
+        $ingredients_text .= '<a href="' . $site_url . '/wp-admin/edit.php?dish_ingredients=' . $ingredient['title']->slug . '&post_type=dish" title="Показать все приемы пищи с ' . $ingredient['title']->name . '">' . $ingredient['title']->name . '</a>';
         if ( $ingredient['number'] ) {
           $ingredients_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
         }
@@ -47,6 +46,9 @@ add_action( 'manage_dish_posts_custom_column', function( $colname, $post_id ) {
       $types = get_field( 'type', $post_id );
       if ( $types ) {
         foreach ( $types as $type ) {
+          if ( is_numeric( $type ) ) {
+            $type = get_term( $type, 'dish_type' );
+          }
           $types_text .= '<a href="' . $site_url . '/wp-admin/edit.php?dish_type=' . $type->slug . '&post_type=dish">' . $type->name . '</a>, ';
         }
         echo '<p>' . substr( $types_text, 0, -2 ) . '</p>';
@@ -55,7 +57,7 @@ add_action( 'manage_dish_posts_custom_column', function( $colname, $post_id ) {
       }
       break;
     case 'terms':
-      $categories = get_field( 'categories', $post_id );
+      $categories = get_the_terms( $post_id, 'dish_category' );
       if ( $categories ) {
         foreach ( $categories as $category ) {
           $categories_text .= '<a href="' . $site_url . '/wp-admin/edit.php?dish_category=' . $category->slug . '&post_type=dish">' . $category->name . '</a>, ';

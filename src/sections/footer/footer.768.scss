@@ -4,6 +4,8 @@
 
 .ftr {
   flex-flow: wrap;
+  position: relative;
+  padding-bottom: 50px;
 
   &__sep {
     margin: 0 0 40px;
@@ -53,6 +55,12 @@
   &__copy {
     margin: 0;
     order: 4;
+  }
+
+  &__doc {
+    position: absolute;
+    bottom: 20px;
+    left: calc(50vw - 360px);
   }
 
   &__dev {

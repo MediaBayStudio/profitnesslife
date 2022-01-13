@@ -249,7 +249,7 @@ if ( !$questionnaire_complete ) : ?>
             'hide_empty' => false
           ] );
           $milk_products_checkboxes[] = [
-            'title' => 'Молочные продукты полностью (творог/кефир/йогурт/сметана/сыры/биота)',
+            'title' => 'Молочные продукты полностью',
             'name' => 'milk-products[]',
             'value' => 'all'
           ];
@@ -265,7 +265,7 @@ if ( !$questionnaire_complete ) : ?>
           ];
           for ( $i = 0, $len = count( $categories ); $i < $len; $i++ ) {
             switch ( $categories[ $i ]->parent ) {
-              case 0:
+              case 0: // Если родителя нет
                 questionnaire_card( [
                   'class' => 'questionnaire-card-products',
                   'lazyload' => true,
@@ -275,7 +275,7 @@ if ( !$questionnaire_complete ) : ?>
                     'height' => 60
                   ],
                   'checkbox' => [
-                    'title' => $categories[ $i ]->name . ( $categories[ $i ]->name === 'Крупы' ? ' на завтрак' : '' ),
+                    'title' => $categories[ $i ]->name . ( $categories[ $i ]->name === 'Крупа' ? ' (только на завтрак)' : '' ),
                     'name' => 'categories[]',
                     'id' => $categories[ $i ]->slug,
                     'value' => $categories[ $i ]->slug,
@@ -284,21 +284,21 @@ if ( !$questionnaire_complete ) : ?>
                   ]
                 ] );
                 break;
-              case 6:
+              case 223:
                 $milk_products_checkboxes[] = [
                   'title' => $categories[ $i ]->name,
                   'name' => 'milk-products[]',
                   'value' => $categories[ $i ]->slug
                 ];
                 break;
-              case 11:
+              case 391:
                 $meat_products_checkboxes[] = [
                   'title' => $categories[ $i ]->name,
                   'name' => 'meat-products[]',
                   'value' => $categories[ $i ]->slug
                 ];
                 break;
-              case 16:
+              case 230:
                 $fish_products_checkboxes[] = [
                   'title' => $categories[ $i ]->name,
                   'name' => 'fish-products[]',
@@ -322,7 +322,7 @@ if ( !$questionnaire_complete ) : ?>
         </div>
       </div>
 
-      <div class="questionnaire-form__step extra-step with-next-button hide" data-question="categories[]" data-answer="milk-products">
+      <div class="questionnaire-form__step extra-step with-next-button hide" data-question="categories[]" data-answer="molochnye-produkty">
         <span class="questionnaire-form__step-title">Отметьте продукты, которые бы вы НЕ хотели видеть в своём меню</span>
         <p class="questionnaire-form__step-descr">Уточните, пожалуйста, какие молочные продукты необходимо исключить из меню</p> <?php
         questionnaire_card( [
@@ -338,7 +338,7 @@ if ( !$questionnaire_complete ) : ?>
         ] ) ?>
       </div>
 
-      <div class="questionnaire-form__step extra-step with-next-button hide" data-question="categories[]" data-answer="meat-products">
+      <div class="questionnaire-form__step extra-step with-next-button hide" data-question="categories[]" data-answer="myaso">
         <span class="questionnaire-form__step-title">Отметьте продукты, которые бы вы НЕ хотели видеть в своём меню</span>
         <p class="questionnaire-form__step-descr">Уточните, пожалуйста, какие мясные продукты необходимо исключить из меню</p> <?php
         questionnaire_card( [
@@ -354,7 +354,7 @@ if ( !$questionnaire_complete ) : ?>
         ] ) ?>
       </div>
 
-      <div class="questionnaire-form__step extra-step with-next-button hide" data-question="categories[]" data-answer="fish-products">
+      <div class="questionnaire-form__step extra-step with-next-button hide" data-question="categories[]" data-answer="ryba">
         <span class="questionnaire-form__step-title">Отметьте продукты, которые бы вы НЕ хотели видеть в своём меню</span>
         <p class="questionnaire-form__step-descr">Уточните, пожалуйста, какие виды рыбы необходимо исключить из меню</p> <?php
         questionnaire_card( [

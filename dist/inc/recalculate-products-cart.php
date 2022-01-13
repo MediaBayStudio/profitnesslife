@@ -15,6 +15,7 @@ function recalculate_products_cart() {
 
   $data = array_slice( $user_data['diet_plan'], ($current_week_number - 1) * 7, 7 );
 
+
   // $posts = get_posts( [
   //   'numberposts' => -1,
   //   'post_type' => 'dish'
