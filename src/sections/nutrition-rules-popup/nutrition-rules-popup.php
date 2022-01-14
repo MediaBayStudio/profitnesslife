@@ -112,15 +112,15 @@ $cnt = [
           'alt' => 'Изображение гейнера',
           [
             'url' => '/img/gainer-1.jpg',
-            'webp' => '/img/gainer-1.webp'
+            // 'webp' => '/img/gainer-1.webp'
           ],
           [
             'url' => '/img/gainer-2.jpg',
-            'webp' => '/img/gainer-2.webp'
+            // 'webp' => '/img/gainer-2.webp'
           ],
           [
             'url' => '/img/gainer-3.jpg',
-            'webp' => '/img/gainer-3.webp'
+            // 'webp' => '/img/gainer-3.webp'
           ]
         ]
       ]

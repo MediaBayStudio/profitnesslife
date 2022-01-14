@@ -63,13 +63,13 @@ function add_user_to_chat( $user_data, $user_id ) {
   } else {
     // echo "<p>За пользователем не закреплен чат</p>";
 
-    // foreach ( $chats as $chat_data ) {
-    //   if ( in_array( $user_id, $chat_data['users'] ) ) {
-    //     // echo "<p>Пользователь есть на странице чата в чате {$chat_data['link']}, обновим ему поле</p>";
-    //     // update_field( 'telegram_chat', $chat_data['link'], 'user_' . $user_id );
-    //     return;
-    //   }
-    // }
+    foreach ( $chats as $chat_data ) {
+      if ( in_array( $user_id, $chat_data['users'] ) ) {
+        // echo "<p>Пользователь есть на странице чата в чате {$chat_data['link']}, обновим ему поле</p>";
+        update_field( 'telegram_chat', $chat_data['link'], 'user_' . $user_id );
+        return;
+      }
+    }
 
     // echo "<p>Пользователя нет в чатах на странце</p>";
 
@@ -212,7 +212,7 @@ add_user_to_chat( $user_data, $user_id );
   <div id="page-wrapper">
     <header class="hdr hdr-account container">
       <a href="<?php echo $site_url ?>" class="hdr__logo"><img src="<?php echo $logo_url ?>" alt="#" class="hdr__logo-img"></a> <?php
-      if ( is_user_logged_in() ) : ?>
+      if ( is_user_logged_in() && $post->ID !== 4122 ) : ?>
         <a href="<?php echo wp_logout_url() ?>" class="hdr__logout"><?php echo $user->user_firstname . ' ' . $user->user_lastname ?><picture class="hdr__logout-icon"><source type="image/svg+xml" srcset="<?php echo $template_directory_uri ?>/img/icon-logout.svg" media="(min-width:767.98px)"><img src="#" alt="#"></picture></a> <?php
       endif ?>
       <button type="button" class="hdr__burger"></button>

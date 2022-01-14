@@ -14,8 +14,10 @@ function popup_content( $args ) {
         foreach ( $value as $img ) :
           if ( is_array( $img ) ) :
             $alt = $args['tags']['images']['alt'] ?: $img['alt'] ?>
-            <picture class="popup__pic">
-              <source type="image/webp" srcset="<?php echo $template_directory_uri . $img['webp'] ?>">
+            <picture class="popup__pic"> <?php
+              if ( $img['webp'] ) : ?>
+                <source type="image/webp" srcset="<?php echo $template_directory_uri . $img['webp'] ?>"> <?php
+              endif ?>
               <img src="<?php echo $template_directory_uri . $img['url'] ?>" alt="<?php echo $alt ?>" class="popup__img">
             </picture> <?php
           endif;

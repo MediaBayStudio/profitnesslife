@@ -1,5 +1,13 @@
 <?php
 
+// $chats = get_field( 'telegram_chats', 419 );
+
+// for ( $i = 0, $len = count( $chats ); $i < $len; $i++ ) { 
+//   if ( $user_data['telegram_chat'] === $chats[ $i ]['link'] ) {
+//     $target_chat_index = $i;
+//   }
+// }
+
 print_account_hero_section( [
   'title' => $section['title'],
   'descr' => $section['descr'],
@@ -12,7 +20,7 @@ print_account_hero_section( [
     [
       'title' => 'Перейти в чат',
       'class' => 'btn-green',
-      'href' => $section['chats'][ $target_chat_index ]['link']
+      'href' => $user_data['telegram_chat']
     ]
   ]
 ] ) ?>

@@ -7,8 +7,9 @@
   // echo '<p>first_week_end_time: ' . date( 'd.m.Y H:i:s', $first_week_end_time ) . '</p>';
   // echo '<p>second_week_end_time: ' . date( 'd.m.Y H:i:s', $second_week_end_time ) . '</p>';
   // echo '<p>third_week_end_time: ' . date( 'd.m.Y H:i:s', $third_week_end_time ) . '</p>';
-  // $products_cart_popup = recalculate_products_cart();
-  // var_dump( $products_cart_popup );
+  if ( $today_day > 21 ) {
+    $today_day = 1;
+  }
  ?>
 
 <section class="diet-plan">

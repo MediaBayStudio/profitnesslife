@@ -363,7 +363,8 @@ document.addEventListener('DOMContentLoaded', function() {
   (function() {
     // Массив форм, на которые будет добавлена валидация
     let $forms = [
-      id('index-form')
+      id('index-form'),
+      id('pay-form')
     ];
   
     let formValidator = function(params) {
@@ -377,15 +378,18 @@ document.addEventListener('DOMContentLoaded', function() {
           name: {
             required: true
           },
+          surname: {
+            required: true
+          },
           tel: {
             required: true,
             pattern: /\+7\([0-9]{3}\)[0-9]{3}\-[0-9]{2}\-[0-9]{2}/,
-            or: 'email'
+            // or: 'email'
           },
           email: {
             required: true,
             pattern: /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z])+$/,
-            or: 'tel'
+            // or: 'tel'
           },
           msg: {
             required: true,
@@ -397,14 +401,17 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         messages = {
           tel: {
-            required: 'Введите ваш телефон или E-mail',
+            required: 'Введите ваш телефон',
             pattern: 'Укажите верный телефон'
           },
           name: {
-            required: 'Введите ваше имя',
+            required: 'Введите ваше имя'
+          },
+          surname: {
+            required: 'Введите вашу фамилию'
           },
           email: {
-            required: 'Введите ваш E-mail или телефон',
+            required: 'Введите ваш E-mail',
             pattern: 'Введите верный E-mail'
           },
           msg: {
@@ -591,10 +598,42 @@ document.addEventListener('DOMContentLoaded', function() {
   
       $form.setAttribute('novalidate', '');
       $form.validatie = false;
-      $formBtn.addEventListener('click', function() {
+      $formBtn.addEventListener('click', function(e) {
         validationForm();
+        if ($form.id === 'pay-form') {
+          e.preventDefault();
+          if ($form.validatie) {
+            let widget = new cp.CloudPayments();
+            widget.pay('charge', {
+                publicId: 'test_api_00000000000000000000001',
+                description: 'Оплата марафона стройности',
+                amount: +$form['price'].value,
+                currency: 'RUB',
+                accountId: $form['email'].value,
+                email: $form['email'].value,
+                skin: 'mini',
+                data: {
+                  myProp: 'myProp value'
+                }
+              }, {
+                onSuccess: function(options) {
+                  q('.pay-hero').classList.remove('active');
+                  q('#success-pay').classList.add('active');
+                  console.log('success');
+                },
+                onFail: function(reason, options) {
+                  q('.pay-hero').classList.remove('active');
+                  q('#failure-pay').classList.add('active');
+                  console.log('fail');
+                },
+                onComplete: function(paymentResult, options) {}
+              }
+            );
+            return;
+          }
+        }
         if ($form.validatie === false) {
-          event.preventDefault();
+          e.preventDefault();
         } else {
           $form.classList.add('loading');
         }

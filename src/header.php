@@ -70,7 +70,6 @@
 <!DOCTYPE html>
 <html <?php language_attributes() ?>>
 <head>
-  <!-- <script async src="https://widget.cloudpayments.ru/bundles/cloudpayments.js"></script> -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=CustomEvent%2CIntersectionObserver%2CIntersectionObserverEntry%2CElement.prototype.closest%2CElement.prototype.dataset%2CHTMLPictureElement"></script>
   <meta charset="<?php bloginfo( 'charset' ) ?>" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover" />

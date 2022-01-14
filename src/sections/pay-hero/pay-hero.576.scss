@@ -1,0 +1,38 @@
+@import '../../scss/assets/colors';
+@import '../../scss/assets/mixins';
+@import '../../scss/assets/variables';
+
+.pay-hero {
+  &__title {}
+
+  &__form {}
+}
+
+.pay-form {
+  .field {
+    &__inp {}
+
+    &__text {}
+  }
+
+  .field_name {}
+
+  .field_surname {}
+
+  .field_tel {}
+
+  .field_email {}
+
+  .form-bottom {}
+
+  .form-price-block {}
+
+  .form-price {}
+
+  .form-btn {}
+
+  .btn {}
+
+  .btn-green {}
+
+}

@@ -43,8 +43,8 @@ add_action( 'wp', function() {
       case 'training-program':
       case 'diet-plan':
       case 'chat':
-        wp_redirect( $site_url . '/account' );
-        exit;
+        // wp_redirect( $site_url . '/account' );
+        // exit;
     }
   } else {
     if ( is_super_admin() ) {
@@ -68,8 +68,8 @@ add_action( 'wp', function() {
             case 'training-program':
             case 'diet-plan':
             case 'chat':
-              wp_redirect( $site_url . '/account' );
-              exit;
+              // wp_redirect( $site_url . '/account' );
+              // exit;
           }
         }
       }

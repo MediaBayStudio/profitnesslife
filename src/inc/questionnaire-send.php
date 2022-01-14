@@ -60,6 +60,7 @@ function questionnaire_send( $args ) {
         array_splice( $chats[ $i ]['users'], $user_key_in_chat, 1 );
       }
     }
+    
     update_field( 'telegram_chats', $chats, 419 );
 
     update_field( 'age', '', $user_id );
