@@ -133,6 +133,7 @@ var browser = {
   workoutPopup,
   errorPopup,
   thanksPopup,
+  thanksPopupTimer,
   // Сокращение записи querySelector
   q = function(selector, element) {
     element = element || document.body;

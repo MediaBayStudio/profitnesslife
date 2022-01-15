@@ -3,6 +3,8 @@
     $preload,
     $site_url,
     $logo_url,
+    $manager_link_whatsapp,
+    $manager_link_viber,
     $user,
     $user_id,
     $user_data,

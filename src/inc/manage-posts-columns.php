@@ -1,4 +1,43 @@
 <?php
+add_filter( 'manage_payment_posts_columns', function( $columns ) {
+  $num = 1; // после какой по счету колонки вставлять новые
+
+  $new_columns = [
+    'title' => 'Номер заказа',
+    'name' => 'Имя',
+    'surname' => 'Фамилия',
+    'email' => 'E-mail',
+    'tel' => 'Телефон',
+    'date' => 'Дата оплаты'
+  ];
+
+  return array_slice( $columns, 0, $num ) + $new_columns + array_slice( $columns, $num );
+}, 4 );
+
+// Заполнение колонок нужными данными
+add_action( 'manage_payment_posts_custom_column', function( $colname, $post_id ) {
+
+  $fields = get_fields( $post_id );
+
+  switch ( $colname ) {
+    case 'name':
+      echo "<p>{$fields['name']}</p>";
+      break;
+    case 'surname':
+      echo "<p>{$fields['surname']}</p>";
+      break;
+    case 'email':
+      echo "<p>{$fields['email']}</p>";
+      break;
+    case 'tel':
+      echo "<p>{$fields['tel']}</p>";
+      break;
+    case 'title':
+      echo '<p>' . get_the_title( $post_id ) . '</p>';
+      break;
+  }
+}, 5, 2 );
+
 add_filter( 'manage_dish_posts_columns', function( $columns ) {
   $num = 1; // после какой по счету колонки вставлять новые
 

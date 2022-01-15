@@ -1,6 +1,75 @@
 <?php
 
+add_action( 'admin_menu', function() {
+  global $menu;
+  
+  $count = wp_count_posts( 'payment' )->pending; // на утверждении
+
+  if ( $count ) {
+    foreach( $menu as $key => $value ) {
+      if ( $menu[ $key ][2] == 'edit.php?post_type=payment' ) {
+        $menu[ $key ][0] .= ' <span class="awaiting-mod"><span class="pending-count">' . $count . '</span></span>';
+        break;
+      }
+    }
+  }
+} );
+
+if ( is_admin() ) {
+	add_filter( 'gettext', function( $translation, $text, $dom ) {
+		global $post;
+		if ( $dom == 'default' ) {
+			// var_dump( $translation );
+			if ( $translation === 'Сохранить для утверждения' ) {
+				if ( $post->post_type === 'payment' ) {
+					if ( stripos( $_SERVER['REQUEST_URI'], 'post.php' ) !== false && stripos( $_SERVER['REQUEST_URI'], '&action=edit' ) !== false ) {
+						return 'Сохранить';
+					}
+				}
+			} else if ( $translation === 'Опубликовать' ) {
+				// var_dump( $post->post_type )
+				if ( $post->post_type === 'payment' ) {
+					if ( stripos( $_SERVER['REQUEST_URI'], 'post.php' ) !== false && stripos( $_SERVER['REQUEST_URI'], '&action=edit' ) !== false ) {
+						return 'Подтвердить';
+					}
+				}
+				
+			}
+		}
+
+		return $translation;
+	}, 10, 3 );
+}
+
 add_action( 'init', function () {
+
+	register_post_type( 'payment', [
+    'label'  => null,
+    'labels' => [
+      'name'               => 'Заказы',
+      'singular_name'      => 'Заказ',
+      'add_new' 					 => 'Добавить',
+			'add_new_item' 			 => 'Добавление',
+			'edit_item' 				 => 'Редактирование',
+			'new_item' 					 => 'Новый ',
+			'view_item' 				 => 'Смотреть',
+			'search_items' 			 => 'Искать',
+			'not_found' 				 => 'Не найдено',
+			'not_found_in_trash' => 'Не найдено в корзине',
+			'parent_item_colon'  => '',
+      'menu_name'          => 'Заказы',
+    ],
+    'description'         => '',
+    'public'              => true,
+    'show_in_menu'        => null,
+    'show_in_rest'        => null,
+    'rest_base'           => null,
+    'menu_position'       => null,
+    'menu_icon'           => 'dashicons-money-alt',
+    'hierarchical'        => false,
+    'supports'            => ['title'],
+    'taxonomies'          => []
+  ] );
 
 	register_post_type( 'review', [
 		'label' => null,

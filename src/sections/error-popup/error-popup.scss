@@ -36,3 +36,14 @@
     }
   }
 }
+
+.page-template-index {
+  .error-popup__cnt {
+    border-radius: 25px;
+    max-width: 375px;
+  }
+  .error-popup__descr {
+    margin: 25px auto 0;
+    max-width: 280px;
+  }
+}

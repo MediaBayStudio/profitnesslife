@@ -9,7 +9,7 @@
         [
           'class' => 'btn btn-green',
           'title' => 'Написать менеджеру',
-          'href' => $manager_link
+          'href' => $manager_link_whatsapp
         ],
         [
           'class' => 'btn btn-ol',

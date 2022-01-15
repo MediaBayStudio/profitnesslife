@@ -9,7 +9,7 @@ if ( $questionnaire_complete ) {
       [
         'title' => 'Перейти в чат',
         'class' => 'btn-green',
-        'href' => $manager_link,
+        'href' => $manager_link_whatsapp,
         'target' => '_blank'
       ]
     ],

@@ -1,3 +1,13 @@
 @import '../../scss/assets/colors';
 @import '../../scss/assets/mixins';
 @import '../../scss/assets/variables';
+
+.thanks-popup {
+  &__cnt {}
+
+  &__close {}
+
+  &__title {}
+
+  &__descr {}
+}

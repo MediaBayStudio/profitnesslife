@@ -133,6 +133,7 @@ var browser = {
   workoutPopup,
   errorPopup,
   thanksPopup,
+  thanksPopupTimer,
   // Сокращение записи querySelector
   q = function(selector, element) {
     element = element || document.body;
@@ -553,22 +554,20 @@ document.addEventListener('DOMContentLoaded', function() {
             //   id('quiz').resetQuiz();
             // }
             console.log('отправлено');
+            thanksPopup.openPopup();
+            thanksPopupTimer = setTimeout(function() {
+              thanksPopup.closePopup();
+            }, 3000);
+          } else if (eventType === 'wpcf7mailfailed') {
+            console.log('отправка не удалась');
+            errorPopup.openPopup();
           }
-          /* else if (eventType === 'wpcf7mailfailed') {
-                  console.log('отправка не удалась');
-                }*/
   
           $form.classList.remove('loading');
   
-          setTimeout(function(){
+          setTimeout(function() {
             $form.classList.remove('sent');
           }, 3000);
-  
-          // thanksPopup.openPopup();
-          // thanksPopupTimer = setTimeout(function() {
-          //   thanksPopup.closePopup();
-          // }, 3000);
-  
   
         },
         toggleInputsClass = function() {
@@ -605,30 +604,55 @@ document.addEventListener('DOMContentLoaded', function() {
           if ($form.validatie) {
             let widget = new cp.CloudPayments();
             widget.pay('charge', {
-                publicId: 'test_api_00000000000000000000001',
-                description: 'Оплата марафона стройности',
-                amount: +$form['price'].value,
-                currency: 'RUB',
-                accountId: $form['email'].value,
-                email: $form['email'].value,
-                skin: 'mini',
-                data: {
-                  myProp: 'myProp value'
-                }
-              }, {
-                onSuccess: function(options) {
-                  q('.pay-hero').classList.remove('active');
-                  q('#success-pay').classList.add('active');
-                  console.log('success');
-                },
-                onFail: function(reason, options) {
-                  q('.pay-hero').classList.remove('active');
-                  q('#failure-pay').classList.add('active');
-                  console.log('fail');
-                },
-                onComplete: function(paymentResult, options) {}
+              publicId: 'test_api_00000000000000000000001',
+              description: 'Оплата марафона стройности',
+              amount: +$form['price'].value,
+              currency: 'RUB',
+              accountId: $form['email'].value,
+              email: $form['email'].value,
+              skin: 'mini',
+              data: {
+                myProp: 'myProp value'
               }
-            );
+            }, {
+              onSuccess: function(options) {
+                q('.pay-hero').classList.remove('active');
+                q('#success-pay').classList.add('active');
+                console.log('success');
+  
+                let data = new FormData($form);
+                data.append('action', 'create_payment');
+  
+                // console.log(data);
+  
+                fetch(siteUrl + '/wp-admin/admin-ajax.php', {
+                    method: 'POST',
+                    body: data
+                  })
+                  .then(function(response) {
+                    if (response.ok) {
+                      return response.text();
+                    } else {
+                      console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
+                      return '';
+                    }
+                  })
+                  .then(function(response) {
+                    // response = JSON.parse(response);
+                    console.log(response);
+                  })
+                  .catch(function(err) {
+                    console.log(err);
+                  });
+  
+              },
+              onFail: function(reason, options) {
+                q('.pay-hero').classList.remove('active');
+                q('#failure-pay').classList.add('active');
+                console.log('fail');
+              },
+              onComplete: function(paymentResult, options) {}
+            });
             return;
           }
         }
@@ -636,6 +660,7 @@ document.addEventListener('DOMContentLoaded', function() {
           e.preventDefault();
         } else {
           $form.classList.add('loading');
+          $formBtn.blur();
         }
       });
       if (!document.wpcf7mailsent) {

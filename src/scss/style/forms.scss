@@ -2,6 +2,13 @@
 @import '../assets/mixins';
 @import '../assets/variables';
 
+form {
+  &.loading {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
 // Сообщение об ошибке заполнения поля
 label.invalid {
   position: absolute;

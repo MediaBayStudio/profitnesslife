@@ -18,11 +18,13 @@ $upload_baseurl = $upload_dir['baseurl'] . DIRECTORY_SEPARATOR;
 $tel = get_option( 'contacts_tel' );
 $tel_clean = str_replace( [' ', '–', '-', '(', ')'], '', $tel );
 $email = get_option( 'contacts_email' );
-$manager_link = get_option( 'contacts_manager_link' );
+$manager_link_whatsapp = get_option( 'contacts_manager_link_whatsapp' );
+$manager_link_viber = get_option( 'contacts_manager_link_viber' );
 
 $logo_id = get_theme_mod( 'custom_logo' );
 $logo_url = wp_get_attachment_url( $logo_id );
 
+// Кнопка "запустить марафон еще раз" на стр. пользователя
 add_action( 'admin_color_scheme_picker', function() {
   echo '<button type="button" class="button" onclick="resetQuestionnaire()" id="clear-user-data-btn" data-user="' . $_GET['user_id'] . '">Запустить марафон еще раз</button>';
 } );
@@ -191,6 +193,9 @@ add_filter( 'template_include', function( $template ) {
   return $template;
 } );
 
+// Запись успешного платежа в базу данных
+require $template_directory . '/inc/create-payment.php';
+
 // Редиректы пользователей
 require $template_directory . '/inc/redirects.php';
 
@@ -203,15 +208,28 @@ require $template_directory . '/inc/users-roles.php';
 // Функция создания календаря для стр. план питания
 require $template_directory . '/inc/calendar.php';
 
+// Отправка в бд записи о закрытии приветственного блока
 require $template_directory . '/inc/close-welcome-block.php';
+
+// Подгрузка плана питания (при клике по календарю)
 require $template_directory . '/inc/load-diet-plan.php';
+
+// Отправка данных о весе пользователя
 require $template_directory . '/inc/weight-send.php';
+
+// Отправка данных для фото-прогресса
 require $template_directory . '/inc/photo-send.php';
+
+// Отправка данных о замерах объемов тела пользователя
 require $template_directory . '/inc/measure-send.php';
+
+// Расчет продуктовой корзины
 require $template_directory . '/inc/recalculate-products-cart.php';
+
+// Отправка данных о замене приемов пищи (пользователь кликнул на "заменить блюдо")
 require $template_directory . '/inc/replace-dish.php';
 
-// Импорт
+// Импорт приемов пищи из csv в бд
 require $template_directory . '/inc/import.php';
 
 // Создание карточек в анкете
@@ -230,7 +248,7 @@ require $template_directory . '/inc/questionnaire-send.php';
 require $template_directory . '/inc/instagram-posts.php';
 
 // Создание <picture> для img
-require $template_directory . '/inc/create-picture.php';
+// require $template_directory . '/inc/create-picture.php';
 
 // Создание <link rel="preload" /> для img
 require $template_directory . '/inc/create-link-preload.php';
@@ -261,49 +279,8 @@ require $template_directory . '/inc/php-path-join.php';
 
 if ( is_super_admin() || is_admin_bar_showing() ) {
 
-  // Смена ролей пользователям
-  $waiting_users = get_users( [
-    'number' => -1,
-    'role' => 'waiting',
-    'meta_query' => [
-      [
-        'key' => 'start_marathon_time',
-        'value' => '',
-        'compare' => '!='
-      ],
-      [
-        'key' => 'start_marathon_time',
-        'value' => $current_time,
-        'compare' => '<='
-      ]
-    ]
-  ] );
-
-  foreach ( $waiting_users as $waiting_user ) {
-    set_user_role_started( $waiting_user );
-  }
-
-  // Смена ролей пользователям
-  $completed_users = get_users( [
-    'number' => -1,
-    'role' => 'started',
-    'meta_query' => [
-      [
-        'key' => 'finish_marathon_time',
-        'value' => '',
-        'compare' => '!='
-      ],
-      [
-        'key' => 'finish_marathon_time',
-        'value' => $current_time,
-        'compare' => '<='
-      ]
-    ]
-  ] );
-
-  foreach ( $completed_users as $completed_user ) {
-    set_user_role_completed( $completed_user );
-  }
+  // Смена ролей пользователям (когда марафон для пользователя закончен или начат)
+  require $template_directory . '/inc/change-users-roles.php';
 
   // Создание новых колонок в админке
   require $template_directory . '/inc/manage-posts-columns.php';
@@ -311,6 +288,7 @@ if ( is_super_admin() || is_admin_bar_showing() ) {
 	// Функция формирования стилей для страницы при сохранении страницы
 	require $template_directory . '/inc/build-styles.php';
 
+  // Планировался перерасчет калорий при клике
   // require $template_directory . '/inc/ajax-recipe.php';
 
 	// Функция формирования скриптов для страницы при сохранении страницы

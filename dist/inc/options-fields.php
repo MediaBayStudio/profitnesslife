@@ -7,10 +7,11 @@
 
   add_action( 'admin_init', function() {
     $options = [
-      'tel'     =>  'Телефон',
-      'email'   =>  'E-mail',
-      'instagram_last_update'     =>  'Последнее обновление отзывов Instagram',
-      'manager_link' =>  'Ссылка на менеджера',
+      'tel'     =>  'Телефон (в подвале сайта)',
+      'email'   =>  'E-mail (в подвале сайта)',
+      // 'instagram_last_update'     =>  'Последнее обновление отзывов Instagram',
+      'manager_link_whatsapp' =>  'Ссылка на WhatsApp (гл. страница и при ошибке оплаты)',
+      'manager_link_viber' =>  'Ссылка на Viber (гл. страница и при ошибке оплаты)',
       // 'coords'  =>  'Координаты маркера на карте',
       // 'zoom'    =>  'Увеличение карты'
     ];

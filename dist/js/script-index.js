@@ -474,6 +474,21 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 })();
 
+;
+(function() {
+  errorPopup = new Popup('.error-popup', {
+    closeButtons: '.error-popup__close'
+  });
+  // errorPopup.openPopup();
+})();
+
+;
+(function() {
+  thanksPopup = new Popup('.thanks-popup', {
+    closeButtons: '.thanks-popup__close'
+  });
+})();
+
 //=include ../sections/footer/footer.js
 
 });

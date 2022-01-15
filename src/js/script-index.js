@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //=include ../sections/no-access-popup/no-access-popup.js
 
+//=include ../sections/error-popup/error-popup.js
+
+//=include ../sections/thanks-popup/thanks-popup.js
+
 //=include ../sections/footer/footer.js
 
 });
