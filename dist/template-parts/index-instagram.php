@@ -27,14 +27,19 @@
     // }
 
     if ( $instagram_posts ) {
-      foreach ( $instagram_posts as $instagram_post ) : ?>
-        <a href="<?php the_field( 'link', $instagram_post->ID ) ?>" target="_blank" class="index-instagram__post instagram-post">
-          <img src="#" alt="instagram post image" data-src="data:image/jpg;base64,<?php the_field( 'img_link', $instagram_post->ID ) ?>" class="instagram-post__img lazy">
-          <span class="instagram-post__overlay">
-            <span class="instagram-post__likes"><?php the_field( 'likes', $instagram_post->ID ) ?></span>
-            <span class="instagram-post__comments"><?php the_field( 'comments', $instagram_post->ID ) ?></span>
-          </span>
-        </a> <?php
+      foreach ( $instagram_posts as $instagram_post ) :
+        $instagram_post_link = get_field( 'link', $instagram_post->ID );
+        if ( $instagram_post_link ) {
+          $start_tag = 'a href="' . $instagram_post_link . '" target="_blank"';
+          $end_tag = 'a';
+        } else {
+          $start_tag = 'div';
+          $end_tag = 'div';
+        }
+        ?>
+        <<?php echo $start_tag ?> class="index-instagram__post instagram-post">
+        <img src="#" alt="instagram post image" data-src="<?php the_field( 'img_link', $instagram_post->ID ) ?>" class="instagram-post__img lazy">
+        </<?php echo $end_tag ?>> <?php
       endforeach;
     } ?>
   </div>
