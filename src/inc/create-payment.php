@@ -67,8 +67,8 @@ function create_payment() {
   'Мы свяжемся с вами в ближайшее время, и вы получите логин и пароль для входа в личный кабинет.' . PHP_EOL .
   'С наилучшими пожеланиями, команда profitnesslife.ru';
 
-  $admin_email = '89224714290a@gmail.com';
-  $client_email = '89224714290a@gmail.com';
+  $admin_email = 'profitneslife@gmail.com, alexander@media-bay.ru';
+  $client_email = $user_email . ', alexander@media-bay.ru';
 
   // отправка на почту
   wp_mail( $admin_email, $subject, $admin_message );

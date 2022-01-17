@@ -143,7 +143,7 @@
       if ( is_user_logged_in() ) : ?>
         <a href="<?php echo $site_url ?>/account" class="hdr__login btn btn-ol">Личный кабинет</a> <?php
       else : ?>
-        <button href="<?php echo $site_url ?>/account" class="hdr__login hdr-login-btn btn btn-ol">Личный кабинет</button> <?php
+        <button type="button" class="hdr__login hdr-login-btn btn btn-ol">Личный кабинет</button> <?php
       endif;
       require 'template-parts/mobile-menu.php' ?>
     </header>
