@@ -5,6 +5,9 @@
 .hdr {
   padding-top: 20px;
   padding-bottom: 20px;
+  &.fixed {
+    display: none;
+  }
   &__logo {
   }
 

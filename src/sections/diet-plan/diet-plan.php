@@ -131,7 +131,7 @@
                   <li class="diet-plan__item-igredietns-li"> <?php
                     $ingredient_text = $ingredient['title']->name;
                     if ( $ingredient['number'] ) {
-                      $ingredient_text .= ' (' . $ingredient['number'] . ' ' . $ingredient['units']['label'] . ')';
+                      $ingredient_text .= ' (' . $ingredient['number'] . ' ' . $ingredient['units'] . ')';
                     }
                     echo $ingredient_text ?>
                   </li> <?php

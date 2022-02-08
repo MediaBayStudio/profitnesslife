@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //=include ../sections/products-cart-popup/products-cart-popup.js
 
+//=include ../sections/error-popup/error-popup.js
+
 //=include ../sections/footer/footer.js
 
 });

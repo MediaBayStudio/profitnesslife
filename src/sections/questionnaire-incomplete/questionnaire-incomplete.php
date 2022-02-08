@@ -275,7 +275,7 @@ if ( !$questionnaire_complete ) : ?>
                     'height' => 60
                   ],
                   'checkbox' => [
-                    'title' => $categories[ $i ]->name . ( $categories[ $i ]->name === 'Крупа' ? ' (только на завтрак)' : '' ),
+                    'title' => $categories[ $i ]->name === 'Крупа' ? 'Каши на завтрак' : $categories[ $i ]->name,
                     'name' => 'categories[]',
                     'id' => $categories[ $i ]->slug,
                     'value' => $categories[ $i ]->slug,

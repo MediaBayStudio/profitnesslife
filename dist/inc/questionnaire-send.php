@@ -44,7 +44,7 @@ function questionnaire_send( $args ) {
       update_field( 'photo_progress', [], $user_id );
     }
 
-    if ( $user_id !== 'user_1' ) {
+    if ( $user_id !== 'user_1' && $user_id !== 'user_13' ) {
       if ( $args['cron'] ) {
         $user->set_role( 'completed' );
       } else {
@@ -73,6 +73,7 @@ function questionnaire_send( $args ) {
     update_field( 'body_parts', [], $user_id );
     update_field( 'height', '', $user_id );
     update_field( 'calories', '', $user_id );
+    update_field( 'place', '', $user_id );
     update_field( 'carbohydrates', '', $user_id );
     update_field( 'proteins', '', $user_id );
     update_field( 'fats', '', $user_id );
@@ -120,9 +121,72 @@ function questionnaire_send( $args ) {
   // На чем хотите сделать акцент в тренировках
   $body_parts = $args['body-parts'];
   $products = $args['categories'];
+  $milk_products = $args['milk-products'];
+  $fish_products = $args['fish-products'];
+  $meat_products = $args['meat-products'];
   $bmr_text = '';
 
-  $place = 'in-gym';
+  $categories = [];
+
+  foreach ( $products as $product_slug ) {
+    if ( $product_slug !== 'molochnye-produkty' && $product_slug !== 'ryba' && $product_slug !== 'myaso' ) {
+      $categories[] = $product_slug;
+    }
+  }
+
+  if ( count( $milk_products ) >= 1 ) {
+    foreach ( $milk_products as $milk_product ) {
+      if ( $milk_product === 'all' ) {
+        $categories[] = 'molochnye-produkty';
+      } else {
+        $categories[] = $milk_product;
+      }
+    }
+  }
+  if ( count( $fish_products ) >= 1 ) {
+    foreach ( $fish_products as $fish_product ) {
+      if ( $fish_product === 'all' ) {
+        $categories[] = 'ryba';
+      } else {
+        $categories[] = $fish_product;
+      }
+    }
+  }
+  if ( count( $meat_products ) >= 1 ) {
+    foreach ( $meat_products as $meat_product ) {
+      if ( $meat_product === 'all' ) {
+        $categories[] = 'myaso';
+      } else {
+        $categories[] = $meat_product;
+      }
+    }
+  }
+  
+  if ( $categories ) {
+    $terms = get_terms( [
+      'taxonomy' => 'dish_category',
+      'hide_empty' => false,
+      'slug' => $categories
+    ] );
+
+    $response['terms'] = $terms;
+    $response['terms_slugs'] = $categories;
+  }
+
+  $terms_counts = [];
+  $categories_ids = [];
+
+  foreach ( $terms as $term ) {
+    $categories_ids[] = $term->term_id;
+    switch ( $term->term_id ) {
+      case 223: // milk
+      case 391: // meat
+      case 230: // fish
+        $childs = get_term_children( $term->term_id, 'dish_category' );
+        $terms_counts[ $term->term_id ] = count( $childs );
+        break;
+    }
+  }
 
   // Расчет количества необходимых калорий в сутки
   if ( $sex === 'male' ) {
@@ -253,7 +317,7 @@ function questionnaire_send( $args ) {
     $exclude_terms[] = $slug;
     $term = get_term_by( 'slug', $slug, 'dish_category' );
     $terms[] = $term->term_id;
-    $exclude_terms_rus[] = $term->name . ( $term->name === 'Крупа' ? ' (только на завтрак)' : '' );
+    $exclude_terms_rus[] = $term->name === 'Крупа' ? 'Каши на завтрак' : $term->name;
   }
 
   // print_r( $terms );
@@ -335,8 +399,7 @@ function questionnaire_send( $args ) {
       'molochnye-produkty',
       'myaso',
       'ryba',
-      'yajcza',
-      'subprodukty'
+      'yajcza'
     ];
 
     $count = 0;
@@ -655,7 +718,7 @@ function questionnaire_send( $args ) {
         'terms'     => 'dinner',
         'orderby' => 'rand'
       ],
-      $y
+      $tax_query_ingredients
     ],
     'meta_query' => [
       [
@@ -1213,9 +1276,9 @@ function questionnaire_send( $args ) {
   update_field( 'workout_week_2', $workout_week_2, $user_id );
   update_field( 'workout_week_3', $workout_week_3, $user_id );
   
-  update_field( 'replacement_breakfasts', $replacement_breakfasts, $user_id );
-  update_field( 'replacement_lunches', $replacement_lunches, $user_id );
-  update_field( 'replacement_dinners', $replacement_dinners, $user_id );
+  // update_field( 'replacement_breakfasts', $replacement_breakfasts, $user_id );
+  // update_field( 'replacement_lunches', $replacement_lunches, $user_id );
+  // update_field( 'replacement_dinners', $replacement_dinners, $user_id );
 
   update_field( 'target', $target, $user_id );
   update_field( 'age', $age, $user_id );
@@ -1236,7 +1299,7 @@ function questionnaire_send( $args ) {
   update_field( 'proteins', $proteins, $user_id );
   update_field( 'fats', $fats, $user_id );
   update_field( 'children', $children, $user_id );
-  update_field( 'categories', $categories, $user_id );
+  update_field( 'categories', $categories_ids, $user_id );
 
 
   /* РАСЧЕТЫ ВРЕМЕНИ */
@@ -1333,6 +1396,20 @@ function questionnaire_send( $args ) {
   }
 
   $response['diet_plan'] = $diet_plan;
+  $response['sended_products'] = $categories;
+  $response['categories_ids'] = $categories_ids;
+
+  if ( $milk_products ) {
+    $response['milk_products'] = $milk_products;
+  }
+  if ( $fish_products ) {
+    $response['fish_products'] = $fish_products;
+  }
+  if ( $meat_products ) {
+    $response['meat_products'] = $meat_products;
+  }
+
+  // wp_set_object_terms( $user_id, $categories_ids, 'dish_category' );
 
   update_field( 'diet_plan', $diet_plan, $user_id );
   // update_field( 'show_diet_plan', true, $user_id );

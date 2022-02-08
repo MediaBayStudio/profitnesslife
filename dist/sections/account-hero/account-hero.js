@@ -82,7 +82,7 @@
     let data = new FormData(weightForm),
       date = new Date(),
       weight = weightForm['current-weight'].value,
-      today = ('0' + date.getDate()).slice(-2) + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+      today = ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear();
 
     data.append('action', 'weight_send');
     data.append('date', today);

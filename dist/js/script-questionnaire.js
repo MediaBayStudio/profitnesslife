@@ -1,1 +1,686 @@
-document.addEventListener("DOMContentLoaded",function(){var h,e,i,n,r,a,o,l,t,s,c,d,f,m,u,v,g,p,w,x,b,L;b=id("questionnaire-incomplete-section"),L=document.forms["questionnaire-form"],b&&L&&(h=".questionnaire-form__step",e=q(".questionnaire-incomplete-section__btn",b),q(".questionnaire-form__complete",L),i=q(".questionnaire-form__count-current",L),n=q(".questionnaire-form__back",L),r=q(".questionnaire-form__next",L),a=L.submit,o=q(".questionnaire-form__progress-line",L),l=qa(h+":not(.extra-step)",L),t=qa(h+".extra-step",L),s=l.length,t.length,c=!1,f=d=0,m={defaults:{min:"Значение не может быть меньше %min%",max:"Значение не может быть больше %max%",required:"Заполните поле"},"current-weight":{"weight-loss":"Текущий вес не может быть меньше желаемого веса","target-weight":"Текущий вес не может быть равен желаемому","weight-gain":"Текущий вес не может быть больше желаемого веса"},"target-weight":{"weight-loss":"Желаемый вес не может быть больше текущего веса","current-weight":"Желаемый вес не может быть равен текущему","weight-gain":"Жалемый вес не может быть меньше текущего веса"},height:{},age:{},"categories[]":{max:"Выберите максимум 4 пункта"},"training-restrictions[]":{max:"Выберите максимум 3 пункта"},"milk-products[]":{required:"Выберите хоть что-то"},"meat-products[]":{required:"Выберите хоть что-то"},"fish-products[]":{required:"Выберите хоть что-то"},"cereals-products[]":{required:"Выберите хоть что-то"},"inventory[]":{required:"Выберите хоть что-то"}},u='<span class="questionnaire-form__error">%text%</span>',v=function(e,t,i){i=i||"add";var n=q(".questionnaire-form__error",e);n?"add"===i?n.textContent=t:e.removeChild(n):"add"===i&&e.insertAdjacentHTML("beforeend",u.replace("%text%",t))},g=function(){var e,t=q(h+":not(.hide)",L).getElementsByTagName("input"),i=0;for(e in m){var n=t[e],r=(m[e],void 0);if(n){if("checkbox"===n.type){if("categories[]"===e){var a=n.parentElement.parentElement;return!(4<qa("input:checked",a).length)||(r=m[e].max||m.defaults.required,v(a,r),!1)}if("training-restrictions[]"===e){var o=n.parentElement.parentElement;return!(3<qa("input:checked",o).length)||(r=m[e].max||m.defaults.required,v(o,r),!1)}for(var s=0,u=t.length;s<u;s++)if(t[s].checked)return!0;return r=m[e].required||m.defaults.required,v(n.parentElement.parentElement,r),!1}var l=n.parentElement,c=n.value,d=n.name,a=n.getAttribute("min"),o=n.getAttribute("max"),n=n.hasAttribute("required");if(!l.classList.contains("disabled"))if(!n||c)if(a&&+c<+a)r=m[e].min||m.defaults.min.replace("%min%",a),v(l,r);else if(o&&+o<+c)r=m[e].max||m.defaults.max.replace("%max%",o),v(l,r);else{if("weight-loss"===L.target.value){if("current-weight"===d){if(+c<+L["target-weight"].value){r=m[e]["weight-loss"],v(l,r);continue}if(c===L["target-weight"].value){r=m[e]["target-weight"],v(l,r);continue}}else if("target-weight"===d){if(+c>+L["current-weight"].value){r=m[e]["weight-loss"],v(l,r);continue}if(c===L["current-weight"].value){r=m[e]["current-weight"],v(l,r);continue}}}else if("weight-gain"===L.target.value)if("current-weight"===d){if(+c>+L["target-weight"].value){r=m[e]["weight-gain"],v(l,r);continue}if(c===L["target-weight"].value){r=m[e]["target-weight"],v(l,r);continue}}else if("target-weight"===d){if(+c<+L["current-weight"].value){r=m[e]["weight-gain"],v(l,r);continue}if(c===L["current-weight"].value){r=m[e]["current-weight"],v(l,r);continue}}v(l,"","remove"),i++}else r=m[e].required||m.defaults.required,v(l,r)}}if(0===i)for(var g=t.length-1;0<=g;g--)t[g].required||i++;return 2===f&&"weight-maintaining"===L.target.value&&i++,4<=i},p=function(){var e=q(h+":not(.hide)",L),t=qa("input",e);!function(){for(var e=qa(".questionnaire-form__error",L),t=e.length-1;0<=t;t--)e[t].parentElement.removeChild(e[t])}();for(var i=0,n=t.length;i<n;i++){var r=t[i].type;"radio"===r||"checkbox"===r?t[i].checked=!1:"text"!==r&&"number"!==r||(t[i].value="")}},w=function(e){q(h+":not(.hide)",L).classList.add("hide"),e.classList.remove("hide"),r.classList.toggle("hide",!e.classList.contains("with-next-button")),a.classList.toggle("hide",!e.classList.contains("with-final-button")),d<=0&&(d=1),i.textContent=f+1+"."+d,scrollToTarget("",".questionnaire-incomplete-section__title")},x=function(e){c=!1,"weight-maintaining"===L.target.value?(L["target-weight"].removeAttribute("required"),L["target-weight"].setAttribute("tabindex","-1")):(L["target-weight"].setAttribute("required",""),L["target-weight"].removeAttribute("tabindex"));var t=q(h+":not(.hide)",L);i.textContent=e+1,r.classList.toggle("hide",!l[e].classList.contains("with-next-button")),a.classList.toggle("hide",!l[e].classList.contains("with-final-button")),L["target-weight"].parentElement.classList.toggle("disabled",L["weight-maintaining"].checked),n.classList.toggle("disabled",0===e),t.classList.add("hide"),l[e].classList.remove("hide"),o.style.width=f/s*100+"%",p(),scrollToTarget("",".questionnaire-incomplete-section__title")},e.addEventListener("click",function(){b.classList.add("show-form"),L.classList.remove("hide")}),L.addEventListener("submit",function(e){e.preventDefault(),L.classList.add("loading"),a.blur();var t=new FormData(L),e=siteUrl+"/wp-admin/admin-ajax.php";t.append("action","questionnaire_send"),fetch(e,{method:"POST",body:t}).then(function(e){return e.ok?e.text():""}).then(function(e){e=JSON.parse(e),location.href=siteUrl+"/account"}).catch(function(e){errorPopup.openPopup()})}),n.addEventListener("click",function(){if(p(),c){var e,t,i=q(".extra-step:not(.hide)",L),n=qa(":checked",l[f]);if(i&&(e=i.getAttribute("data-question"),t=i.getAttribute("data-answer")),1<=d)for(var r=d-1;0<=r;r--)if(e!==n[r].name||t!==n[r].value){var a=q('.extra-step[data-question="'+n[r].name+'"][data-answer="'+n[r].value+'"]',L);if(a)return c=!0,w(a),void d--}d=0,x(f)}else{i=l[--f];if(i)for(var o=qa(":checked",i),s=o.length-1;0<=s;s--){var u=q('.extra-step[data-question="'+o[s].name+'"][data-answer="'+o[s].value+'"]',L);if(u)return c=!0,w(u),void d--}x(f)}}),r.addEventListener("click",function(){if(g()){for(var e,t=qa('input[type="checkbox"]:checked',l[f]),i=null,n=!1,r=d=5===f&&!c?0:d,a=t.length;r<a;r++)if(i=q('.extra-step[data-question="'+t[r].name+'"][data-answer="'+t[r].value+'"]',L),e=q(h+":not(.hide)",L),i&&i!==e){n=!0;break}if(c){if(n)return c=!0,d++,void w(i)}else if(n)return c=!0,d=0,void w(i);x(++f)}}),L.addEventListener("change",function(e){var t=e.target,i=t.type,n=t.value,e=t.name;if("radio"===i){e=q('.extra-step[data-question="'+e+'"][data-answer="'+n+'"]',L);if(e)return c=!0,d++,void w(e);x(++f)}else if("checkbox"===i){var i=t.parentElement.parentElement,r=qa('input:not([value="all"])',i);if("all"===n)for(var a=r.length-1;0<=a;a--)r[a].checked=t.checked;else{n=q('input[value="all"]',i),i=qa('input:checked:not([value="all"])',i);n&&(n.checked=i.length===r.length)}}}),L.addEventListener("keydown",function(e){13===e.keyCode&&(a.classList.contains("hide")&&e.preventDefault(),g()&&x(++f))})),errorPopup=new Popup(".error-popup",{closeButtons:".error-popup__close"})});
+document.addEventListener('DOMContentLoaded', function() {
+
+//=include ../sections/header/header.js
+
+//=include ../sections/mobile-menu/mobile-menu.js
+
+// ;
+// (function() {
+//   let resetBtn = id('reset');
+
+//   resetBtn && resetBtn.addEventListener('click', resetQuestionnaire);
+// })();
+
+;
+(function() {
+  let section = id('questionnaire-incomplete-section'),
+    questionnaireForm = document.forms['questionnaire-form'];
+
+  if (section && questionnaireForm) {
+    let stepSelector = '.questionnaire-form__step',
+      sectionBtn = q('.questionnaire-incomplete-section__btn', section),
+      completeBlock = q('.questionnaire-form__complete', questionnaireForm),
+      currentStepElement = q('.questionnaire-form__count-current', questionnaireForm),
+      backBtn = q('.questionnaire-form__back', questionnaireForm),
+      nextBtn = q('.questionnaire-form__next', questionnaireForm),
+      submitBtn = questionnaireForm['submit'],
+      progressLine = q('.questionnaire-form__progress-line', questionnaireForm),
+      steps = qa(stepSelector + ':not(.extra-step)', questionnaireForm),
+      extraSteps = qa(stepSelector + '.extra-step', questionnaireForm),
+      stepsLength = steps.length,
+      extraStepsLength = extraSteps.length,
+      isExtraStep = false,
+      next = true,
+      extraStepCount = 0,
+      lastExtraStepCount = 0,
+      currentStepNumber = 0,
+      // currentStepNumber = 5,
+      validateRules = {
+        'defaults': {
+          'min': 'Значение не может быть меньше %min%',
+          'max': 'Значение не может быть больше %max%',
+          'required': 'Заполните поле'
+        },
+        'current-weight': {
+          'weight-loss': 'Текущий вес не может быть меньше желаемого веса',
+          'target-weight': 'Текущий вес не может быть равен желаемому',
+          'weight-gain': 'Текущий вес не может быть больше желаемого веса'
+        },
+        'target-weight': {
+          'weight-loss': 'Желаемый вес не может быть больше текущего веса',
+          'current-weight': 'Желаемый вес не может быть равен текущему',
+          'weight-gain': 'Жалемый вес не может быть меньше текущего веса'
+        },
+        'height': {},
+        'age': {},
+        'categories[]': {
+          'max': 'Выберите максимум 5 пунктов'
+        },
+        'training-restrictions[]': {
+          'max': 'Выберите максимум 3 пункта'
+        },
+        'milk-products[]': {
+          'required': 'Выберите хоть что-то'
+        },
+        'meat-products[]': {
+          'required': 'Выберите хоть что-то'
+        },
+        'fish-products[]': {
+          'required': 'Выберите хоть что-то'
+        },
+        'cereals-products[]': {
+          'required': 'Выберите хоть что-то'
+        },
+        'inventory[]': {
+          'required': 'Выберите хоть что-то'
+        }
+      },
+      validateLength = 4,
+      errorHTML = '<span class="questionnaire-form__error">%text%</span>',
+      submitForm = function(e) {
+        e.preventDefault();
+
+        questionnaireForm.classList.add('loading');
+        submitBtn.blur();
+
+        let data = new FormData(questionnaireForm),
+          url = siteUrl + '/wp-admin/admin-ajax.php';
+
+        data.append('action', 'questionnaire_send');
+
+        fetch(url, {
+            method: 'POST',
+            body: data
+          })
+          .then(function(response) {
+            if (response.ok) {
+              return response.text();
+            } else {
+              console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
+              return '';
+            }
+          })
+          .then(function(response) {
+            if (response == 0) {
+              errorPopup.openPopup();
+            } else {
+              response = JSON.parse(response);
+              console.log(response);
+              location.href = siteUrl + '/account';
+            }
+
+            // let breakfasts = '<h3>Завтрак:</h3>',
+            //   lunches = '<h3>Обед:</h3>',
+            //   dinners = '<h3>Ужин:</h3>',
+            //   snack_1 = '<h3>Перекус:</h3>',
+            //   snack_2 = '<h3>Перекус:</h3>',
+            //   j = 0;
+
+            // for (let key in response.breakfasts) {
+            //   j++;
+            //   breakfasts += '<span style="display:block">День ' + j + ': ' + response.breakfasts[key].title + ' (~' + response.breakfasts[key].calories + ' ккал)</span>';
+            // }
+
+            // j = 0;
+            // for (let key in response.snack_1) {
+            //   j++;
+            //   snack_1 += '<span style="display:block">День ' + j + ': ' + response.snack_1[key].title + ' (~' + response.snack_1[key].calories + ' ккал)</span>';
+            // }
+
+            // j = 0;
+            // for (let key in response.lunches) {
+            //   j++;
+            //   lunches += '<span style="display:block">День ' + j + ': ' + response.lunches[key].title + ' (~' + response.lunches[key].calories + ' ккал)</span>';
+            // }
+
+            // j = 0;
+            // for (let key in response.snack_2) {
+            //   j++;
+            //   snack_2 += '<span style="display:block">День ' + j + ': ' + response.snack_2[key].title + ' (~' + response.snack_2[key].calories + ' ккал)</span>';
+            // }
+
+            // j = 0;
+            // for (let key in response.dinners) {
+            //   j++;
+            //   dinners += '<span style="display:block">День ' + j + ': ' + response.dinners[key].title + ' (~' + response.dinners[key].calories + ' ккал)</span>';
+            // }
+
+            // completeBlock.insertAdjacentHTML('beforeend', '<button type="button" id="reset" class="btn btn-green" style="width:200px;margin:0 0 20px;">Сбросить анкету</button>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Суточная норма калорий: ' + response.bmr + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Исключили продукты: ' + response.categories + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Исключили только на завтраки: ' + response.categories_breakfasts + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на завтрак: ' + response.breakfast_ccal + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на обед: ' + response.lunch_ccal + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>Калорий на ужин: ' + response.dinner_ccal + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', '<p>terms: ' + response.terms + '</p>');
+            // completeBlock.insertAdjacentHTML('beforeend', breakfasts + snack_1 + lunches + snack_2 + dinners);
+
+            // questionnaireForm.classList.remove('loading');
+            // questionnaireForm.classList.add('complete');
+            // console.log(response);
+            // scrollToTarget('', '.questionnaire-incomplete-section__title');
+
+            // id('reset').addEventListener('click', function() {
+            //   let data = 'action=questionnaire_send&reset=reset',
+            //     url = siteUrl + '/wp-admin/admin-ajax.php';
+
+            //   fetch(url, {
+            //       method: 'POST',
+            //       body: data,
+            //       headers: {
+            //         'Content-Type': 'application/x-www-form-urlencoded'
+            //       }
+            //     })
+            //     .then(function(response) {
+            //       if (response.ok) {
+            //         return response.text();
+            //       } else {
+            //         console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
+            //         return '';
+            //       }
+            //     })
+            //     .then(function(response) {
+            //       // console.log(response);
+            //       location.reload();
+            //     })
+            //     .catch(function(err) {
+            //       console.log(err);
+            //     });
+            // });
+          })
+          .catch(function(err) {
+            // if (errorPopup) {
+            //   errorPopup.children[0].insertAdjacentHTML('beforeend', '<button type="button" id="error-popup-btn" class="btn btn-green" style="padding:10px 20px">Попробовать еще</button>');
+            //   id('error-popup-btn').addEventListener('click', resetQuestionnaire);
+            //   errorPopup.openPopup();
+            // }
+            errorPopup.openPopup();
+            console.log(err);
+          });
+      },
+      placeError = function(inputParent, errorText, action) {
+        action = action || 'add';
+
+        let error = q('.questionnaire-form__error', inputParent);
+
+        if (error) {
+          if (action === 'add') {
+            error.textContent = errorText;
+          } else {
+            inputParent.removeChild(error);
+          }
+        } else {
+          if (action === 'add') {
+            inputParent.insertAdjacentHTML('beforeend', errorHTML.replace('%text%', errorText));
+          }
+        }
+
+      },
+      removeFieldErrors = function() {
+        let errors = qa('.questionnaire-form__error', questionnaireForm);
+
+        for (let i = errors.length - 1; i >= 0; i--) {
+          errors[i].parentElement.removeChild(errors[i]);
+        }
+      },
+      validateFields = function() {
+        let activeStep = q(stepSelector + ':not(.hide)', questionnaireForm),
+          inputs = activeStep.getElementsByTagName('input'),
+          validateCount = 0;
+
+        for (let inputName in validateRules) {
+          let input = inputs[inputName],
+            rule = validateRules[inputName],
+            errorText;
+
+          if (input) {
+
+            // Если хотя бы один чекбокс выбран, то идем дальше
+            if (input.type === 'checkbox') {
+              if (inputName === 'categories[]') {
+                // Максимум 4 чекбокса
+                let fieldsBlock = input.parentElement.parentElement,
+                  checkedInputs = qa('input:checked', fieldsBlock);
+
+                if (checkedInputs.length > 5) {
+                  errorText = validateRules[inputName].max || validateRules.defaults.required;
+                  placeError(fieldsBlock, errorText);
+                  console.log(errorText, input.name);
+                  return false;
+                } else {
+                  return true;
+                }
+
+              } else if (inputName === 'training-restrictions[]') {
+                // Максимум 4 чекбокса
+                let fieldsBlock = input.parentElement.parentElement,
+                  checkedInputs = qa('input:checked', fieldsBlock);
+
+                if (checkedInputs.length > 3) {
+                  errorText = validateRules[inputName].max || validateRules.defaults.required;
+                  placeError(fieldsBlock, errorText);
+                  console.log(errorText, input.name);
+                  return false;
+                } else {
+                  return true;
+                }
+
+              } else {
+                for (let i = 0, len = inputs.length; i < len; i++) {
+                  if (inputs[i].checked) {
+                    return true;
+                  }
+                }
+                // Если не выбран ни один чекбокс, то показываем ошибку
+                errorText = validateRules[inputName].required || validateRules.defaults.required;
+                placeError(input.parentElement.parentElement, errorText);
+                console.log(errorText, input.name);
+                return false;
+              } // endif inputName === 'categories[]'
+            }
+
+            let parent = input.parentElement,
+              value = input.value,
+              name = input.name,
+              min = input.getAttribute('min'),
+              max = input.getAttribute('max'),
+              required = input.hasAttribute('required');
+
+            if (parent.classList.contains('disabled')) {
+              continue;
+            }
+
+            if (required) {
+              if (!value) {
+                errorText = validateRules[inputName].required || validateRules.defaults.required;
+                placeError(parent, errorText);
+                console.log(errorText, input.name);
+                continue;
+              }
+            }
+            if (min) {
+              if (+value < +min) {
+                errorText = validateRules[inputName].min || validateRules.defaults.min.replace('%min%', min);
+                placeError(parent, errorText);
+                console.log(errorText, input.name);
+                continue;
+              }
+            }
+            if (max) {
+              if (+value > +max) {
+                errorText = validateRules[inputName].max || validateRules.defaults.max.replace('%max%', max);
+                placeError(parent, errorText);
+                console.log(errorText, input.name);
+                continue;
+              }
+            }
+
+            if (questionnaireForm['target'].value === 'weight-loss') {
+              if (name === 'current-weight') {
+                if (+value < +questionnaireForm['target-weight'].value) {
+                  errorText = validateRules[inputName]['weight-loss'];
+                  placeError(parent, errorText);
+                  continue;
+                }
+                if (value === questionnaireForm['target-weight'].value) {
+                  errorText = validateRules[inputName]['target-weight'];
+                  placeError(parent, errorText);
+                  continue;
+                }
+              } else if (name === 'target-weight') {
+                if (+value > +questionnaireForm['current-weight'].value) {
+                  errorText = validateRules[inputName]['weight-loss'];
+                  placeError(parent, errorText);
+                  continue;
+                }
+                if (value === questionnaireForm['current-weight'].value) {
+                  errorText = validateRules[inputName]['current-weight'];
+                  placeError(parent, errorText);
+                  continue;
+                }
+              }
+            } else if (questionnaireForm['target'].value === 'weight-gain') {
+              if (name === 'current-weight') {
+                if (+value > +questionnaireForm['target-weight'].value) {
+                  errorText = validateRules[inputName]['weight-gain'];
+                  placeError(parent, errorText);
+                  continue;
+                }
+                if (value === questionnaireForm['target-weight'].value) {
+                  errorText = validateRules[inputName]['target-weight'];
+                  placeError(parent, errorText);
+                  continue;
+                }
+              } else if (name === 'target-weight') {
+                if (+value < +questionnaireForm['current-weight'].value) {
+                  errorText = validateRules[inputName]['weight-gain'];
+                  placeError(parent, errorText);
+                  continue;
+                }
+                if (value === questionnaireForm['current-weight'].value) {
+                  errorText = validateRules[inputName]['current-weight'];
+                  placeError(parent, errorText);
+                  continue;
+                }
+              }
+            }
+
+            placeError(parent, '', 'remove');
+            validateCount++;
+          } else {
+            // console.log('count+');
+            // validateCount++;
+          } // endif input
+        } // end for in
+
+        // Проверяем есть ли вообше у инпутов required
+        if (validateCount === 0) {
+          for (let i = inputs.length - 1; i >= 0; i--) {
+            if (!inputs[i].required) {
+              validateCount++;
+            }
+          }
+        }
+
+        if (currentStepNumber === 2 && questionnaireForm.target.value === 'weight-maintaining') {
+          validateCount++;
+        }
+
+
+        if (validateCount >= validateLength) {
+          return true;
+        } else {
+          return false;
+        }
+
+        // return validateCount === validateLength;
+      },
+      resetFields = function() {
+        let activeStep = q(stepSelector + ':not(.hide)', questionnaireForm),
+          inputs = qa('input', activeStep);
+
+        removeFieldErrors();
+
+        for (let i = 0, len = inputs.length; i < len; i++) {
+          let type = inputs[i].type;
+
+          if (type === 'radio' || type === 'checkbox') {
+            inputs[i].checked = false;
+          } else if (type === 'text' || type === 'number') {
+            inputs[i].value = '';
+          }
+        } // endfor
+
+      },
+      // Показать дополнительный шаг
+      showExtraStep = function(extraStep) {
+        // console.log('extraStep');
+        // Ищем активный шаг
+        let activeStep = q(stepSelector + ':not(.hide)', questionnaireForm);
+
+        // Скрываем активный шаг
+        activeStep.classList.add('hide');
+
+        // Показываем дополнительный шаг
+        extraStep.classList.remove('hide');
+
+        // Скрываем кнопку "Далее", если шаг не содержит класс with-next-button
+        nextBtn.classList.toggle('hide', !extraStep.classList.contains('with-next-button'));
+
+        // Показываем/скрываем кнопку отправки
+        submitBtn.classList.toggle('hide', !extraStep.classList.contains('with-final-button'));
+
+        if (extraStepCount <= 0) {
+          extraStepCount = 1;
+        }
+
+        // if (lastExtraStepCount <= 0) {
+        //   lastExtraStepCount = 1;
+        // }
+
+        currentStepElement.textContent = currentStepNumber + 1 + '.' + extraStepCount;
+        // currentStepElement.textContent = currentStepNumber + 1 + '.' + lastExtraStepCount;
+
+        scrollToTarget('', '.questionnaire-incomplete-section__title');
+      },
+      // Показать шаг
+      showStep = function(number) {
+        // console.log('showStep');
+        isExtraStep = false;
+
+        if (questionnaireForm.target.value === 'weight-maintaining') {
+          questionnaireForm['target-weight'].removeAttribute('required');
+          questionnaireForm['target-weight'].setAttribute('tabindex', '-1');
+        } else {
+          questionnaireForm['target-weight'].setAttribute('required', '');
+          questionnaireForm['target-weight'].removeAttribute('tabindex');
+        }
+
+        let activeStep = q(stepSelector + ':not(.hide)', questionnaireForm);
+
+        currentStepElement.textContent = number + 1;
+
+        // Скрываем кнопку "Далее", если шаг не содержит класс with-next-button
+        nextBtn.classList.toggle('hide', !steps[number].classList.contains('with-next-button'));
+
+        // Показываем/скрываем кнопку отправки
+        submitBtn.classList.toggle('hide', !steps[number].classList.contains('with-final-button'));
+
+        // Если на первом шаге выбрали "поддержание веса", то блокируем поле для ввода "желаемый вес"
+        questionnaireForm['target-weight'].parentElement.classList.toggle('disabled', questionnaireForm['weight-maintaining'].checked);
+
+        // Если мы на самом первом шаге, то блокируем кнопку "назад"
+        backBtn.classList.toggle('disabled', number === 0);
+
+        activeStep.classList.add('hide');
+        steps[number].classList.remove('hide');
+
+        progressLine.style.width = currentStepNumber / stepsLength * 100 + '%';
+
+        resetFields();
+
+        scrollToTarget('', '.questionnaire-incomplete-section__title');
+
+        // extraStepCount = 0;
+      },
+      showForm = function() {
+        section.classList.add('show-form');
+        questionnaireForm.classList.remove('hide');
+      };
+
+    sectionBtn.addEventListener('click', showForm);
+
+    questionnaireForm.addEventListener('submit', submitForm);
+
+    backBtn.addEventListener('click', function() {
+      // Очищение и сброс checked всех полей на текущем шаге
+      resetFields();
+
+      if (isExtraStep) {
+        // С дополнительного шага
+        let activeExtraStep = q('.extra-step:not(.hide)', questionnaireForm),
+          checkedFields = qa(':checked', steps[currentStepNumber]),
+          excludeName,
+          excludeValue;
+
+        if (activeExtraStep) {
+          excludeName = activeExtraStep.getAttribute('data-question');
+          excludeValue = activeExtraStep.getAttribute('data-answer');
+          activeExtraStep.completed = false;
+        }
+
+        if (extraStepCount >= 1) {
+          for (let i = extraStepCount - 1; i >= 0; i--) {
+            if (excludeName === checkedFields[i].name && excludeValue === checkedFields[i].value) {
+              continue;
+            }
+            let extraStep = q('.extra-step[data-question="' + checkedFields[i].name + '"][data-answer="' + checkedFields[i].value + '"]', questionnaireForm);
+            if (extraStep) {
+              // на доп шаг
+              isExtraStep = true;
+              showExtraStep(extraStep);
+              extraStepCount--;
+              return;
+            } // endif extraStep
+          } // endfor
+        }
+
+        // На обычный шаг
+        extraStepCount = 0;
+        showStep(currentStepNumber);
+
+      } else {
+        let prevStep = steps[--currentStepNumber];
+        // let prevStep = steps[currentStepNumber - 1];
+
+        if (prevStep) {
+          // С обычного шага на доп. шаг
+          let checkedFields = qa(':checked', prevStep);
+
+          for (let i = checkedFields.length - 1; i >= 0; i--) {
+            let extraStep = q('.extra-step[data-question="' + checkedFields[i].name + '"][data-answer="' + checkedFields[i].value + '"]', questionnaireForm);
+            if (extraStep) {
+              isExtraStep = true;
+              showExtraStep(extraStep);
+              extraStepCount--;
+              // lastExtraStepCount--;
+              // extraStepCount = lastExtraStepCount;
+              return;
+            } // endif extraStep
+          } // endfor
+        } // endif prevStep
+
+        // С обычного шага на обычный шаг
+        showStep(currentStepNumber);
+
+      } // endif isExtraStep
+
+    });
+
+    nextBtn.addEventListener('click', function() {
+      console.log('currentStepNumber', currentStepNumber);
+      if (validateFields()) {
+        let checkedFields = qa('input[type="checkbox"]:checked', steps[currentStepNumber]),
+          extraStep = null,
+          activeStep = null,
+          existsExtraStep = false;
+
+        if (currentStepNumber === 5 && !isExtraStep) {
+          extraStepCount = 0;
+        }
+
+        // Нужно проверить есть ли дополнительный шаг
+        for (let i = extraStepCount, len = checkedFields.length; i < len; i++) {
+          extraStep = q('.extra-step[data-question="' + checkedFields[i].name + '"][data-answer="' + checkedFields[i].value + '"]', questionnaireForm);
+          activeStep = q(stepSelector + ':not(.hide)', questionnaireForm);
+
+          // console.log('input', checkedFields[i]);
+
+          if (extraStep && !extraStep.completed && extraStep !== activeStep) {
+            existsExtraStep = true;
+            break;
+          }
+        }
+
+        // console.log(checkedFields);
+        // console.log('activeStep', activeStep);
+        // console.log('extraStep', extraStep);
+
+        if (isExtraStep) {
+          // С дополнительного шага
+          console.log('С доп шага');
+          // console.log('existsExtraStep', existsExtraStep);
+
+          // На дополнительный шаг
+          if (existsExtraStep) {
+            isExtraStep = true;
+            extraStepCount++;
+            showExtraStep(extraStep);
+            extraStep.completed = true;
+            console.log('на доп шаг');
+            return;
+          }
+        } else {
+          // С обычного шага
+          console.log('С обычного шага');
+
+          // На дополнительнй шаг
+          if (existsExtraStep) {
+            console.log('на доп шаг');
+            isExtraStep = true;
+            // extraStepCount++;
+            extraStepCount = 0;
+            showExtraStep(extraStep);
+            return;
+          }
+        }
+
+        // На обычный шаг
+        showStep(++currentStepNumber);
+      }
+    });
+
+
+    questionnaireForm.addEventListener('change', function(e) {
+      let input = e.target,
+        type = input.type,
+        value = input.value,
+        name = input.name;
+
+      if (type === 'radio') {
+        let extraStep = q('.extra-step[data-question="' + name + '"][data-answer="' + value + '"]', questionnaireForm);
+
+        if (extraStep) {
+          isExtraStep = true;
+          extraStepCount++;
+          // lastExtraStepCount++;
+          showExtraStep(extraStep);
+          return;
+        }
+
+        showStep(++currentStepNumber);
+      } else if (type === 'checkbox') {
+        let checkboxesBlock = input.parentElement.parentElement,
+          fields = qa('input:not([value="all"])', checkboxesBlock);
+
+        if (value === 'all') {
+          for (let i = fields.length - 1; i >= 0; i--) {
+            fields[i].checked = input.checked;
+          }
+        } else {
+          let fieldAll = q('input[value="all"]', checkboxesBlock),
+            checkedInputs = qa('input:checked:not([value="all"])', checkboxesBlock);
+
+          if (fieldAll) {
+            fieldAll.checked = checkedInputs.length === fields.length;
+          }
+        }
+      }
+
+    });
+
+    questionnaireForm.addEventListener('keydown', function(e) {
+      if (e.keyCode === 13) {
+        if (submitBtn.classList.contains('hide')) {
+          e.preventDefault();
+        }
+        if (validateFields()) {
+          showStep(++currentStepNumber);
+        }
+      }
+    });
+  }
+
+})();
+
+;
+(function() {
+  errorPopup = new Popup('.error-popup', {
+    closeButtons: '.error-popup__close'
+  });
+  // errorPopup.openPopup();
+})();
+
+//=include ../sections/footer/footer.js
+
+});

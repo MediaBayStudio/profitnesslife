@@ -118,12 +118,13 @@
             productsCartHero = q('.products-cart-hero'),
             ingredientsList = q('.diet-plan__item-igredietns-list', parent),
             ingredientsHTML = '',
-            cartHTML = '';
+            cartHTML = '',
+            cart = Object.assign(response.cart.top, response.cart.bottom);
 
-          for (let key in response.cart) {
+          for (let key in cart) {
             let number = '';
-            if (response.cart[key].number) {
-              number += response.cart[key].number + ' ' + response.cart[key].label;
+            if (cart[key].number) {
+              number += cart[key].number + ' ' + cart[key].label;
             }
             cartHTML +=
               `<div class="products-cart-popup__tr">
@@ -163,6 +164,8 @@
         })
         .catch(function(err) {
           console.log(err);
+          errorPopup.openPopup();
+          parent.classList.remove('loading');
         });
     }
   });

@@ -84,12 +84,14 @@
     font-size: 20px;
   }
 
-  &__weight-goal {}
+  &__weight-goal {
+    // grid-template-rows: auto 20px auto;
+  }
 
   &__weight-goal-chart {}
 
   &__weight-goal-numbers {
-    bottom: 53px;
+    // bottom: 53px;
   }
 
   &__weight-goal-current {
@@ -121,6 +123,10 @@
     margin: 0 0 20px;
   }
 
+  &__descr {
+    margin: -10px 0 10px;
+  }
+
   &__input {
     &::placeholder {}
   }
@@ -134,7 +140,7 @@
 }
 
 #weight-goal-svg {
-  margin: 20px 0 0;
+  // margin: 20px 0 0;
 }
 
 #weight-goal-svg-bar,

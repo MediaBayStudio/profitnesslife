@@ -1,1 +1,1 @@
-@charset "UTF-8";.ftr{font-size:16px}.ftr__logo-img{width:175px;height:25px}.ftr__nav{margin:0 0 55px}.ftr__nav-list{columns:3}.ftr__doc{left:calc(50vw - 480px)}
+@charset "UTF-8";.ftr{font-size:16px}.ftr__logo-img{width:175px;height:25px}.ftr__nav{margin:0 0 55px}.ftr__nav-list{-webkit-columns:3;columns:3}.ftr__doc{left:calc(50vw - 480px)}

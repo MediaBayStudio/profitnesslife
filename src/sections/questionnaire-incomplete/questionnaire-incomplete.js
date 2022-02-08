@@ -41,7 +41,7 @@
         'height': {},
         'age': {},
         'categories[]': {
-          'max': 'Выберите максимум 4 пункта'
+          'max': 'Выберите максимум 5 пунктов'
         },
         'training-restrictions[]': {
           'max': 'Выберите максимум 3 пункта'
@@ -88,8 +88,13 @@
             }
           })
           .then(function(response) {
-            response = JSON.parse(response);
-            console.log(response);
+            if (response == 0) {
+              errorPopup.openPopup();
+            } else {
+              response = JSON.parse(response);
+              console.log(response);
+              location.href = siteUrl + '/account';
+            }
 
             // let breakfasts = '<h3>Завтрак:</h3>',
             //   lunches = '<h3>Обед:</h3>',
@@ -141,7 +146,6 @@
             // questionnaireForm.classList.add('complete');
             // console.log(response);
             // scrollToTarget('', '.questionnaire-incomplete-section__title');
-            location.href = siteUrl + '/account';
 
             // id('reset').addEventListener('click', function() {
             //   let data = 'action=questionnaire_send&reset=reset',
@@ -225,7 +229,7 @@
                 let fieldsBlock = input.parentElement.parentElement,
                   checkedInputs = qa('input:checked', fieldsBlock);
 
-                if (checkedInputs.length > 4) {
+                if (checkedInputs.length > 5) {
                   errorText = validateRules[inputName].max || validateRules.defaults.required;
                   placeError(fieldsBlock, errorText);
                   console.log(errorText, input.name);
@@ -489,6 +493,7 @@
         if (activeExtraStep) {
           excludeName = activeExtraStep.getAttribute('data-question');
           excludeValue = activeExtraStep.getAttribute('data-answer');
+          activeExtraStep.completed = false;
         }
 
         if (extraStepCount >= 1) {
@@ -507,6 +512,7 @@
           } // endfor
         }
 
+        // На обычный шаг
         extraStepCount = 0;
         showStep(currentStepNumber);
 
@@ -555,17 +561,17 @@
           extraStep = q('.extra-step[data-question="' + checkedFields[i].name + '"][data-answer="' + checkedFields[i].value + '"]', questionnaireForm);
           activeStep = q(stepSelector + ':not(.hide)', questionnaireForm);
 
-          console.log('input', checkedFields[i]);
+          // console.log('input', checkedFields[i]);
 
-          if (extraStep && extraStep !== activeStep) {
+          if (extraStep && !extraStep.completed && extraStep !== activeStep) {
             existsExtraStep = true;
             break;
           }
         }
 
-        console.log(checkedFields);
-        console.log('activeStep', activeStep);
-        console.log('extraStep', extraStep);
+        // console.log(checkedFields);
+        // console.log('activeStep', activeStep);
+        // console.log('extraStep', extraStep);
 
         if (isExtraStep) {
           // С дополнительного шага
@@ -577,6 +583,7 @@
             isExtraStep = true;
             extraStepCount++;
             showExtraStep(extraStep);
+            extraStep.completed = true;
             console.log('на доп шаг');
             return;
           }

@@ -4,6 +4,38 @@
 	Template name: index
 */
 
+// $posts = get_posts( [
+//   'post_type' => 'dish',
+//   'numberposts' => -1,
+//   'tax_query' => [
+//     [
+//       'taxonomy' => 'dish_category',
+//       'terms' => 228
+//     ]
+//   ]
+// ] );
+
+// foreach ( $posts as $post ) {
+//   $terms_ids = [];
+//   $terms = get_the_terms( $post->ID, 'dish_category' );
+//   foreach ( $terms as $term ) {
+//     $terms_ids[] = $term->term_id;
+//   }
+//   if ( !in_array( 391, $terms_ids ) ) {
+//     $terms_ids[] = 391;
+//   }
+//   echo "<p>Для записи \"{$post->ID}\"";
+//   // var_dump( $terms_ids );
+//   $t = wp_set_object_terms( $post->ID, $terms_ids, 'dish_category' );
+//   $updated = update_field( 'categories', $terms_ids, $post->ID );
+//   if ( $updated ) {
+//     echo "<p>Поле обновлено</p>";
+//   } else {
+//     echo "<p>Поле не обовлено</p>";
+//   }
+//   var_dump( $t );
+// }
+
 get_header(); ?>
 <!-- <script>
 	function importDB() {

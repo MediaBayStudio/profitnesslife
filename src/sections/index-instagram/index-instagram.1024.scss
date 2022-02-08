@@ -10,10 +10,10 @@
   &__posts {}
 
   &__post {
-    width: 290px;
-    height: 290px;
+    width: 207px;
+    height: 217px;
     &:not(:last-child) {
-      margin-right: 30px;
+      margin-right: 20px;
     }
   }
   &__links {

@@ -31,6 +31,7 @@ $workout = [
     'day_3' => $user_data['workout_week_3']['day_3']
   ];
 
+
 #} ?>
 
 <section class="workout-sect"> <?php
@@ -54,6 +55,7 @@ $workout = [
           if ( $i === 1 ) {
             $type = get_term( $fields['category'][0] )->name;
             $src = $template_directory_uri . '/video/' . $fields['video'];
+            $poster = $template_directory_uri . '/video/' . str_replace( '.mp4', '.jpg', $fields['video'] );
           }
           switch ( $user_data['training_experience'] ) {
             case 'Новичок':
@@ -88,7 +90,9 @@ $workout = [
           <span class="workout__title">Тренировка <?php echo $workout_count ?></span>
           <div class="workout__body">
             <span class="workout__play"></span>
-            <video src="<?php echo $src ?>" class="workout__preview"></video>
+            <video class="workout__preview" preload="none" poster="<?php echo $poster ?>">
+              <source src="<?php echo $src ?>" type="video/mp4">
+            </video>
             <span class="workout__duration" style="display:none;"><?php echo round( $duration / 60 ) ?> мин</span>
             <span class="workout__name"> <?php
             switch ( $type ) {

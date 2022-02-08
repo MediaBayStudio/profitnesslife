@@ -13,7 +13,7 @@
         let $slider = $(instagramSlider),
           slides = qa(slidesSelector, instagramSlider);
 
-        if (media('(min-width:1279.98px)') && slides.length < 5) {
+        if (media('(min-width:1023.98px)') && slides.length < 5) {
           if (SLIDER.hasSlickClass($slider)) {
             SLIDER.unslick($slider);
           }
@@ -52,7 +52,7 @@
                   slidesToScroll: 3
                 }
               }, {
-                breakpoint: 1279.98,
+                breakpoint: 1023.98,
                 settings: {
                   centerMode: false,
                   slidesToShow: 4,

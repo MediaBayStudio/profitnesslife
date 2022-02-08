@@ -41,15 +41,15 @@ add_filter( 'wp_nav_menu_items', function( $items, $args ) {
 
 // задать свои классы для пунктов меню (li)
   add_filter( 'nav_menu_css_class', function( $classes, $item, $args, $depth ) {
-    global $show_diet_plan;
+    global $show_diet_plan, $user_id;
     $container_class = $args->container_class;
     $li_class = '';
 
     switch ( $container_class ) {
       case 'side-menu__nav':
         $li_class = 'side-menu__nav-li';
-        if ( !is_super_admin() && ($item->ID === 424 || $item->ID === 423 || $item->ID === 421) && !$show_diet_plan ) {
-          // $li_class .= ' disabled';
+        if ( !is_super_admin() && !$user_id == 13 && ($item->ID === 424 || $item->ID === 423 || $item->ID === 421) && !$show_diet_plan ) {
+          $li_class .= ' disabled';
         }
         break;
       case 'hdr__nav':

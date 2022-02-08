@@ -67,35 +67,47 @@ if ( $user_data['show_msg'] ) {
         $last_weight = end( $user_data['weight_timeline'] );
         $current_weight = $last_weight['weight'];
 
-        if ( strtotime( $last_weight['date'] ) >= $current_time ) {
-          $weight_form_class = ' disabled';
-          $weight_form_placeholder = $current_weight;
-        } else {
+        if ( $current_time >= strtotime( $last_weight['date'] ) ) {
           $weight_form_class = '';
+          $weight_form_descr = '';
+          $weight_form_tabinex = '';
           $weight_form_placeholder = 'Введите значение веса';
+        } else {
+          $available_weight_time = strtotime( '+1 day', $last_weight['date'] );
+          $weight_form_class = ' disabled';
+          $weight_form_descr = 'Будет доступно с ' . date( 'd.m.Y', $available_weight_time );
+          $weight_form_tabinex = ' tabindex="-1"';
+          $weight_form_placeholder = $current_weight;
         }
       } else {
+        $weight_form_class = ' disabled';
+        $weight_form_descr = 'Будет доступно с ' . date( 'd.m.Y', $start_marathon_time );
+        $weight_form_tabinex = ' tabindex="-1"';
         $current_weight = $user_data['current_weight'];
+        $available_weight_time = $start_marathon_time;
       } ?>
       <span class="user-data__current-weight-date" id="current-weight-date"><?php echo $last_weight['date'] ?></span>
       <span class="user-data__current-weight-number" id="current-weight-number"><?php echo $current_weight ?> <sapn class="user-data__current-weight-units">кг</sapn></span>
     </div>
     <div class="user-data__weight-goal">
-      <span>До цели</span>
-      <svg id="weight-goal-svg" width="100" height="100" viewPort="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <circle id="weight-goal-svg-bg" r="40" cx="50" cy="50" fill="transparent" stroke-dasharray="251" stroke-dashoffset="0"></circle>
-        <circle id="weight-goal-svg-bar" r="40" cx="50" cy="50" fill="transparent" stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round"></circle>
-      </svg>
-      <div class="user-data__weight-goal-chart">
-        <div class="user-data__weight-goal-numbers">
-          <span class="user-data__weight-goal-current" id="weight-goal-current"><?php echo abs( $current_weight - $user_data['target_weight'] ) ?> /</span>
-          <span class="user-data__weight-goal-total" id="weight-goal-total"><?php echo abs( $user_data['start_weight'] - $user_data['target_weight'] ) ?> кг</span>
+      <span class="user-data__weight-goal-title">До цели</span>
+      <div class="user-data__weight-goal-chart-block">
+        <svg class="user-data__weight-goal-svg" id="weight-goal-svg" width="100" height="100" viewPort="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <circle id="weight-goal-svg-bg" r="40" cx="50" cy="50" fill="transparent" stroke-dasharray="251" stroke-dashoffset="0"></circle>
+          <circle id="weight-goal-svg-bar" r="40" cx="50" cy="50" fill="transparent" stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round"></circle>
+        </svg>
+        <div class="user-data__weight-goal-chart">
+          <div class="user-data__weight-goal-numbers">
+            <span class="user-data__weight-goal-current" id="weight-goal-current"><?php echo abs( $current_weight - $user_data['target_weight'] ) ?> /</span>
+            <span class="user-data__weight-goal-total" id="weight-goal-total"><?php echo abs( $user_data['start_weight'] - $user_data['target_weight'] ) ?> кг</span>
+          </div>
         </div>
       </div>
     </div>
     <form action="<?php echo $site_url ?>/wp-admin/admin-ajax.php" method="POST" class="user-data__weight-form weight-form<?php echo $weight_form_class ?>" data-start-weight="<?php echo $user_data['start_weight'] ?>" data-target-weight="<?php echo $user_data['target_weight'] ?>">
       <span class="weight-form__title">Вес сегодня</span>
-      <input type="number" name="current-weight" placeholder="<?php echo $weight_form_placeholder ?>" required class="weight-form__input">
+      <span class="weight-form__descr"><?php echo $weight_form_descr ?></span>
+      <input type="number" name="current-weight" placeholder="<?php echo $weight_form_placeholder ?>"<?php echo $weight_form_tabinex ?> required class="weight-form__input">
       <button name="submit" class="weight-form__btn btn btn-green disabled">Сохранить</button>
     </form> <?php
   endif ?>

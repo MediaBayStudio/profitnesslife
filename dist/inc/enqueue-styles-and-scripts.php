@@ -9,7 +9,7 @@ add_action( 'admin_enqueue_scripts', function() {
 
 // Функция подключения стилей
 function enqueue_style( $style_name, $widths ) {
-  global $template_directory_uri;
+  global $template_directory_uri, $template_directory;
 
   if ( is_string( $widths ) ) {
     if ( $style_name === 'hover' ) {
@@ -22,7 +22,7 @@ function enqueue_style( $style_name, $widths ) {
       if ( $width !== "0" ) {
         $media = $width - 0.02;
          // если размер файла равен 0, то не подключаем его
-        if ( filesize( get_template_directory_uri() . '/css/' . $style_name . '.' . $width . '.css' ) === 0 ) {
+        if ( filesize( $template_directory . '/css/' . $style_name . '.' . $width . '.css' ) === 0 ) {
           continue;
         }
         wp_enqueue_style( "{$style_name}-{$width}px", $template_directory_uri . "/css/{$style_name}.{$width}.css", [], null, "(min-width: {$media}px)" );
@@ -48,7 +48,11 @@ add_action( 'wp_enqueue_scripts', function() {
   enqueue_style( 'hover', '' ); // подключаем стили для эффектов при наведении
 
   // Подключаем скрипты циклом
-	$scripts = ['lazy.min', 'chartjs', 'Popup.min', 'slick.min', 'script'];
+	$scripts = ['lazy.min', 'Popup.min', 'slick.min', 'script'];
+
+  if ( is_page_template( 'account.php' ) ) {
+    $scripts[] = 'chartjs';
+  }
 
   if ( $GLOBALS['page_script_name'] ) {
     $scripts[] = $GLOBALS['page_script_name'];
@@ -66,13 +70,16 @@ add_action( 'wp_enqueue_scripts', function() {
   // Подключаем свой jquery
   wp_register_script( 'jquery-core', $template_directory_uri . '/js/jquery-3.5.1.min.js', false, null, true );
   wp_register_script( 'jquery', false, ['jquery-core'], null, true );
-  wp_enqueue_script( 'jquery' );
+  wp_enqueue_script( 'jquery', $template_directory_uri . '/js/jquery-3.5.1.min.js', null, '3.5.1', true );
+  wp_enqueue_script( 'jquery-core', $template_directory_uri . '/js/jquery-3.5.1.min.js', null, '3.5.1', true );
 
 } );
 
 // Убираем id и type в тегах script, добавляем нужным атрибут defer
   add_filter( 'script_loader_tag',   function( $html, $handle ) {
     switch ( $handle ) {
+      case 'rcl-core-scripts':
+      case 'rcl-primary-scripts':
       case 'lazy.min':
       case 'Popup.min':
       case 'slick.min':

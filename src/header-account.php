@@ -32,6 +32,20 @@ function add_user_to_chat( $user_data, $user_id ) {
   $user_chat_link = $user_data['telegram_chat'];
   $user_start_marathon_date = date( 'd.m.Y', $user_data['start_marathon_time'] );
   $chats = get_field( 'telegram_chats', 419 );
+  $chat_exists = false;
+
+  foreach ( $chats as $chat ) {
+    if ( $chat['start_marathon_date'] === $user_start_marathon_date ) {
+      $chat_exists = true;
+      break;
+    }
+  }
+
+  if ( !$chat_exists ) {
+    return;
+  }
+
+  unset( $chat );  
 
   // echo "<p>user_chat_link: {$user_chat_link}</p>";
   // echo "<p>user_start_marathon_date: {$user_start_marathon_date}</p>";
@@ -39,7 +53,7 @@ function add_user_to_chat( $user_data, $user_id ) {
 
   // var_dump( $chats );
 
-  if ( $user_chat_link ) {
+  // if ( $user_chat_link ) {
     // echo "<p>За пользователем закреплен чат: {$user_chat_link}</p>";
 
     // for ( $i = 0, $len = count( $chats ); $i < $len; $i++ ) { 
@@ -62,7 +76,7 @@ function add_user_to_chat( $user_data, $user_id ) {
     //   }
 
     // }
-  } else {
+  // } else {
     // echo "<p>За пользователем не закреплен чат</p>";
 
     foreach ( $chats as $chat_data ) {
@@ -108,7 +122,7 @@ function add_user_to_chat( $user_data, $user_id ) {
     update_field( 'telegram_chats', $chats, 419 );
     update_field( 'telegram_chat', $chats[ $target_chat_index ]['link'], 'user_' . $user_id );
 
-  }
+  // }
 }
 
 add_user_to_chat( $user_data, $user_id );
@@ -161,7 +175,11 @@ add_user_to_chat( $user_data, $user_id );
   <meta charset="<?php bloginfo( 'charset' ) ?>" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <!-- styles preload -->
+  <!-- styles preload --> <?php
+if ( $current_template === 'training-program' ) : ?>
+  <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
+  <script defer src="//vjs.zencdn.net/7.10.2/video.min.js"></script> <?php
+endif ?>
   <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/style.css" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.css" />
 	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.576.css" media="(min-width:575.98px)" />

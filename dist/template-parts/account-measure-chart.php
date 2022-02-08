@@ -103,7 +103,7 @@ if ( $user_data['target'] !== 'Поддержание веса' ) :
       if ( $user_data['initial_measure_chest'] && $user_data['initial_measure_waist'] && $user_data['initial_measure_hip'] ) {
         if ( $measure_timeline_count === 0 ) {
           if ( strtotime( $user_data['initial_measure_date'] ) <= $curent_time ) {
-            var_dump('here-1');
+            // var_dump('here-1');
             $available_measure_time = $curent_time - 1000;
           } else {
             $available_measure_time = strtotime( '+1 day', strtotime( $user_data['initial_measure_date'] ) );

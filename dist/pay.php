@@ -5,7 +5,15 @@
 */
 
 get_header( 'account' ) ?>
-
+<style>
+	#page-wrapper::before {
+		width: 100% !important;
+		border-radius: 0 !important;
+	}
+	.header-account {
+		background: #fff !important;
+	}
+</style>
 <section class="container account-page-wrapper"> <?php
 	#require 'template-parts/side-menu.php' ?>
 
@@ -23,4 +31,4 @@ get_header( 'account' ) ?>
     </div>
   </body>
 </html> <?php
-// get_footer();
+ // get_footer();

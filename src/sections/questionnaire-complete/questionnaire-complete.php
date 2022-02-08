@@ -1,4 +1,5 @@
 <?php
+
 // $questionnaire_complete объявляется в functions.php
 if ( $questionnaire_complete ) {
 
@@ -25,7 +26,7 @@ if ( $questionnaire_complete ) {
 
   <section class="questionnaire-complete-sect">
     <div class="questionnaire-complete-sect__title-block"> <?php
-      if ( $current_time <= $start_marathon_time && !$user_data['reset'] ) : ?>
+      if ( ($user_id == 13 || $user_id == 1) || $current_time <= $start_marathon_time && !$user_data['reset'] ) : ?>
         <button type="button" class="questionnaire-complete-sect__reset-btn" data-user="<?php echo $user_id ?>" onclick="resetQuestionnaire(true)">Пройти анкету заново</button> <?php
       endif ?>
       <h3 class="questionnaire-complete-sect__title">Общие вопросы</h3>
@@ -75,10 +76,23 @@ if ( $questionnaire_complete ) {
         <span class="questionnaire-complete-sect__li-left">Продукты, которые необходимо исключить из вашего меню:</span>
         <span class="questionnaire-complete-sect__li-right"><?php
         if ( $user_data['categories'] ) {
+          $is_error = false;
+
+          foreach ( $user_data['categories'] as $category ) {
+            if ( is_wp_error( $category ) ) {
+              $is_error = true;
+              break;
+            }
+          }
+          
+          $categories = $is_error ? get_user_meta( $user_id, 'categories' )[0] : $user_data['categories'];
+
           $terms = get_terms( [
             'taxonomy' => 'dish_category',
-            'include' => $user_data['categories']
+            'include' => $categories
           ] );
+
+          // var_dump( get_field( 'categories', 'user_' . $user_id ) );
 
           $milk_products = [];
           $meat_products = [];
@@ -86,20 +100,21 @@ if ( $questionnaire_complete ) {
 
           $terms_counts = [];
 
-          $terms_count = count( $terms );
-
           foreach ( $terms as $term ) {
             switch ( $term->parent ) {
               // milk-products
               case 223:
+                // $products[] = $term;
                 $milk_products[] = $term;
                 break;
               // meat-products
               case 391:
+                // $products[] = $term;
                 $meat_products[] = $term;
                 break;
               // fish-products
               case 230:
+                // $products[] = $term;
                 $fish_products[] = $term;
                 break;
               default:
@@ -117,8 +132,21 @@ if ( $questionnaire_complete ) {
             }
           } // endforeach $terms as $term
 
+          $i = 0;
+          foreach ( $products as $product ) {
+            switch ( $product->name ) {
+              case 'Мясо':
+              case 'Молочные продукты':
+              case 'Рыба':
+                unset( $products[ $i ] );
+                break;
+            }
+            $i++;
+          }
+
+
           if ( count( $milk_products ) === $terms_counts[223] ) {
-            // $categories_text .= 'молочные продукты полностью, ';
+            $categories_text .= 'молочные продукты полностью, ';
           } else {
             foreach ( $milk_products as $term ) {
               $categories_text .= $term->name . ', ';
@@ -126,7 +154,7 @@ if ( $questionnaire_complete ) {
           }
 
           if ( count( $meat_products ) === $terms_counts[391] ) {
-            // $categories_text .= 'мясо полностью, ';
+            $categories_text .= 'мясо полностью, ';
           } else {
             foreach ( $meat_products as $term ) {
               $categories_text .= $term->name . ', ';
@@ -134,7 +162,7 @@ if ( $questionnaire_complete ) {
           }
 
           if ( count( $fish_products ) === $terms_counts[230] ) {
-            // $categories_text .= 'рыба полностью, ';
+            $categories_text .= 'рыба полностью, ';
           } else {
             foreach ( $fish_products as $term ) {
               $categories_text .= $term->name . ', ';
@@ -142,11 +170,13 @@ if ( $questionnaire_complete ) {
           }
 
           foreach ( $products as $product ) {
-            $categories_text .= ( $product->description ?: $product->name ) . ', ';
+            $categories_text .= $product->name . ', ';
           }
 
           if ( $categories_text ) {
-            echo mb_strtolower( substr( $categories_text, 0, -2) );
+            echo mb_strtolower( substr( $categories_text, 0, -2 ) );
+          } else {
+            echo '<span style="color:#E99A8B">Ошибка отображения данных. Пожалуйста, обратитесь к менеджеру.</span>';
           }
         } else {
           echo 'нет ограничений';

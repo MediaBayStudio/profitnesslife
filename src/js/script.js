@@ -4,8 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
   body = document.body;
 
   //=include components/telMask.js
+  
 
   //=include ../components/account-hero-block/account-hero-block.js
+  //=include ../components/form-sign/form-sign.js
 
   //=include components/validateForms.js
 
@@ -64,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
     navLinks[i].addEventListener('click', scrollToTarget);
   }
 
-  // sticky(hdr);
+  sticky(hdr);
 
   // thanksPopup = new Popup('.thanks', {
   // closeButtons: '.thanks__close'

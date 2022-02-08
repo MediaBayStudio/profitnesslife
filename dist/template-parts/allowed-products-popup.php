@@ -721,8 +721,19 @@ $cnt = [
   <div class="allowed-products-popup__cnt popup__cnt">
     <button type="button" class="allowed-products-popup__close popup__close"></button>
     <span class="allowed-products-popup__title popup__title">Разрешенные продукты</span> <?php
+    $is_error = false;
+
     foreach ( $user_data['categories'] as $category ) {
-      if ( $category === 19 ) {
+      if ( is_wp_error( $category ) ) {
+        $is_error = true;
+        break;
+      }
+    }
+    
+    $categories = $is_error ? get_user_meta( $user_id, 'categories' )[0] : $user_data['categories'];
+
+    foreach ( $categories as $category ) {
+      if ( $category === 214 ) {
         $exclude_gluten = true;
       }
     }
@@ -736,3 +747,4 @@ $cnt = [
     } ?>
   </div>
 </div>
+<?php var_dump( $user_data['categories'] ); ?>

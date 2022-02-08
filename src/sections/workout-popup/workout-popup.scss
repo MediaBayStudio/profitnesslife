@@ -1,6 +1,18 @@
-@import '../../scss/assets/colors';
-@import '../../scss/assets/mixins';
-@import '../../scss/assets/variables';
+@import "../../scss/assets/colors";
+@import "../../scss/assets/mixins";
+@import "../../scss/assets/variables";
+
+video::-internal-media-controls-download-button {
+  display: none;
+}
+
+video::-webkit-media-controls-enclosure {
+  overflow: hidden;
+}
+
+video::-webkit-media-controls-panel {
+  width: calc(100% + 30px);
+}
 
 .workout-popup {
   &__cnt {
@@ -8,14 +20,17 @@
     flex-flow: column;
   }
 
-  &__close {}
+  &__close {
+  }
 
-  &__title {}
+  &__title {
+  }
 
   &__video {
     max-width: 100%;
     border-radius: 20px;
     cursor: pointer;
+    background: url(../img/video-placeholder.svg) center/cover;
   }
 
   &__controls {
@@ -41,7 +56,7 @@
   &__playlist {
     margin: 25px 0 0;
     padding: 20px 15px;
-    background: #F3F2EE;
+    background: #f3f2ee;
     border-radius: 30px;
   }
 
@@ -56,7 +71,7 @@
       box-shadow: 0px 8px 20px rgba(147, 167, 181, 0.15);
       border-radius: 30px;
 
-      >.workout-popup__playlist-item-duration {
+      > .workout-popup__playlist-item-duration {
         color: $accentGreen;
       }
     }

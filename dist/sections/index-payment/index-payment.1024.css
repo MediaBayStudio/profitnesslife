@@ -1,1 +1,1 @@
-@charset "UTF-8";.index-payment{margin:55px 0}.index-payment__list{margin:-30px 0 0;flex-wrap:wrap}.index-payment__method{width:calc((100% - 60px)/ 3)}.index-payment__method:nth-child(n){margin:30px 30px 0 0}.index-payment__method:nth-child(3n+3){margin-right:0}
+@charset "UTF-8";.index-payment{margin:55px 0}.index-payment__list{margin:-30px 0 0;-webkit-flex-wrap:wrap;flex-wrap:wrap}.index-payment__method{width:calc((100% - 60px)/ 3)}.index-payment__method:nth-child(n){margin:30px 30px 0 0}.index-payment__method:nth-child(3n+3){margin-right:0}

@@ -104,12 +104,12 @@ if ( $questionnaire_date ) {
   }
 
   // Марафон начался, меняем роль пользователя
-  if ( $start_marathon_time <= $current_time && !is_super_admin() ) {
+  if ( $start_marathon_time <= $current_time && !is_super_admin() && $user_id != 13 ) {
     set_user_role_started( $user );
   }
 
   // Марафон закончился, меняем роль пользователя
-  if ( $finish_marathon_time <= $current_time && !is_super_admin() ) {
+  if ( $finish_marathon_time <= $current_time && !is_super_admin() && $user_id != 13 ) {
     set_user_role_completed( $user );
   }
 
@@ -192,6 +192,9 @@ add_filter( 'template_include', function( $template ) {
   $GLOBALS['sections'] = get_field( 'sections', $page_template_id );
   return $template;
 } );
+
+// Авторизация пользователя
+require $template_directory . '/inc/auth.php';
 
 // Запись успешного платежа в базу данных
 require $template_directory . '/inc/create-payment.php';

@@ -176,7 +176,8 @@
   }
 
   &__weight-goal {
-    position: relative;
+    
+    // position: relative;
     // width: calc((100% - 20px) / 2);
     // padding: 25px 10px;
     // display: flex;
@@ -189,13 +190,34 @@
     // text-align: center;
   }
 
-  &__weight-goal-chart {}
+  &__weight-goal-title {
+    margin: 0 0 10px;
+  }
+
+  &__weight-goal-chart-block {
+    padding: 5px 0;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 100%;
+  }
+
+  &__weight-goal-chart {
+    margin: auto;
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  &__weight-goal-svg {
+    margin: auto;
+    grid-row: 1;
+    grid-column: 1;
+  }
 
   &__weight-goal-numbers {
-    position: absolute;
-    bottom: 48px;
-    left: 50%;
-    transform: translateX(-50%);
+    // position: absolute;
+    // bottom: 48px;
+    // left: 50%;
+    // transform: translateX(-50%);
   }
 
   &__weight-goal-current {
@@ -238,6 +260,10 @@
     margin: 0 0 30px;
     font: bold 18px/1 $notoSans;
   }
+  &__descr {
+    margin: -20px 0 10px;
+    color: $coral;
+  }
 
   &__input {
     padding: 0 5px 5px;
@@ -261,9 +287,9 @@
   }
 }
 
-#weight-goal-svg {
-  margin: 10px 0 0;
-}
+// #weight-goal-svg {
+//   margin: 10px 0 0;
+// }
 
 #weight-goal-svg-bar,
 #weight-goal-svg-bg {

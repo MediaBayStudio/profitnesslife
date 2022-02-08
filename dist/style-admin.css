@@ -47,7 +47,9 @@
 }
 
 #acf-form-data + .form-table > tbody {
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
 }
 
@@ -84,8 +86,11 @@
 #workout-week-3,
 #diet-plan {
   width: 100%;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-flow: column;
   flex-flow: column;
+  -webkit-justify-content: center;
   justify-content: center;
 }
 #user-photo > .acf-label,
@@ -372,8 +377,11 @@
 #third-week-end-time {
   margin: 0 0 25px;
   width: 100%;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-flow: column;
   flex-flow: column;
+  -webkit-justify-content: center;
   justify-content: center;
 }
 #telegram-chat td,

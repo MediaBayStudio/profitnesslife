@@ -8,6 +8,7 @@
   padding: 30px 30px 30px 25px;
   margin: 0 0 $sectionVerticalPadding768;
   display: flex;
+  flex-wrap: wrap;
 
   &-maybe-close {}
 
@@ -37,6 +38,7 @@
   &__text {
     // max-width: 425px;
     font-size: 16px;
+    flex: 1;
   }
 
   &__title {
