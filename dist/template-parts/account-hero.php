@@ -17,14 +17,22 @@ if ( $user_data['show_msg'] ) {
       <input type="file" name="photo" accept="image/jpeg,image/png" class="user-data__avatar-input">
       <picture class="user-data__avatar-pic lazy"> <?php
         if ( $user_data['img'] ) {
-          $avatar_url = $user_data['img']['url'];
-          $avatar_webp = $upload_baseurl . get_post_meta( $user_data['img']['ID'] )['webp'][0];
+          $avatar_webp_url = image_get_intermediate_size( $user_data['img']['ID'], 'photo_progress_webp' )['url'];
+          $avatar_url = image_get_intermediate_size( $user_data['img']['ID'], 'photo_progress' )['url'];
+          
+          if ( !$avatar_url ) {
+            $avatar_url = $user_data['img']['url'];
+          }
+          if ( !$avatar_webp_url ) {
+            $avatar_webp_url = image_get_intermediate_size( $user_data['img']['ID'], 'webp' )['url'];
+          }
+
         } else {
           $avatar_url = $template_directory_uri . '/img/icon-add-avatar.svg';
-          $avatar_webp = '#';
+          $avatar_webp_url = '';
         }
-        if ( $avatar_webp !== '#' ) : ?>
-          <source type="image/webp" srcset="#" data-srcset="<?php echo $avatar_webp ?>"> <?php
+        if ( $avatar_webp_url ) : ?>
+          <source type="image/webp" srcset="#" data-srcset="<?php echo $avatar_webp_url ?>"> <?php
         endif ?>
         <img src="#" alt="Фото профиля" data-src="<?php echo $avatar_url ?>" class="user-data__avatar-img">
       </picture>
@@ -66,25 +74,32 @@ if ( $user_data['show_msg'] ) {
       if ( $user_data['weight_timeline'] ) {
         $last_weight = end( $user_data['weight_timeline'] );
         $current_weight = $last_weight['weight'];
+        $last_weight_time = strtotime( $last_weight['date'] );
+        $available_weight_time = strtotime( '+1 day', $last_weight_time );
 
-        if ( $current_time >= strtotime( $last_weight['date'] ) ) {
-          $weight_form_class = '';
-          $weight_form_descr = '';
-          $weight_form_tabinex = '';
-          $weight_form_placeholder = 'Введите значение веса';
-        } else {
-          $available_weight_time = strtotime( '+1 day', $last_weight['date'] );
+        if ( $current_time < $available_weight_time ) {
           $weight_form_class = ' disabled';
           $weight_form_descr = 'Будет доступно с ' . date( 'd.m.Y', $available_weight_time );
           $weight_form_tabinex = ' tabindex="-1"';
           $weight_form_placeholder = $current_weight;
+        } else {
+          $weight_form_class = '';
+          $weight_form_descr = '';
+          $weight_form_tabinex = '';
+          $weight_form_placeholder = 'Введите значение веса';
         }
       } else {
-        $weight_form_class = ' disabled';
-        $weight_form_descr = 'Будет доступно с ' . date( 'd.m.Y', $start_marathon_time );
-        $weight_form_tabinex = ' tabindex="-1"';
         $current_weight = $user_data['current_weight'];
         $available_weight_time = $start_marathon_time;
+        if ( $current_time < $available_weight_time ) {
+          $weight_form_class = ' disabled';
+          $weight_form_tabinex = ' tabindex="-1"';
+          $weight_form_descr = 'Будет доступно с ' . date( 'd.m.Y', $start_marathon_time );
+        } else {
+          $weight_form_class = '';
+          $weight_form_descr = '';
+          $weight_form_tabinex = '';
+        }
       } ?>
       <span class="user-data__current-weight-date" id="current-weight-date"><?php echo $last_weight['date'] ?></span>
       <span class="user-data__current-weight-number" id="current-weight-number"><?php echo $current_weight ?> <sapn class="user-data__current-weight-units">кг</sapn></span>
@@ -107,7 +122,7 @@ if ( $user_data['show_msg'] ) {
     <form action="<?php echo $site_url ?>/wp-admin/admin-ajax.php" method="POST" class="user-data__weight-form weight-form<?php echo $weight_form_class ?>" data-start-weight="<?php echo $user_data['start_weight'] ?>" data-target-weight="<?php echo $user_data['target_weight'] ?>">
       <span class="weight-form__title">Вес сегодня</span>
       <span class="weight-form__descr"><?php echo $weight_form_descr ?></span>
-      <input type="number" name="current-weight" placeholder="<?php echo $weight_form_placeholder ?>"<?php echo $weight_form_tabinex ?> required class="weight-form__input">
+      <input type="number" name="current-weight" step="any" placeholder="<?php echo $weight_form_placeholder ?>"<?php echo $weight_form_tabinex ?> required class="weight-form__input">
       <button name="submit" class="weight-form__btn btn btn-green disabled">Сохранить</button>
     </form> <?php
   endif ?>

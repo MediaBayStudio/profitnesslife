@@ -106,15 +106,27 @@
         } else {
           console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
           return '';
+          errorPopup.openPopup();
         }
       })
       .then(function(response) {
         response = JSON.parse(response);
-        console.log(response);
-        let slide = `<picture class="photo-progress-pic">
-          <source type="image/webp" srcset="${response.img_webp}">
-          <img src="${response.img}" alt="Фото" class="photo-progress-img">
-        </picture>`;
+
+        let img = response.img,
+          imgWebp = response.img_webp;
+
+        if (!img) {
+           photoProgressForm.reset();
+          slider.classList.remove('loading');
+          errorPopup.openPopup();
+          return;
+        }
+
+        let slide = '<picture class="photo-progress-pic">';
+        if (imgWebp) {
+          slide += '<source type="image/webp" srcset="' + imgWebp + '">';
+        }
+        slide +=  '<img src="' + response.img + '" alt="Фото" class="photo-progress-img"></picture>';
 
         if (SLIDER.hasSlickClass($slidesSect)) {
           $slidesSect.slick('slickAdd', slide, 1, true);
@@ -133,6 +145,9 @@
       })
       .catch(function(err) {
         console.log(err);
+        errorPopup.openPopup();
+        slider.classList.remove('loading');
+        photoProgressForm.reset();
       });
   });
 })();

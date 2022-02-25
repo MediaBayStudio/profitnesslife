@@ -136,19 +136,19 @@ if ( $user_data['target'] !== 'Поддержание веса' ) :
           <table class="measure-form__data-table">
             <tr>
               <td>
-                <input type="number" name="chest" placeholder="Обхват груди" class="measure-form__data-input" <?php echo $tabinex_attr ?>>
+                <input type="number" name="chest" step="any" placeholder="Обхват груди" class="measure-form__data-input" <?php echo $tabinex_attr ?>>
               </td>
               <td>см</td>
             </tr>
             <tr>
               <td>
-                <input type="number" name="waist" placeholder="Обхват талии" class="measure-form__data-input" <?php echo $tabinex_attr ?>>
+                <input type="number" name="waist" step="any" placeholder="Обхват талии" class="measure-form__data-input" <?php echo $tabinex_attr ?>>
               </td>
               <td>см</td>
             </tr>
             <tr>
               <td>
-                <input type="number" name="hip" placeholder="Обхват бёдер" class="measure-form__data-input" <?php echo $tabinex_attr ?>>
+                <input type="number" name="hip" step="any" placeholder="Обхват бёдер" class="measure-form__data-input" <?php echo $tabinex_attr ?>>
               </td>
               <td>см</td>
             </tr>

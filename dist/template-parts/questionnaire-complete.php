@@ -1,24 +1,28 @@
 <?php
 
 // $questionnaire_complete объявляется в functions.php
+// $start_marathon_time объявляется в functions.php
+// $current_time объявляется в functions.php
 if ( $questionnaire_complete ) {
 
-  print_account_hero_section( [
-    'title' => 'Анкета участника',
-    'descr' => 'Ты можешь скорректировать данные анкеты на этой странице, для этого необходимо заново ее пройти. Это ты можешь сделать только до начала марафона.',
-    'buttons' => [
-      [
-        'title' => 'Перейти в чат',
-        'class' => 'btn-green',
-        'href' => $manager_link_whatsapp,
-        'target' => '_blank'
+  if ( $start_marathon_time > $current_time ) {
+    print_account_hero_section( [
+      'title' => 'Анкета участника',
+      'descr' => 'Ты можешь скорректировать данные анкеты на этой странице, для этого необходимо заново ее пройти. Это ты можешь сделать только до начала марафона.',
+      'buttons' => [
+        [
+          'title' => 'Перейти в чат',
+          'class' => 'btn-green',
+          'href' => $manager_link_whatsapp,
+          'target' => '_blank'
+        ]
+      ],
+      'img' => [
+        'url' => $template_directory_uri . '/img/questionnaire-hero-img.svg',
+        'alt' => 'Изображение'
       ]
-    ],
-    'img' => [
-      'url' => $template_directory_uri . '/img/questionnaire-hero-img.svg',
-      'alt' => 'Изображение'
-    ]
-  ] )
+    ] );
+  }
 
   // $user_data объявляется в functions.php
   // $start_marathon_time объявляется в functions.php
@@ -26,7 +30,7 @@ if ( $questionnaire_complete ) {
 
   <section class="questionnaire-complete-sect">
     <div class="questionnaire-complete-sect__title-block"> <?php
-      if ( ($user_id == 13 || $user_id == 1) || $current_time <= $start_marathon_time && !$user_data['reset'] ) : ?>
+      if ( ($user_id == 13 || $user_id == 1 || $user_id == 65) || $current_time <= $start_marathon_time && !$user_data['reset'] ) : ?>
         <button type="button" class="questionnaire-complete-sect__reset-btn" data-user="<?php echo $user_id ?>" onclick="resetQuestionnaire(true)">Пройти анкету заново</button> <?php
       endif ?>
       <h3 class="questionnaire-complete-sect__title">Общие вопросы</h3>

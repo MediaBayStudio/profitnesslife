@@ -237,31 +237,31 @@
     $form.validatie = false;
     $formBtn.addEventListener('click', function(e) {
       validationForm();
+      
       if ($form.id === 'pay-form') {
         e.preventDefault();
         if ($form.validatie) {
+          $form.classList.add('loading');
+          // $formBtn.blur();
+          // $form.blur();
           let widget = new cp.CloudPayments();
           widget.pay('charge', {
-            publicId: 'test_api_00000000000000000000001',
+            // publicId: 'test_api_00000000000000000000001',
+            publicId: 'pk_82de7baa82dfeede0822c06c01cbc',
             description: 'Оплата марафона стройности',
             amount: +$form['price'].value,
             currency: 'RUB',
             accountId: $form['email'].value,
             email: $form['email'].value,
-            skin: 'mini',
-            data: {
-              myProp: 'myProp value'
-            }
+            skin: 'mini'
           }, {
             onSuccess: function(options) {
               q('.pay-hero').classList.remove('active');
               q('#success-pay').classList.add('active');
               console.log('success');
-
+              $form.classList.remove('loading');
               let data = new FormData($form);
               data.append('action', 'create_payment');
-
-              // console.log(data);
 
               fetch(siteUrl + '/wp-admin/admin-ajax.php', {
                   method: 'POST',
@@ -281,6 +281,8 @@
                 })
                 .catch(function(err) {
                   console.log(err);
+                  errorPopup && errorPopup.openPopup();
+                  $form.classList.remove('loading');
                 });
 
             },
@@ -288,6 +290,7 @@
               q('.pay-hero').classList.remove('active');
               q('#failure-pay').classList.add('active');
               console.log('fail');
+              $form.classList.remove('loading');
             },
             onComplete: function(paymentResult, options) {}
           });
@@ -298,7 +301,8 @@
         e.preventDefault();
       } else {
         $form.classList.add('loading');
-        $formBtn.blur();
+        // $formBtn.blur();
+        // $form.blur();
       }
     });
     if (!document.wpcf7mailsent) {

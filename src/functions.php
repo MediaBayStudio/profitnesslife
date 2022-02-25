@@ -13,7 +13,7 @@ $questionnaire_complete = get_field( 'questionnaire_complete', 'user_' . $user_i
 
 $upload_dir = wp_get_upload_dir();
 $upload_basedir = $upload_dir['basedir'];
-$upload_baseurl = $upload_dir['baseurl'] . DIRECTORY_SEPARATOR;
+$upload_baseurl = $upload_dir['baseurl'];
 
 $tel = get_option( 'contacts_tel' );
 $tel_clean = str_replace( [' ', '–', '-', '(', ')'], '', $tel );
@@ -40,6 +40,10 @@ add_action('init', function() {
       wp_schedule_event( time(), 'weekly', 'wplb_cron' );
     }
 });
+
+add_filter( 'big_image_size_threshold', function(){
+	return 1200;
+} );
 
 // Описываем функцию для планировщика
 function wplb_run_cron() {
@@ -250,9 +254,6 @@ require $template_directory . '/inc/questionnaire-send.php';
 // Получение и обновление инстаграм постов
 require $template_directory . '/inc/instagram-posts.php';
 
-// Создание <picture> для img
-// require $template_directory . '/inc/create-picture.php';
-
 // Создание <link rel="preload" /> для img
 require $template_directory . '/inc/create-link-preload.php';
 
@@ -288,20 +289,14 @@ if ( is_super_admin() || is_admin_bar_showing() ) {
   // Создание новых колонок в админке
   require $template_directory . '/inc/manage-posts-columns.php';
 
-	// Функция формирования стилей для страницы при сохранении страницы
-	require $template_directory . '/inc/build-styles.php';
+	// Формирование файла pages-info.json, для понимания на какой странице какие секции используются
+	require $template_directory . '/inc/build-pages-info.php';
 
-  // Планировался перерасчет калорий при клике
-  // require $template_directory . '/inc/ajax-recipe.php';
-
-	// Функция формирования скриптов для страницы при сохранении страницы
-	require $template_directory . '/inc/build-scripts.php';
+	// Функция формирования стилей и скриптов для страницы при сохранении страницы
+	require $template_directory . '/inc/build-styles-scripts.php';
 
 	// Функция создания webp и минификации изображений
 	require $template_directory . '/inc/generate-images.php';
-
-	// Формирование файла pages-info.json, для понимания на какой странице какие секции используются
-	require $template_directory . '/inc/build-pages-info.php';
 
 	// Удаление лишних пунктов из меню админ-панели и прочие настройки админ-панели
 	require $template_directory . '/inc/admin-menu-actions.php';

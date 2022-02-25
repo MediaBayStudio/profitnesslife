@@ -108,7 +108,7 @@
 
         id('current-weight-date').textContent = today;
         id('current-weight-number').innerHTML = weight + ' <span class="user-data__current-weight-units">кг</span>';
-        weightGoalCurrent.textContent = Math.abs(weight - weightForm.getAttribute('data-target-weight')) + ' /';
+        weightGoalCurrent.textContent = Math.abs(weight - weightForm.getAttribute('data-target-weight')).toFixed(1) + ' /';
 
         updateSvgBar(parseInt(weightGoalCurrent.textContent) / parseInt(weightGoalTotal.textContent) * 100);
 
@@ -123,8 +123,6 @@
         console.log(err);
       });
   });
-
-  console.log(userAvatarForm);
 
   userAvatarForm.addEventListener('change', function(e) {
     let data = new FormData(userAvatarForm);
@@ -158,6 +156,9 @@
       })
       .catch(function(err) {
         console.log(err);
+        errorPopup.openPopup();
+        userAvatarForm.reset();
+        userAvatarForm.classList.remove('loading');
       });
   });
 })();
