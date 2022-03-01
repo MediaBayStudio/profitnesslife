@@ -40,7 +40,7 @@ class Calendar
     $out.= '<tr class="calendar-row">';
  
     for ( $x = 0; $x < $day_week; $x++ ) {
-      $out.= '<td></td>';
+      // $out.= '<td></td>';
     }
  
     $days_counter = 0;
@@ -84,7 +84,7 @@ class Calendar
         }
       }
 
-      $day_date = 'data-date="' . $day . '.' . $month . '.' . $year . '"';
+      $day_date = 'data-date="' . substr( '0' . $day, -2 ) . '.' . substr( '0' . $month, -2 ) . '.' . $year . '"';
       
       if ( $event_show ) {
         $out.= '<td class="calendar-day' . $class . ' event" ' . $day_date . '>' . $day;

@@ -5,34 +5,42 @@
     <source srcset="<?php echo $template_directory_uri ?>/img/menu-img.svg" type="image/svg+xml" media="(min-width:767.98px)">
     <img src="#" alt="#">
   </picture>
-  <h1 class="pay-hero__title sect-title">Страница оплаты марафона</h1>
-  <form class="pay-hero__form pay-form" id="pay-form">
-    <input type="text" name="username" class="cf7-form-field">
-    <input type="text" name="price" class="cf7-form-field" value="<?php echo preg_replace( '/[^0-9]/', '', $price ) ?>">
-    <label class="field field_name">
-      <input type="text" name="name" class="field__inp">
-      <span class="field__text">Имя</span>
-    </label>
-    <label class="field field_surname">
-      <input type="text" name="surname" class="field__inp">
-      <span class="field__text">Фамилия</span>
-    </label>
-    <label class="field field_tel">
-      <input type="tel" name="tel" class="field__inp">
-      <span class="field__text">Телефон</span>
-    </label> 
-    <label class="field field_email">
-      <input type="email" name="email" class="field__inp">
-      <span class="field__text">E-mail</span>
-    </label>
-    <div class="form-bottom">
-      <div class="form-price-block">
-        <span>К оплате:</span>
-        <span class="form-price"><?php echo $price ?> &#8381;</span>
+  <h1 class="pay-hero__title sect-title">Страница оплаты марафона</h1> <?php
+  if ( $_GET['test'] ) : ?>
+    <input form="test-pay-form" type="text" name="test" value="test" disabled tabindex="-1" style="pointer-events:none;text-transform:uppercase;border:0;background:0 0;width:100%;display:block;margin:10px auto;color:red;text-align:center"> <?php
+    $form_class = ' test';
+    $form_id = 'test-pay-form';
+  else :
+    $form_class = '';
+    $form_id = 'pay-form' ?>
+    <form class="pay-hero__form pay-form<?php echo $form_class ?>" id="<?php echo $form_id ?>">
+      <input type="text" name="username" class="cf7-form-field">
+      <input type="text" name="price" class="cf7-form-field" value="<?php echo preg_replace( '/[^0-9]/', '', $price ) ?>">
+      <label class="field field_name">
+        <input type="text" name="name" class="field__inp">
+        <span class="field__text">Имя</span>
+      </label>
+      <label class="field field_surname">
+        <input type="text" name="surname" class="field__inp">
+        <span class="field__text">Фамилия</span>
+      </label>
+      <label class="field field_tel">
+        <input type="tel" name="tel" class="field__inp pay-form-tel">
+        <span class="field__text">Телефон</span>
+      </label> 
+      <label class="field field_email">
+        <input type="email" name="email" class="field__inp">
+        <span class="field__text">E-mail</span>
+      </label>
+      <div class="form-bottom">
+        <div class="form-price-block">
+          <span>К оплате:</span>
+          <span class="form-price"><?php echo $price ?> &#8381;</span>
+        </div>
       </div>
-    </div>
-    <button name="submit" class="form-btn btn btn-green">Оплатить</button>
-  </form>
+      <button name="submit" class="form-btn btn btn-green">Оплатить</button>
+    </form> <?php
+  endif ?>
 </section>
 <section class="pay-hero" id="failure-pay">
   <img src="<?php echo $template_directory_uri ?>/img/icon-failure-pay.svg" alt="failure pay" class="pay-hero__img">

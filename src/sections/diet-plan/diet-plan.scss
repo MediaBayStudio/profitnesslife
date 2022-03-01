@@ -17,6 +17,7 @@
   &__hdr-date {
     display: flex;
     align-items: center;
+    position: relative;
   }
 
   &__date {
@@ -162,23 +163,54 @@
         margin: 0 0 8px;
       }
 
-      &.active-week {
-        background: #DAEABC;
-
-        >.calendar-day {
-          border: 0;
-          color: $black;
-          cursor: pointer;
-        }
-
-        >.today {
-          color: $white;
-        }
-
-        >.event {
-          color: $white;
+      &:last-child {
+        > td:last-child {
+          margin: 0 auto 0 0;
         }
       }
+
+      // &.active-week {
+        // background: #DAEABC;
+
+        // >.calendar-day {
+          // border: 0;
+          // color: $black;
+          // cursor: pointer;
+          // position: relative;
+
+          // &:first-child {
+          //   &::before {
+          //     border-radius: 80px 0 0 80px;
+          //   }
+          // }
+
+          // &:last-child {
+          //   &::before {
+          //     border-radius: 0 80px 80px 0;
+          //   }
+          // }
+          
+          // &::before {
+          //   content: '';
+          //   position: absolute;
+          //   top: 0;
+          //   left: 0;
+          //   width: calc(100% + 8px);
+          //   height: 100%;
+          //   background: #DAEABC;
+          //   z-index: -1;
+          //   pointer-events: none;
+          // }
+        // }
+
+        // >.today {
+        //   color: $white;
+        // }
+
+        // >.event {
+        //   color: $white;
+        // }
+      // }
     }
 
     .calendar-day {
@@ -193,8 +225,56 @@
       transition: background .5s, color .5s;
       cursor: default;
 
+      &:only-child {
+        margin: 0 auto 0 0;
+      }
+
       &:not(:last-child) {
         margin: 0 8px 0 0;
+      }
+
+      &.available {
+        border: 0;
+        color: $black;
+        cursor: pointer;
+        position: relative;
+
+        &.today,
+        &.event {
+          color: $white;
+        }
+
+        &:first-child {
+          &::before {
+            border-radius: 80px 0 0 80px;
+          }
+        }
+
+        &:last-child {
+          &::before {
+            width: 100%;
+            border-radius: 0 80px 80px 0;
+          }
+        }
+
+        &:only-child {
+          &::before {
+            width: 100%;
+            border-radius: 80px;
+          }
+        }
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: calc(100% + 8px);
+          height: 100%;
+          background: #DAEABC;
+          z-index: -1;
+          pointer-events: none;
+        }
       }
     }
 

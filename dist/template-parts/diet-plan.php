@@ -17,19 +17,21 @@
     <span class="diet-plan__day">День <?php echo $today_day ?></span>
     <div class="diet-plan__hdr-date">
       <span class="diet-plan__date"><span class="diet-plan__today">сегодня, </span><?php echo date( 'd.m.Y' ) ?></span>
-      <div class="diet-plan__calendar-btn lazy" data-src="#">
-        <div class="diet-plan__calendar" data-today="<?php echo $today_day ?>">
+      <div class="diet-plan__calendar-btn lazy" data-src="#"></div>
+      <div class="diet-plan__calendar" data-today="<?php echo $today_day ?>">
         <div class="diet-plan__calendar-nav hide">
           <button type="button" class="diet-plan__calendar-prev"></button>
           <button type="button" class="diet-plan__calendar-next"></button>
         </div> <?php
         if ( $start_marathon_time ) {
-          echo Calendar::getInterval( date( 'n.Y', $start_marathon_time ), date( 'n.Y', strtotime( '-1day', $finish_marathon_time ) ), [
+          echo Calendar::getInterval(
+            date( 'n.Y', $start_marathon_time ),
+            date( 'n.Y', strtotime( '-1day', $finish_marathon_time )
+          ), [
             date( 'd.m', $start_marathon_time ) => 'Начало марафона',
             date( 'd.m', strtotime( '-1day', $finish_marathon_time ) ) => 'Окончание марафона'
           ] );
         } ?>
-        </div>
       </div>
     </div>
   </header>
@@ -131,7 +133,7 @@
                   <li class="diet-plan__item-igredietns-li"> <?php
                     $ingredient_text = $ingredient['title']->name;
                     if ( $ingredient['number'] ) {
-                      $ingredient_text .= ' (' . $ingredient['number'] . ' ' . $ingredient['units'] . ')';
+                      $ingredient_text .= ' (' . $ingredient['number'] . ' ' . ( is_array( $ingredient['units'] ) ? $ingredient['units']['label'] : $ingredient['units'] ) . ')';
                     }
                     echo $ingredient_text ?>
                   </li> <?php
@@ -142,6 +144,9 @@
               <span class="diet-plan__item-recipe-title">Рецепт</span>
               <p class="diet-plan__item-recipe-text"><?php echo $item_fields['text'] ?></p>
             </div>
+          </div>
+          <div class="loader loader-coral">
+            <div class="loader__circle"></div>
           </div>
           <button type="button" class="diet-plan__item-change lazy" data-src="#"<?php echo $replacement_data_attr . $replacement_selector_attr ?>>Заменить блюдо</button>
         </div>

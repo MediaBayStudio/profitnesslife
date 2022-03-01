@@ -97,13 +97,23 @@ body {
   }
 }
 
+.loader-coral {
+
+  background: $white;
+
+  >.loader__circle {
+    border-top-color: $coral;
+    border-left-color: $coral;
+  }
+}
+
 .loading {
   position: relative;
   overflow: hidden;
   pointer-events: none;
 }
 
-.loading>.loader {
+.loading .loader {
   opacity: 1;
   visibility: visible;
 }

@@ -11,11 +11,22 @@ function load_diet_plan() {
 
     $diet_plan = get_field( 'diet_plan', $user );
 
-    $breakfast_post = $diet_plan[ ($week - 1) * 7 + $day_index ]['breakfast'];
-    $snack_1_post = $diet_plan[ ($week - 1) * 7 + $day_index ]['snack_1'];
-    $lunch_post = $diet_plan[ ($week - 1) * 7 + $day_index ]['lunch'];
-    $snack_2_post = $diet_plan[ ($week - 1) * 7 + $day_index ]['snack_2'];
-    $dinner_post = $diet_plan[ ($week - 1) * 7 + $day_index ]['dinner'];
+    // var_dump(($week - 1) * 7 + $day_index);
+
+    // var_dump( $_POST );
+    // var_dump( $diet_plan );
+
+    // $breakfast_post = $diet_plan[ ($week - 1) * 7 + $day_index ]['breakfast'];
+    // $snack_1_post = $diet_plan[ ($week - 1) * 7 + $day_index ]['snack_1'];
+    // $lunch_post = $diet_plan[ ($week - 1) * 7 + $day_index ]['lunch'];
+    // $snack_2_post = $diet_plan[ ($week - 1) * 7 + $day_index ]['snack_2'];
+    // $dinner_post = $diet_plan[ ($week - 1) * 7 + $day_index ]['dinner'];
+
+    $breakfast_post = $diet_plan[ $day_index ]['breakfast'];
+    $snack_1_post = $diet_plan[ $day_index ]['snack_1'];
+    $lunch_post = $diet_plan[ $day_index ]['lunch'];
+    $snack_2_post = $diet_plan[ $day_index ]['snack_2'];
+    $dinner_post = $diet_plan[ $day_index ]['dinner'];
 
     $types = [
       'breakfast',
@@ -118,6 +129,7 @@ function load_diet_plan() {
                 </div>';
               }
             $response .= '</div>
+            <div class="loader loader-coral"><div class="loader__circle"></div></div>
             <button type="button" class="diet-plan__item-change"';
             $response .= $replacement_data_attr;
             $response .= '>Заменить блюдо</button>

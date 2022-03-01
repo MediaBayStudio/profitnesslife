@@ -1332,7 +1332,7 @@ function questionnaire_send( $args ) {
   if ( $questionnaire_week_day === 'Sun' || $questionnaire_week_day === 'Mon' ) {
     $diet_plan_open_time = strtotime( '+3 hours', $questionnaire_time );
   } else {
-    $diet_plan_open_time = strtotime( 'next sunday +10 hours', $questionnaire_time );
+    $diet_plan_open_time = strtotime( 'next sunday +7 hours', $questionnaire_time );
   }
 
   $diet_plan_open_date = date( 'd.m.Y H:i:s', $diet_plan_open_time );

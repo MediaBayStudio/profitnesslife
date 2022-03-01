@@ -1,80 +1,147 @@
 ;
 (function() {
-  let calendar = q('.diet-plan__calendar'),
-    calendarItems = qa('.calendar-item', calendar),
-    calendarNav = q('.diet-plan__calendar-nav', calendar),
-    dietPlanList = q('.diet-plan__list'),
-    dietPlanDay = q('.diet-plan__day'),
-    dietPlanDate = q('.diet-plan__date'),
-    openCalendarBtn = q('.diet-plan__calendar-btn'),
-    events = qa('.event', calendar),
-    todayDay = calendar.getAttribute('data-today'),
-    setDataDay = function(days) {
-      for (let i = 0, len = days.length; i < len; i++) {
-        days[i].setAttribute('data-day', i);
-      }
-    },
-    closeCalendar = function(e) {
-      let target = e.target;
+  let calendar = q('.diet-plan__calendar');
+  let calendarItems = qa('.calendar-item', calendar);
+  let calendarNav = q('.diet-plan__calendar-nav', calendar);
+  let dietPlanList = q('.diet-plan__list');
+  let dietPlanDay = q('.diet-plan__day');
+  let dietPlanDate = q('.diet-plan__date');
+  let openCalendarBtn = q('.diet-plan__calendar-btn');
+  let events = qa('.event', calendar);
+  let todayDay = calendar.getAttribute('data-today');
+  let closeCalendar = function(e) {
+    let target = e.target;
 
-      if (!target.closest('.diet-plan__calendar')) {
-        calendar.classList.remove('active');
-        document.removeEventListener('click', closeCalendar);
-      }
-    };
-
-  events.forEach(function(event, i) {
-    let parent = event.parentElement,
-      next = parent.nextElementSibling,
-      prev = parent.previousElementSibling;
-
-    setDataDay(parent.children);
-    parent.classList.add('active-week');
-
-    if (i === 0 && next) {
-      next.classList.add('active-week');
-      next.setAttribute('data-week', 2);
-      setDataDay(next.children);
+    if (!target.closest('.diet-plan__calendar')) {
+      calendar.classList.remove('active');
+      document.removeEventListener('click', closeCalendar);
     }
+  };
 
-    if (i === 1 && prev) {
-      prev.classList.add('active-week');
-      prev.setAttribute('data-week', 2);
-      setDataDay(prev.children);
+  const startDateCell = events[0];
+  const finishDateCell = events[1];
+  const startDate = startDateCell.getAttribute('data-date').split('.').reverse();
+  const finishDate = finishDateCell.getAttribute('data-date').split('.').reverse();
+
+  Date.prototype.addDays = function(days) {
+    let dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
+  }
+
+  function getDates(startDate, stopDate) {
+    let dateArray = [];
+    let currentDate = startDate;
+    while (currentDate <= stopDate) {
+      dateArray.push(currentDate)
+      currentDate = currentDate.addDays(1);
     }
+    return dateArray.map(date => ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear());
+   }
+
+  let dateArray = getDates(new Date(startDate), (new Date(finishDate)).addDays(0));
+
+  dateArray.forEach(function(date, i) {
+    const cell = q('[data-date="' + date + '"]', calendar);
+    cell.setAttribute('data-day', i);
+    cell.classList.add('available');
   });
-
-  events[0]&&events[0].parentElement.setAttribute('data-week', 1);
-  events[1]&&events[1].parentElement.setAttribute('data-week', 3);
 
   if (calendarItems.length > 1) {
     calendarNav.classList.remove('hide');
   }
 
+  // Open Calendar
   openCalendarBtn.addEventListener('click', function(e) {
-    let target = e.target;
+    calendar.classList.add('active');
 
+    const activeCalendarItem = q('.calendar-item.active', calendar);
+    const todayElement = q('.today', calendar);
+    const todayElementparent = todayElement.closest('.calendar-item');
+
+    if (activeCalendarItem) {
+      activeCalendarItem.classList.remove('active');
+    }
+
+    todayElementparent.classList.add('active');
+
+    setTimeout(function() {
+      document.addEventListener('click', closeCalendar);
+    });
+
+  });
+
+  // openCalendarBtn.click();
+
+  // Клик по дате внутри календаря
+  calendar.addEventListener('click', function(e) {
+    let target = e.target;
     if (target.classList.contains('diet-plan__calendar-next') || target.classList.contains('diet-plan__calendar-prev')) {
-      let activeItem = q('.calendar-item.active', calendar),
-        item = q('.calendar-item:not(.active)', calendar);
+      const activeItem = q('.calendar-item.active', calendar);
+      const item = q('.calendar-item:not(.active)', calendar);
 
       activeItem.classList.remove('active');
       item.classList.add('active');
-    } else {
-      calendar.classList.add('active');
+    } else if (target.classList.contains('calendar-day') && target.classList.contains('available')) {
+      let today = q('.today', calendar);
+      let tragetElementDate = target.getAttribute('data-date');
+      let tragetElementDateArray = tragetElementDate.split('.');
+      let day = target.getAttribute('data-day');
+      let data = 'action=load_diet_plan&day_index=' + day;
 
-      let activeCalendarItem = q('.calendar-item.active', calendar),
-        todayElement = q('.today', calendar),
-        todayElementparent = todayElement.closest('.calendar-item');
+      calendar.classList.add('loading');
+      dietPlanList.classList.add('loading');
 
-      if (activeCalendarItem) {
-        activeCalendarItem.classList.remove('active');
-      }
+      fetch(siteUrl + '/wp-admin/admin-ajax.php', {
+        method: 'POST',
+        body: data,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then(function(response) {
+        if (response.ok) {
+          return response.text();
+        } else {
+          console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
+          return '';
+        }
+      })
+      .then(function(response) {
+        let dayName = '';
+        const targetDate = new Date(tragetElementDateArray[2], tragetElementDateArray[1] - 1, tragetElementDateArray[0]);
+        const nowDate = new Date();
+        const targetTime = Date.parse(targetDate);
+        const nowTime = Date.parse(nowDate);
+        const nowDay = nowDate.getDate();
+        const targetDay = targetDate.getDate();
+        const lastDayOfCurrentMonth = new Date(tragetElementDateArray[2], tragetElementDateArray[1] - 1, 0).getDate();
 
-      todayElementparent.classList.add('active');
+        if (targetTime === nowTime) {
+          dayName = 'сегодня, ';
+        } else if (targetTime < nowTime) {
+          if (nowDay - targetDay === 1) {
+            dayName = 'вчера, ';  
+          }
+        } else {
+          if (nowDay + 1 === targetDay || lastDayOfCurrentMonth === nowDay && targetDay === 1) {
+            dayName = 'завтра, ';  
+          }
+        }
 
-      setTimeout(function() {
-        document.addEventListener('click', closeCalendar);
+        dietPlanList.innerHTML = response;
+        dietPlanDay.textContent = 'День ' + (+day + 1);
+        dietPlanDate.innerHTML = '<span class="diet-plan__today">' + dayName + '</span>' + tragetElementDate;
+        calendar.classList.remove('loading');
+        dietPlanList.classList.remove('loading');
+        today.classList.remove('today');
+        target.classList.add('today');
+      })
+      .catch(function(err) {
+        errorPopup && errorPopup.openPopup();
+        calendar.classList.remove('loading');
+        dietPlanList.classList.remove('loading');
+        console.log(err);
       });
     }
   });
@@ -84,6 +151,8 @@
     let target = e.target;
 
     if (target.classList.contains('diet-plan__item-change')) {
+      target.blur();
+      target.setAttribute('tabindex', -1);
       let parent = target.closest('.diet-plan__item'),
         parentId = +parent.getAttribute('data-id'),
         replacementIds = JSON.parse(target.getAttribute('data-replacement')),
@@ -159,11 +228,13 @@
           // console.log(ingredientsHTML);
 
           parent.classList.remove('loading');
+          target.removeAttribute('tabindex');
           parent.setAttribute('data-id', response.item.id);
           // target.setAttribute('data-replacement', JSON.stringify(response.replacement_ids));
         })
         .catch(function(err) {
           console.log(err);
+          target.removeAttribute('tabindex');
           errorPopup.openPopup();
           parent.classList.remove('loading');
         });
@@ -326,71 +397,5 @@
   //     console.log('click on the change-button');
   //   }
   // });
-
-  // Клик по дате внутри календаря
-  calendar.addEventListener('click', function(e) {
-    let target = e.target;
-
-    if (target.classList.contains('calendar-day') && target.parentElement.classList.contains('active-week')) {
-      let today = q('.today', calendar),
-        tragetElementDate = target.getAttribute('data-date').slice(-10),
-        week = target.parentElement.getAttribute('data-week'),
-        day = target.getAttribute('data-day'),
-        data = 'action=load_diet_plan&day=' + target.textContent +
-        '&week=' + week +
-        '&day_index=' + day;
-
-      console.log('data-day', day);
-
-      calendar.classList.add('loading');
-
-      fetch(siteUrl + '/wp-admin/admin-ajax.php', {
-          method: 'POST',
-          body: data,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        })
-        .then(function(response) {
-          if (response.ok) {
-            return response.text();
-          } else {
-            console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
-            return '';
-          }
-        })
-        .then(function(response) {
-          let dayName = '',
-            targetDate = new Date(tragetElementDate.slice(-4), tragetElementDate.slice(3, 5), tragetElementDate.slice(0, 2)).getDate(),
-            todayDate = new Date().getDate();
-
-          // console.log('tragetElementDate', tragetElementDate);
-          // console.log('targetDate', targetDate);
-          // console.log('todayDate', todayDate);
-
-          if (targetDate === todayDate) {
-            dayName = 'сегодня, ';
-          } else if (todayDate - targetDate === 1) {
-            dayName = 'вчера, ';
-          } else if (todayDate + 1 === targetDate) {
-            dayName = 'завтра, ';
-          }
-
-          console.log(day);
-
-          dietPlanList.innerHTML = response;
-          dietPlanDay.textContent = 'День ' + ((+day + 1) + ((week - 1) * 7));
-          dietPlanDate.innerHTML = '<span class="diet-plan__today">' + dayName + '</span>' + target.getAttribute('data-date').slice(-10);
-          // console.log(response);
-          // console.log(JSON.parse(response));
-          calendar.classList.remove('loading');
-          today.classList.remove('today');
-          target.classList.add('today');
-        })
-        .catch(function(err) {
-          console.log(err);
-        });
-    }
-  });
 
 })();

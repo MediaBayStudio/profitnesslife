@@ -37,7 +37,9 @@
     }
   };
 
-  let input = qa('[name=tel]');
+  let input = qa('[name=tel]:not(.pay-form-tel)');
+
+  console.log(input)
 
   for (let i = 0; i < input.length; i++) {
     input[i].addEventListener('input', mask);

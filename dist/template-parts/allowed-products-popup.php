@@ -747,4 +747,4 @@ $cnt = [
     } ?>
   </div>
 </div>
-<?php var_dump( $user_data['categories'] ); ?>
+<?php #var_dump( $user_data['categories'] ); ?>

@@ -8,6 +8,16 @@ function create_payment() {
   $user_surname = $_POST['surname'];
   $user_email = $_POST['email'];
   $user_tel = $_POST['tel'];
+  $is_test = isset( $_POST['test'] ) ? true : false;
+
+  $test_email = 'alexander@media-bay.ru';
+  $admin_email = 'profitneslife@gmail.com, ' . $test_email;
+  $client_email = $user_email . ', ' . $test_email;
+
+  if ( $is_test ) {
+    wp_mail( $test_email, 'Тестовая оплата Profitnesslife.ru', 'На сайте успешно прошла тестовая олпата' );
+    die();
+  }
 
   // Получаем последний платеж
   $query = new WP_Query( [
@@ -66,9 +76,6 @@ function create_payment() {
   'Благодарим вас за оплату марафона стройности!' . PHP_EOL . PHP_EOL .
   'Мы свяжемся с вами в ближайшее время, и вы получите логин и пароль для входа в личный кабинет.' . PHP_EOL .
   'С наилучшими пожеланиями, команда profitnesslife.ru';
-
-  $admin_email = 'profitneslife@gmail.com, alexander@media-bay.ru';
-  $client_email = $user_email . ', alexander@media-bay.ru';
 
   // отправка на почту
   wp_mail( $admin_email, $subject, $admin_message );

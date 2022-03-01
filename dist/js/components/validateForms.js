@@ -3,7 +3,8 @@
   // Массив форм, на которые будет добавлена валидация
   let $forms = [
     id('index-form'),
-    id('pay-form')
+    id('pay-form'),
+    id('test-pay-form')
   ];
 
   let formValidator = function(params) {
@@ -22,7 +23,8 @@
         },
         tel: {
           required: true,
-          pattern: /\+7\([0-9]{3}\)[0-9]{3}\-[0-9]{2}\-[0-9]{2}/,
+          pattern: /\d+/
+          // pattern: /\+7\([0-9]{3}\)[0-9]{3}\-[0-9]{2}\-[0-9]{2}/,
           // or: 'email'
         },
         email: {
@@ -238,24 +240,44 @@
     $formBtn.addEventListener('click', function(e) {
       validationForm();
       
-      if ($form.id === 'pay-form') {
+      if ($form.id === 'pay-form' || $form.id === 'test-pay-form') {
         e.preventDefault();
         if ($form.validatie) {
           $form.classList.add('loading');
+          let publicID;
+          let amount;
+          if ($form.classList.contains('test')) {
+            publicID = 'test_api_00000000000000000000001';
+            amount = 1;
+          } else {
+            publicID = 'pk_82de7baa82dfeede0822c06c01cbc';
+            amount = +$form['price'].value;
+          }
           // $formBtn.blur();
           // $form.blur();
           let widget = new cp.CloudPayments();
           widget.pay('charge', {
             // publicId: 'test_api_00000000000000000000001',
-            publicId: 'pk_82de7baa82dfeede0822c06c01cbc',
+            // publicId: 'pk_82de7baa82dfeede0822c06c01cbc',
+            publicId: publicID,
             description: 'Оплата марафона стройности',
-            amount: +$form['price'].value,
+            // amount: +$form['price'].value,
+            amount: amount,
             currency: 'RUB',
             accountId: $form['email'].value,
             email: $form['email'].value,
             skin: 'mini'
           }, {
             onSuccess: function(options) {
+              
+            },
+            onFail: function(reason, options) {
+              q('.pay-hero').classList.remove('active');
+              q('#failure-pay').classList.add('active');
+              console.log('fail');
+              $form.classList.remove('loading');
+            },
+            onComplete: function(paymentResult, options) {
               q('.pay-hero').classList.remove('active');
               q('#success-pay').classList.add('active');
               console.log('success');
@@ -264,35 +286,27 @@
               data.append('action', 'create_payment');
 
               fetch(siteUrl + '/wp-admin/admin-ajax.php', {
-                  method: 'POST',
-                  body: data
-                })
-                .then(function(response) {
-                  if (response.ok) {
-                    return response.text();
-                  } else {
-                    console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
-                    return '';
-                  }
-                })
-                .then(function(response) {
-                  // response = JSON.parse(response);
-                  console.log(response);
-                })
-                .catch(function(err) {
-                  console.log(err);
-                  errorPopup && errorPopup.openPopup();
-                  $form.classList.remove('loading');
-                });
-
-            },
-            onFail: function(reason, options) {
-              q('.pay-hero').classList.remove('active');
-              q('#failure-pay').classList.add('active');
-              console.log('fail');
-              $form.classList.remove('loading');
-            },
-            onComplete: function(paymentResult, options) {}
+                method: 'POST',
+                body: data
+              })
+              .then(function(response) {
+                if (response.ok) {
+                  return response.text();
+                } else {
+                  console.log('Ошибка ' + response.status + ' (' + response.statusText + ')');
+                  return '';
+                }
+              })
+              .then(function(response) {
+                // response = JSON.parse(response);
+                console.log(response);
+              })
+              .catch(function(err) {
+                console.log(err);
+                errorPopup && errorPopup.openPopup();
+                $form.classList.remove('loading');
+              });
+            }
           });
           return;
         }
