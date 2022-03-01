@@ -13,6 +13,7 @@
     let target = e.target;
 
     if (!target.closest('.diet-plan__calendar')) {
+      console.log('close');
       calendar.classList.remove('active');
       document.removeEventListener('click', closeCalendar);
     }
@@ -53,7 +54,9 @@
 
   // Open Calendar
   openCalendarBtn.addEventListener('click', function(e) {
-    calendar.classList.add('active');
+    console.log('click');
+    document.removeEventListener('click', closeCalendar);
+    calendar.classList.toggle('active');
 
     const activeCalendarItem = q('.calendar-item.active', calendar);
     const todayElement = q('.today', calendar);

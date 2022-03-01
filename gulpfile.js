@@ -188,3 +188,29 @@ task('moveall', parallel(
   'moveimg',
   'movefavicons',
   'movejson'));
+
+
+  const browserSync = require('browser-sync').create();
+
+// function serve() {
+//   browserSync.init({
+//     server: './dist',
+//     notify: false,
+//   })
+// }
+
+let siteUrl = 'http://localhost:8888/profitnesslife/';
+let siteDir = '../wc-estore/';
+
+task('browser-sync', function () {
+  browserSync.init({
+    proxy: {
+      target: siteUrl,
+      ws: true
+    },
+    reloadDelay: 2000
+  });
+  watch(siteDir + "**/*.php").on('change', browserSync.reload);
+  watch(siteDir + "**/*.css").on('change', browserSync.reload);
+  watch(siteDir + "**/*.js").on('change', browserSync.reload);
+});

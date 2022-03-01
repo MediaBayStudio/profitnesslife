@@ -2,20 +2,20 @@
 
 // Скрипт и стиль в админку
 add_action( 'admin_enqueue_scripts', function() {
-  global $template_directory_uri;
-  wp_enqueue_script( "script-admin", $template_directory_uri . "/js/script-admin.js", [], null, true );
-  wp_enqueue_style( "style-admin", $template_directory_uri . "/style-admin.css", [], null );
+  global $template_directory_uri, $version;
+  wp_enqueue_script( "script-admin", $template_directory_uri . "/js/script-admin.js", [], $version, true );
+  wp_enqueue_style( "style-admin", $template_directory_uri . "/style-admin.css", [], $version );
 } );
 
 // Функция подключения стилей
 function enqueue_style( $style_name, $widths ) {
-  global $template_directory_uri, $template_directory;
+  global $template_directory_uri, $template_directory, $version;
 
   if ( is_string( $widths ) ) {
     if ( $style_name === 'hover' ) {
-      wp_enqueue_style( "{$style_name}", $template_directory_uri . "/css/{$style_name}.css", [], null, "(hover) and (min-width:1024px)" );
+      wp_enqueue_style( "{$style_name}", $template_directory_uri . "/css/{$style_name}.css", [], $version, "(hover) and (min-width:1024px)" );
     } else {
-      wp_enqueue_style( "{$style_name}", $template_directory_uri . "/css/{$style_name}.css", [], null );
+      wp_enqueue_style( "{$style_name}", $template_directory_uri . "/css/{$style_name}.css", [], $version );
     }
   } else {
     foreach ( $widths as $width ) {
@@ -25,9 +25,9 @@ function enqueue_style( $style_name, $widths ) {
         if ( filesize( $template_directory . '/css/' . $style_name . '.' . $width . '.css' ) === 0 ) {
           continue;
         }
-        wp_enqueue_style( "{$style_name}-{$width}px", $template_directory_uri . "/css/{$style_name}.{$width}.css", [], null, "(min-width: {$media}px)" );
+        wp_enqueue_style( "{$style_name}-{$width}px", $template_directory_uri . "/css/{$style_name}.{$width}.css", [], $version, "(min-width: {$media}px)" );
       } else {
-        wp_enqueue_style( "{$style_name}-page", $template_directory_uri . "/css/{$style_name}.css", [], null );
+        wp_enqueue_style( "{$style_name}-page", $template_directory_uri . "/css/{$style_name}.css", [], $version );
       }
     }
   }
@@ -35,10 +35,10 @@ function enqueue_style( $style_name, $widths ) {
 
 // Подключаем свои стили и скрипты
 add_action( 'wp_enqueue_scripts', function() {
-  global $template_directory_uri;
+  global $template_directory_uri, $version;
   $screen_widths = ['0', '576', '768', '1024', '1280']; // на каких экранах подключать css
 
-  wp_enqueue_style( 'theme-style', get_stylesheet_uri(), [], null );        // подключить стиль темы (default)
+  wp_enqueue_style( 'theme-style', get_stylesheet_uri(), [], $version );        // подключить стиль темы (default)
 
   // подключаем стили с помощью своей функции
   // enqueue_style( 'style', $screen_widths );
@@ -59,7 +59,7 @@ add_action( 'wp_enqueue_scripts', function() {
   }
 
   foreach ( $scripts as $script ) {
-    wp_enqueue_script( "{$script}", $template_directory_uri . "/js/{$script}.js", [], null );
+    wp_enqueue_script( "{$script}", $template_directory_uri . "/js/{$script}.js", [], $version );
   }
 
   // Отключаем стандартные jquery, jquery-migrate

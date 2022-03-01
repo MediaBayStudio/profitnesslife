@@ -12,7 +12,8 @@
     $show_diet_plan,
     $questionnaire_complete,
     $template_directory,
-    $template_directory_uri;
+    $template_directory_uri,
+    $version;
 
   if ( !$preload ) {
     $preload = get_field( 'preload' );
@@ -76,13 +77,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <!-- styles preload -->
-  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/style.css" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.css" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.576.css" media="(min-width:575.98px)" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.768.css" media="(min-width:767.98px)" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.1024.css" media="(min-width:1023.98px)" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.1280.css" media="(min-width:1279.98px)" />
-  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/hover.css" media="(hover) and (min-width:1024px)" />
+  <link rel="preload" as="style" href="<?php echo "$template_directory_uri/style.css?ver=$version" ?>" />
+	<link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/$style_name.css?ver=$version" ?>" />
+	<link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/$style_name.576.css?ver=$version" ?>" media="(min-width:575.98px)" />
+	<link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/$style_name.768.css?ver=$version" ?>" media="(min-width:767.98px)" />
+	<link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/$style_name.1024.css?ver=$version" ?>" media="(min-width:1023.98px)" />
+	<link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/$style_name.1280.css?ver=$version" ?>" media="(min-width:1279.98px)" />
+  <link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/hover.css?ver=$version" ?>" media="(hover) and (min-width:1024px)" />
   <!-- fonts preload --> <?php
 	$fonts = [
 		'NotoSans-Bold.woff' => 'woff',

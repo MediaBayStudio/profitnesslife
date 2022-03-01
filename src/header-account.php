@@ -17,7 +17,8 @@
     $current_time,
     $first_week_end_time,
     $second_week_end_time,
-    $third_week_end_time;
+    $third_week_end_time,
+    $version;
 
 function add_user_to_chat( $user_data, $user_id ) {
   if ( !is_user_logged_in() ) {
@@ -147,6 +148,12 @@ add_user_to_chat( $user_data, $user_id );
       $script_name = 'script-' . $GLOBALS['current_template'];
       $style_name = 'style-' . $GLOBALS['current_template'];
 
+
+      // if ( $current_template === 'diet-plan' ) {
+      //   $script_name .= '-1';
+      //   $style_name .= '-1';
+      // }
+
       // $questionnaire_complete определяется в functions.php
 
       if ( $current_template === 'questionnaire' ) {
@@ -176,17 +183,17 @@ add_user_to_chat( $user_data, $user_id );
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, user-scalable=no, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <!-- styles preload --> <?php
-if ( $current_template === 'training-program' ) : ?>
-  <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
-  <script defer src="//vjs.zencdn.net/7.10.2/video.min.js"></script> <?php
-endif ?>
-  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/style.css" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.css" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.576.css" media="(min-width:575.98px)" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.768.css" media="(min-width:767.98px)" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.1024.css" media="(min-width:1023.98px)" />
-	<link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/<?php echo $style_name ?>.1280.css" media="(min-width:1279.98px)" />
-  <link rel="preload" as="style" href="<?php echo $template_directory_uri ?>/css/hover.css" media="(hover) and (min-width:1024px)" />
+#if ( $current_template === 'training-program' ) : ?>
+  <!-- <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet"> -->
+  <!-- <script defer src="//vjs.zencdn.net/7.10.2/video.min.js"></script> --> <?php
+#endif ?>
+  <link rel="preload" as="style" href="<?php echo "$template_directory_uri/style.css?ver=$version" ?>" />
+	<link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/$style_name.css?ver=$version" ?>" />
+	<link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/$style_name.576.css?ver=$version" ?>" media="(min-width:575.98px)" />
+	<link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/$style_name.768.css?ver=$version" ?>" media="(min-width:767.98px)" />
+	<link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/$style_name.1024.css?ver=$version" ?>" media="(min-width:1023.98px)" />
+	<link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/$style_name.1280.css?ver=$version" ?>" media="(min-width:1279.98px)" />
+  <link rel="preload" as="style" href="<?php echo "$template_directory_uri/css/hover.css?ver=$version" ?>" media="(hover) and (min-width:1024px)" />
   <!-- fonts preload --> <?php
 	$fonts = [
 		'NotoSans-Bold.woff' => 'woff',

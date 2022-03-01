@@ -1,5 +1,6 @@
 <?php
 // Глобальные переменные
+$version = '1.0.4'; // Версия стилей и скриптов
 $template_directory_uri = get_template_directory_uri();
 $template_directory = get_template_directory();
 $site_url = site_url();
