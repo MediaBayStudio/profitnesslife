@@ -1,4 +1,5 @@
 <?php
+
 if ( !$questionnaire_complete ) : ?>
   <section class="questionnaire-incomplete-section" id="questionnaire-incomplete-section">
     <img src="<?php echo $template_directory_uri ?>/img/questionnaire-start-img.svg" alt="Анкета участника" width="225" height="170" class="questionnaire-incomplete-section__img">
@@ -494,31 +495,31 @@ if ( !$questionnaire_complete ) : ?>
       <div class="questionnaire-form__step with-final-button hide">
         <span class="questionnaire-form__step-title">Каким проблемным местам вы хотите уделить внимание?</span>
         <div class="questionnaire-form__step-fields">
-          <input type="checkbox" name="body-parts" id="belly" value="belly" class="checkbox-green">
+          <input type="checkbox" name="body-parts[]" id="belly" value="belly" class="checkbox-green">
           <label for="belly" class="questionnaire-card questionnaire-card-body-parts">
             <img src="#" alt="Изображение живота" width="95" height="90" data-src="<?php echo $template_directory_uri ?>/img/questionnaire-body-parts-img-1.svg" class="questionnaire-card__img lazy">
             <span class="questionnaire-card__checkbox-pseudo-input checkbox-pseudo-input"></span>
             <span class="questionnaire-card__checkbox-text checkbox-text">Живот</span>
           </label>
-          <input type="checkbox" name="body-parts" id="sides" value="sides" class="checkbox-green">
+          <input type="checkbox" name="body-parts[]" id="sides" value="sides" class="checkbox-green">
           <label for="sides" class="questionnaire-card questionnaire-card-body-parts">
             <img src="#" alt="Изображение боков" width="95" height="90" data-src="<?php echo $template_directory_uri ?>/img/questionnaire-body-parts-img-2.svg" class="questionnaire-card__img lazy">
             <span class="questionnaire-card__checkbox-pseudo-input checkbox-pseudo-input"></span>
             <span class="questionnaire-card__checkbox-text checkbox-text">Бока</span>
           </label>
-          <input type="checkbox" name="body-parts" id="hips" value="hips" class="checkbox-green">
+          <input type="checkbox" name="body-parts[]" id="hips" value="hips" class="checkbox-green">
           <label for="hips" class="questionnaire-card questionnaire-card-body-parts">
             <img src="#" alt="Изображение бедер" width="95" height="90" data-src="<?php echo $template_directory_uri ?>/img/questionnaire-body-parts-img-3.svg" class="questionnaire-card__img lazy">
             <span class="questionnaire-card__checkbox-pseudo-input checkbox-pseudo-input"></span>
             <span class="questionnaire-card__checkbox-text checkbox-text">Бедра</span>
           </label>
-          <input type="checkbox" name="body-parts" id="butt" value="butt" class="checkbox-green">
+          <input type="checkbox" name="body-parts[]" id="butt" value="butt" class="checkbox-green">
           <label for="butt" class="questionnaire-card questionnaire-card-body-parts">
             <img src="#" alt="Изображение ягодиц" width="95" height="90" data-src="<?php echo $template_directory_uri ?>/img/questionnaire-body-parts-img-4.svg" class="questionnaire-card__img lazy">
             <span class="questionnaire-card__checkbox-pseudo-input checkbox-pseudo-input"></span>
             <span class="questionnaire-card__checkbox-text checkbox-text">Ягодицы</span>
           </label>
-          <input type="checkbox" name="body-parts" id="hands" value="hands" class="checkbox-green">
+          <input type="checkbox" name="body-parts[]" id="hands" value="hands" class="checkbox-green">
           <label for="hands" class="questionnaire-card questionnaire-card-body-parts">
             <img src="#" alt="Изображение рук" width="95" height="90" data-src="<?php echo $template_directory_uri ?>/img/questionnaire-body-parts-img-5.svg" class="questionnaire-card__img lazy">
             <span class="questionnaire-card__checkbox-pseudo-input checkbox-pseudo-input"></span>

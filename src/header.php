@@ -67,6 +67,7 @@
       $style_name = '';
     } 
   }
+
   $GLOBALS['page_script_name'] = $script_name;
   $GLOBALS['page_style_name'] = $style_name ?>
 <!DOCTYPE html>

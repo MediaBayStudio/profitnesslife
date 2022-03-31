@@ -40,7 +40,7 @@
     return dateArray.map(date => ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear());
    }
 
-  let dateArray = getDates(new Date(startDate), (new Date(finishDate)).addDays(0));
+  let dateArray = getDates(new Date(startDate[0], startDate[1] - 1, startDate[2]), (new Date(finishDate[0], finishDate[1] - 1, finishDate[2])).addDays(0));
 
   dateArray.forEach(function(date, i) {
     const cell = q('[data-date="' + date + '"]', calendar);

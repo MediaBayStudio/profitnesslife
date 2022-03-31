@@ -4,25 +4,24 @@
 // $start_marathon_time объявляется в functions.php
 // $current_time объявляется в functions.php
 if ( $questionnaire_complete ) {
-
-  if ( $start_marathon_time > $current_time ) {
-    print_account_hero_section( [
-      'title' => 'Анкета участника',
-      'descr' => 'Ты можешь скорректировать данные анкеты на этой странице, для этого необходимо заново ее пройти. Это ты можешь сделать только до начала марафона.',
-      'buttons' => [
-        [
-          'title' => 'Перейти в чат',
-          'class' => 'btn-green',
-          'href' => $manager_link_whatsapp,
-          'target' => '_blank'
-        ]
-      ],
-      'img' => [
-        'url' => $template_directory_uri . '/img/questionnaire-hero-img.svg',
-        'alt' => 'Изображение'
-      ]
-    ] );
-  }
+  // if ( $start_marathon_time > $current_time ) {
+  //   print_account_hero_section( [
+  //     'title' => 'Анкета участника',
+  //     'descr' => 'Ты можешь скорректировать данные анкеты на этой странице, для этого необходимо заново ее пройти. Это ты можешь сделать только до начала марафона.',
+  //     'buttons' => [
+  //       [
+  //         'title' => 'Перейти в чат',
+  //         'class' => 'btn-green',
+  //         'href' => $manager_link_whatsapp,
+  //         'target' => '_blank'
+  //       ]
+  //     ],
+  //     'img' => [
+  //       'url' => $template_directory_uri . '/img/questionnaire-hero-img.svg',
+  //       'alt' => 'Изображение'
+  //     ]
+  //   ] );
+  // }
 
   // $user_data объявляется в functions.php
   // $start_marathon_time объявляется в functions.php
@@ -229,7 +228,7 @@ if ( $questionnaire_complete ) {
       if ( $user_data['body_parts'] ) : ?>
         <li class="questionnaire-complete-sect__li">
           <span class="questionnaire-complete-sect__li-left">Каким проблемным местам вы хотите уделить внимание:</span>
-          <span class="questionnaire-complete-sect__li-right"><?php
+          <span class="questionnaire-complete-sect__li-right"> <?php
               echo mb_strtolower( implode( ', ', $user_data['body_parts'] ) ) ?>      
           </span>
         </li> <?php

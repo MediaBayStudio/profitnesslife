@@ -8,7 +8,6 @@ get_header( 'account' );
 
 // $user_id определяется в functions.php
 // $questionnaire_complete определяется в functions.php
-
 $questionnaire_section_class = $questionnaire_complete ? 'complete' : 'incomplete' ?>
 
 <section class="container account-page-wrapper questionnaire-<?php echo $questionnaire_section_class ?>"> <?php
