@@ -67,6 +67,37 @@
   // update_field( 'start_marathon_date', $start_marathon_date, 'user_14' );
   // update_field( 'finish_marathon_date', $finish_marathon_date, 'user_14' );
   // update_field( 'questionnaire_time', $questionnaire_date, 'user_14' );
+  
+
+  // $users = get_users( [
+  //   'role__in' => 'completed',
+  //   'number' => -1
+  // ] );
+
+  // foreach ( $users as $u ) {
+  //   echo "<p>{$u->data->display_name}</p>";
+  //   echo "<p>{$u->data->user_registered}</p>";
+  //   echo "<p>" . strtotime( $u->data->user_registered ) . "</p>";
+  //   echo "<p>" . strtotime( '01.05.2022' ) . "</p>";
+
+  //   echo "<p><a style='text-decoration:underline;color:lightblue' href=\"" . $site_url . '/wp-admin/user-edit.php?user_id=' . $u->ID . "\" target=\"_blank\">" . $site_url . '/wp-admin/user-edit.php?user_id=' . $u->ID . "</a></p>";
+
+  //   if ( strtotime( '01.05.2022' ) > strtotime( $u->data->user_registered ) ) {
+  //     $childrens = get_posts( [
+  //       'author' => $u->ID,
+  //       'post_type'   => 'attachment',
+  //       'numberposts' => -1,
+  //       'post_status' => 'any'
+  //     ] );
+
+  //     if( $childrens ){
+  //       foreach( $childrens as $children ){
+  //         echo "<p>{$children->post_type}</p>";
+  //         echo "<p><a style='text-decoration:underline;color:lightblue' href=\"" . wp_get_attachment_url( $children->ID ) . "\" target=\"_blank\">" . wp_get_attachment_url( $children->ID ) . "</a></p>";
+  //       }
+  //     }
+  //   }
+  // }
 
 ?>
 <header>
@@ -140,6 +171,7 @@
         url = '<?php echo site_url() ?>/wp-admin/admin-ajax.php';
 
       data.append('action', 'questionnaire_send');
+      data.append('method', 'test');
 
       fetch(url, {
         method: 'POST',

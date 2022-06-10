@@ -99,6 +99,9 @@ function questionnaire_send( $args ) {
     return 0;
   }
 
+
+  $is_test = $_POST['method'] === 'test';
+
   $user_id = $args['user-id'];
   $target = $args['target'];
   $sex = $args['sex'];
@@ -309,44 +312,46 @@ function questionnaire_send( $args ) {
   $terms = [];
   $exclude_terms = [];
 
-  foreach ( $products as $product ) {
-    $products_array[] = $product;
-  }
+  // foreach ( $products as $product ) {
+  //   $products_array[] = $product;
+  // }
 
-  foreach ( $products_array as $slug ) {
+  // foreach ( $products_array as $slug ) {
+  foreach ( $categories as $slug ) {
     $exclude_terms[] = $slug;
+    $products_array[] = $slug;
     $term = get_term_by( 'slug', $slug, 'dish_category' );
     $terms[] = $term->term_id;
     $exclude_terms_rus[] = $term->name === 'Крупа' ? 'Каши на завтрак' : $term->name;
   }
-
-  // print_r( $terms );
-
-  // echo "<div class=\"container\">";
-  // echo "<h2>Данные анкеты:</h2>";
-  // echo "<p>Цель: <b>{$target_rus}</b></p>";
-  // echo "<p>Пол: <b>{$args['sex']}</b></p>";
-  // echo "<p>Дети: <b>" . ($args['children'] === 'y' ? 'Есть' : 'Нет')  . "</b></p>";
-  // echo "<p>Текущий вес: <b>{$args['current-weight']}</b></p>";
-  // echo "<p>Рост: <b>{$args['height']}</b></p>";
-  // echo "<p>Возраст: <b>{$args['age']}</b></p>";
-  // echo "<p>Первоначальный BMR: <b>{$initial_bmr}</b></p>";
-  // echo $bmr_text;
-  // echo "<p>BMR: <b>{$bmr}</b></p>";
-  // echo "<br>";
-  // echo $calories_on_breakfast;
-  // echo "<p>Поиск в интервале калорий от <i>" . ($breakfast_max_calories - 50) . "</i> до <i>" . ($breakfast_max_calories + 50) . "</i></p>";
-  // echo $calories_on_lunch;
-  // echo "<p>Поиск в интервале калорий от <i>" . ($lunch_max_calories - 50) . "</i> до <i>" . ($lunch_max_calories + 50) . "</i></p>";
-  // echo $calories_on_dinner;
-  // echo "<p>Поиск в интервале калорий от <i>" . ($dinner_max_calories - 50) . "</i> до <i>" . ($dinner_max_calories + 50) . "</i></p>";
-  // echo $calories_on_snack_1;
-  // echo "<p>Поиск в интервале калорий от <i>" . ($snack_1_max_calories - 100) . "</i> до <i>" . ($snack_1_max_calories + 100) . "</i></p>";
-  // echo $calories_on_snack_2;
-  // echo "<p>Поиск в интервале калорий от <i>" . ($snack_2_max_calories - 100) . "</i> до <i>" . ($snack_2_max_calories + 100) . "</i></p>";
-  // echo "<br>";
-  // echo "<p>Исключения: <b>" . ($exclude_terms_rus ? implode( ', ', $exclude_terms_rus ) : 'нет') . "</b></p>";
-  // echo "<br>";
+  
+  if ( $is_test ) {
+    echo "<div class=\"container\">";
+    echo "<h2>Данные анкеты:</h2>";
+    echo "<p>Цель: <b>{$target_rus}</b></p>";
+    echo "<p>Пол: <b>{$args['sex']}</b></p>";
+    echo "<p>Дети: <b>" . ($args['children'] === 'y' ? 'Есть' : 'Нет')  . "</b></p>";
+    echo "<p>Текущий вес: <b>{$args['current-weight']}</b></p>";
+    echo "<p>Рост: <b>{$args['height']}</b></p>";
+    echo "<p>Возраст: <b>{$args['age']}</b></p>";
+    echo "<p>Первоначальный BMR: <b>{$initial_bmr}</b></p>";
+    echo $bmr_text;
+    echo "<p>BMR: <b>{$bmr}</b></p>";
+    echo "<br>";
+    echo $calories_on_breakfast;
+    echo "<p>Поиск в интервале калорий от <i>" . ($breakfast_max_calories - 50) . "</i> до <i>" . ($breakfast_max_calories + 50) . "</i></p>";
+    echo $calories_on_lunch;
+    echo "<p>Поиск в интервале калорий от <i>" . ($lunch_max_calories - 50) . "</i> до <i>" . ($lunch_max_calories + 50) . "</i></p>";
+    echo $calories_on_dinner;
+    echo "<p>Поиск в интервале калорий от <i>" . ($dinner_max_calories - 50) . "</i> до <i>" . ($dinner_max_calories + 50) . "</i></p>";
+    echo $calories_on_snack_1;
+    echo "<p>Поиск в интервале калорий от <i>" . ($snack_1_max_calories - 100) . "</i> до <i>" . ($snack_1_max_calories + 100) . "</i></p>";
+    echo $calories_on_snack_2;
+    echo "<p>Поиск в интервале калорий от <i>" . ($snack_2_max_calories - 100) . "</i> до <i>" . ($snack_2_max_calories + 100) . "</i></p>";
+    echo "<br>";
+    echo "<p>Исключения: <b>" . ($exclude_terms_rus ? implode( ', ', $exclude_terms_rus ) : 'нет') . "</b></p>";
+    echo "<br>";
+  }
 
   /*
 
@@ -357,13 +362,17 @@ function questionnaire_send( $args ) {
   if ( $target === 'weight-gain' ) {
     // Набор веса + грудное вскармливание
     if ( $children === 'y' ) {
-      // echo '<p><b>ОШИБКА:</b> Набор веса + грудное вскармливание</p>';
+      if ( $is_test ) {
+        echo '<p><b>ОШИБКА:</b> Набор веса + грудное вскармливание</p>';
+      }
       return;
     }
 
     // Набор веса + исключение всех белков
     if ( in_array( 'molochnye-produkty', $products_array ) && in_array( 'myaso', $products_array ) && in_array( 'ryba', $products_array ) && in_array( 'yajcza', $products_array ) ) {
-      // echo '<p><b>ОШИБКА:</b> Набор веса + исключение всех белков</p>';
+      if ( $is_test ) {
+        echo '<p><b>ОШИБКА:</b> Набор веса + исключение всех белков</p>';
+      }
       return;
     }
     $products_slugs = [
@@ -377,20 +386,26 @@ function questionnaire_send( $args ) {
     }
     // Набор веса + Выбрано 2 из "рыба, мясо, молоко"
     if ( $count >= 2 ) {
-      // echo "<p><b>ОШИБКА:</b> Набор веса + Выбрано 2 из \"рыба, мясо, молоко\"</p>";
+      if ( $is_test ) {
+        echo "<p><b>ОШИБКА:</b> Набор веса + Выбрано 2 из \"рыба, мясо, молоко\"</p>";
+      }
       return;
     }
   }
 
   // Исключено 5 и более категорий продуктов
   if ( count( $products ) >= 5 ) {
-    // echo "<p><b>ОШИБКА:</b> Исключено 5 и более категорий продуктов</p>";
+    if ( $is_test ) {
+      echo "<p><b>ОШИБКА:</b> Исключено 5 и более категорий продуктов</p>";
+    }
     return;
   }
 
   // Грудное вскармливание + исключено все белковое
   if ( $children === 'y' && in_array( 'ryba', $products_array ) && in_array( 'molochnye-produkty', $products_array ) && in_array( 'myaso', $products_array ) && in_array( 'yajcza', $products_array ) ) {
-    // echo "<p><b>ОШИБКА:</b> Грудное вскармливание + исключено все белковое</p>";
+    if ( $is_test ) {
+      echo "<p><b>ОШИБКА:</b> Грудное вскармливание + исключено все белковое</p>";
+    }
     return;
   }
 
@@ -443,7 +458,9 @@ function questionnaire_send( $args ) {
         'Яйца'
       ];
       $vegan = true;
-      // echo '<p>Исключено много белкового, добавляем исключения: ' . implode( ', ', $exclude_terms_rus ) . '</p>';
+      if ( $is_test ) {
+        echo '<p>Исключено много белкового, добавляем исключения: ' . implode( ', ', $exclude_terms_rus ) . '</p>';
+      }
     }
 
     $products_slugs = [
@@ -458,7 +475,9 @@ function questionnaire_send( $args ) {
     }
     if ( $count === 3 ) {
       $vegan = true;
-      // echo '<p>Исключено много белкового</p>';
+      if ( $is_test ) {
+        echo '<p>Исключено много белкового</p>';
+      }
     }
   }
 
@@ -481,17 +500,25 @@ function questionnaire_send( $args ) {
     if ( $target === 'weight-loss' || $target === 'weight-maintaining' ) {
 
       if ( in_array( 'ryba', $products_array ) && in_array( 'myaso', $products_array )) {
-        // echo '<p>Исключены рыба и мясо, в приемах пищи может быть тофу</p>';
+        if ( $is_test ) {
+          echo '<p>Исключены рыба и мясо, в приемах пищи может быть тофу</p>';
+        }
         $excluded_ingredients[] = 'soevyj-protein-pure-protein';
       } else if ( in_array( 'yajcza', $products_array ) && in_array( 'myaso', $products_array ) && in_array( 'ryba', $products_array ) ) {
-        // echo '<p>Исключены рыба, мясо и яйца, в приемах пищи может быть тофу и соевый протеин</p>';
+        if ( $is_test ) {
+          echo '<p>Исключены рыба, мясо и яйца, в приемах пищи может быть тофу и соевый протеин</p>';
+        }
       } else {
-        // echo '<p>Приемы пищи с соевым протеином и тофу исключены</p>';
+        if ( $is_test ) {
+          echo '<p>Приемы пищи с соевым протеином и тофу исключены</p>';
+        }
         $excluded_ingredients = ['soevyj-protein-pure-protein', 'tofu'];  
       }
 
     } else {
-      // echo '<p>Приемы пищи с соевым протеином и тофу исключены</p>';
+      if ( $is_test ) {
+        echo '<p>Приемы пищи с соевым протеином и тофу исключены</p>';
+      }
       $excluded_ingredients = ['soevyj-protein-pure-protein', 'tofu'];
     }
 
@@ -505,7 +532,9 @@ function questionnaire_send( $args ) {
     }
 
   } else {
-    // echo '<p>Исключено много белкового, добавлены приемы пищи с соевым протеином и тофу</p>';
+    if ( $is_test ) {
+      echo '<p>Исключено много белкового, добавлены приемы пищи с соевым протеином и тофу</p>';
+    }
   }
 
   $breakfasts_args = [
@@ -588,118 +617,127 @@ function questionnaire_send( $args ) {
       'terms'     => $exclude_terms
     ];
   }
-
+  
   $breakfasts = get_posts( $breakfasts_args );
   $lunches = get_posts( $lunches_args );
 
   if ( $breakfasts ) {
     $breakfasts_count = count( $breakfasts );
-    // echo "<h3>Завтраки" . ( $breakfasts_count < 21 ? ' (уникальных подобралось ' . $breakfasts_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
-    // echo "<table style=\"width:100%\">";
-    // echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
     $breakfasts = fill_array( $breakfasts );
-    // $i = 1;
-    // foreach ( $breakfasts as $breakfast ) {
-    //   $ccal = get_field( 'calories', $breakfast->ID );
-    //   $targets = get_field( 'target', $breakfast->ID );
-    //   // $categories = get_field( 'categories', $breakfast->ID );
-    //   $categories = get_the_terms( $breakfast->ID, 'dish_category' );
-    //   $ingredients = get_field( 'ingredients', $breakfast->ID );
-    //   $recipe = get_field( 'text', $breakfast->ID );
-    //   $ingredients_str = [];
-    //   $targets_str = [];
-    //   foreach ( $targets as $t ) {
-    //     if ( $t->slug === $target_slug ) {
-    //       $targets_str[] = "<b>{$t->name}</b>";
-    //     } else {
-    //       $targets_str[] = $t->name;
-    //     }
-    //   }
-    //   $categories_str = [];
-    //   foreach ( $categories as $c ) {
-    //     $categories_str[] = $c->name;
-    //   }
-    //   foreach ( $ingredients as $ingredient ) {
-    //     $ingredient_text = $ingredient['title']->name;
-    //     if ( $ingredient['number'] ) {
-    //       $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
-    //     }
-    //     $ingredients_str[] = $ingredient_text;
-    //   }
-    //   // echo "<tr>";
-    //   // echo "<td style=\"font-size:0.75em\">{$i}</td>";
-    //   // echo "<td style=\"font-size:0.9em\">{$breakfast->post_title}</td>";
-    //   // echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
-    //   // echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
-    //   // echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
-    //   // echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
-    //   // echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
-    //   // echo "</tr>";
-    //   $i++;
-    // }
-    // echo "</table>";
+    if ( $is_test ) {
+      echo "<h3>Завтраки" . ( $breakfasts_count < 21 ? ' (уникальных подобралось ' . $breakfasts_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
+      echo "<table style=\"width:100%\">";
+      echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
+      $i = 1;
+      foreach ( $breakfasts as $breakfast ) {
+        $ccal = get_field( 'calories', $breakfast->ID );
+        $targets = get_field( 'target', $breakfast->ID );
+        $categories = get_the_terms( $breakfast->ID, 'dish_category' );
+        $ingredients = get_field( 'ingredients', $breakfast->ID );
+        $recipe = get_field( 'text', $breakfast->ID );
+        $ingredients_str = [];
+        $targets_str = [];
+        foreach ( $targets as $t ) {
+          if ( $t->slug === $target_slug ) {
+            $targets_str[] = "<b>{$t->name}</b>";
+          } else {
+            $targets_str[] = $t->name;
+          }
+        }
+        $categories_str = [];
+        foreach ( $categories as $c ) {
+          $categories_str[] = $c->name;
+        }
+        foreach ( $ingredients as $ingredient ) {
+          $ingredient_text = $ingredient['title']->name;
+          if ( $ingredient['number'] ) {
+            $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
+          }
+          $ingredients_str[] = $ingredient_text;
+        }
+        echo "<tr>";
+        echo "<td style=\"font-size:0.75em\">{$i}</td>";
+        echo "<td style=\"font-size:0.9em\">{$breakfast->post_title}</td>";
+        echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
+        echo "</tr>";
+        $i++;
+      }
+      echo "</table>";
+    }
   } else {
+    if ( $is_test ) {
+      echo "<p>Не удалось подобрать завтраки</p>";
+      echo "<p>Цель: {$target_rus}</p>";
+    }
     return;
-    // echo "<p>Не удалось подобрать завтраки</p>";
-    // echo "<p>Цель: {$target_rus}</p>";
   }
 
-  // echo "<br>";
+  if ( $is_test ) {
+    echo "<br>";
+  }
   
   if ( $lunches ) {
     $lunches_count = count( $lunches );
-    // echo "<h3>Обеды" . ( $lunches_count < 21 ? ' (уникальных подобралось ' . $lunches_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
-    // echo "<table style=\"width:100%\">";
-    // echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
     $lunches = fill_array( $lunches );
-    // $i = 1;
-    // foreach ( $lunches as $lunch ) {
-    //   $ccal = get_field( 'calories', $lunch->ID );
-    //   $targets = get_field( 'target', $lunch->ID );
-    //   // $categories = get_field( 'categories', $lunch->ID );
-    //   $categories = get_the_terms( $lunch->ID, 'dish_category' );
-    //   $ingredients = get_field( 'ingredients', $lunch->ID );
-    //   $recipe = get_field( 'text', $lunch->ID );
-    //   $ingredients_str = [];
-    //   $targets_str = [];
-    //   foreach ( $targets as $t ) {
-    //     if ( $t->slug === $target_slug ) {
-    //       $targets_str[] = "<b>{$t->name}</b>";
-    //     } else {
-    //       $targets_str[] = $t->name;
-    //     }
-    //   }
-    //   $categories_str = [];
-    //   foreach ( $categories as $c ) {
-    //     $categories_str[] = $c->name;
-    //   }
-    //   foreach ( $ingredients as $ingredient ) {
-    //     $ingredient_text = $ingredient['title']->name;
-    //     if ( $ingredient['number'] ) {
-    //       $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
-    //     }
-    //     $ingredients_str[] = $ingredient_text;
-    //   }
-    //   echo "<tr>";
-    //   echo "<td style=\"font-size:0.75em\">{$i}</td>";
-    //   echo "<td style=\"font-size:0.9em\">{$lunch->post_title}</td>";
-    //   echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
-    //   echo "</tr>";
-    //   $i++;
-    // }
-    // echo "</table>";
+    if ( $is_test ) {
+      echo "<h3>Обеды" . ( $lunches_count < 21 ? ' (уникальных подобралось ' . $lunches_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
+      echo "<table style=\"width:100%\">";
+      echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
+      $i = 1;
+      foreach ( $lunches as $lunch ) {
+        $ccal = get_field( 'calories', $lunch->ID );
+        $targets = get_field( 'target', $lunch->ID );
+        $categories = get_the_terms( $lunch->ID, 'dish_category' );
+        $ingredients = get_field( 'ingredients', $lunch->ID );
+        $recipe = get_field( 'text', $lunch->ID );
+        $ingredients_str = [];
+        $targets_str = [];
+        foreach ( $targets as $t ) {
+          if ( $t->slug === $target_slug ) {
+            $targets_str[] = "<b>{$t->name}</b>";
+          } else {
+            $targets_str[] = $t->name;
+          }
+        }
+        $categories_str = [];
+        foreach ( $categories as $c ) {
+          $categories_str[] = $c->name;
+        }
+        foreach ( $ingredients as $ingredient ) {
+          $ingredient_text = $ingredient['title']->name;
+          if ( $ingredient['number'] ) {
+            $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
+          }
+          $ingredients_str[] = $ingredient_text;
+        }
+        echo "<tr>";
+        echo "<td style=\"font-size:0.75em\">{$i}</td>";
+        echo "<td style=\"font-size:0.9em\">{$lunch->post_title}</td>";
+        echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
+        echo "</tr>";
+        $i++;
+      }
+      echo "</table>";
+    }
   } else {
     // Не удалось подобрать обеды
+    if ( $is_test ) {
+      echo "<p>Не удалось подобрать обеды</p>";
+      echo "<p>Цель: {$target_rus}</p>";
+    }
     return;
-    // echo "<p>Не удалось подобрать обеды</p>";
-    // echo "<p>Цель: {$target_rus}</p>";
   }
-
-  // echo "<br>";
+  if ( $is_test ) {
+    echo "<br>";
+  }
 
   $dinners_args = [
     'post_type'   => 'dish',
@@ -746,70 +784,78 @@ function questionnaire_send( $args ) {
       'field'     => 'slug',
       'terms'     => ['krupa']
     ];
-    // echo '<p>Все ужины только из категории <b>крупа</b></p>';
+    if ( $is_test ) {
+      echo '<p>Все ужины только из категории <b>крупа</b></p>';
+    }
   }
 
   $dinners = get_posts( $dinners_args );
 
   if ( $dinners ) {
     $dinners_count = count( $dinners );
-    // echo "<h3>Ужины" . ( $dinners_count < 21 ? ' (уникальных подобралось ' . $dinners_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
-    // echo "<table style=\"width:100%\">";
     $dinners = fill_array( $dinners );
-    // $i = 1;
-    // echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
-    // foreach ( $dinners as $dinner ) {
-    //   $ccal = get_field( 'calories', $dinner->ID );
-    //   $targets = get_field( 'target', $dinner->ID );
-    //   // $categories = get_field( 'categories', $dinner->ID );
-    //   $categories = get_the_terms( $dinner->ID, 'dish_category' );
-    //   $ingredients = get_field( 'ingredients', $dinner->ID );
-    //   $recipe = get_field( 'text', $dinner->ID );
-    //   $ingredients_str = [];
-    //   $targets_str = [];
-    //   foreach ( $targets as $t ) {
-    //     if ( $t->slug === $target_slug ) {
-    //       $targets_str[] = "<b>{$t->name}</b>";
-    //     } else {
-    //       $targets_str[] = $t->name;
-    //     }
-    //   }
-    //   $categories_str = [];
-    //   foreach ( $categories as $c ) {
-    //     if ( $target === 'weight-gain' && $c->slug === 'krupa' ) {
-    //       $categories_str[] = "<span style=\"color:green\"><b>$c->name</b></span>";
-    //     } else {
-    //       $categories_str[] = $c->name;
-    //     }
-    //   }
-    //   foreach ( $ingredients as $ingredient ) {
-    //     $ingredient_text = $ingredient['title']->name;
-    //     if ( $ingredient['number'] ) {
-    //       $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
-    //     }
-    //     $ingredients_str[] = $ingredient_text;
-    //   }
-    //   echo "<tr>";
-    //   echo "<td style=\"font-size:0.75em\">{$i}</td>";
-    //   echo "<td style=\"font-size:0.9em\">{$dinner->post_title}</td>";
-    //   echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
-    //   echo "</tr>";
-    //   $i++;
-    // }
-    // echo "</table>";
+    if ( $is_test ) {
+      echo "<h3>Ужины" . ( $dinners_count < 21 ? ' (уникальных подобралось ' . $dinners_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
+      echo "<table style=\"width:100%\">";
+      $i = 1;
+      echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
+      foreach ( $dinners as $dinner ) {
+        $ccal = get_field( 'calories', $dinner->ID );
+        $targets = get_field( 'target', $dinner->ID );
+        // $categories = get_field( 'categories', $dinner->ID );
+        $categories = get_the_terms( $dinner->ID, 'dish_category' );
+        $ingredients = get_field( 'ingredients', $dinner->ID );
+        $recipe = get_field( 'text', $dinner->ID );
+        $ingredients_str = [];
+        $targets_str = [];
+        foreach ( $targets as $t ) {
+          if ( $t->slug === $target_slug ) {
+            $targets_str[] = "<b>{$t->name}</b>";
+          } else {
+            $targets_str[] = $t->name;
+          }
+        }
+        $categories_str = [];
+        foreach ( $categories as $c ) {
+          if ( $target === 'weight-gain' && $c->slug === 'krupa' ) {
+            $categories_str[] = "<span style=\"color:green\"><b>$c->name</b></span>";
+          } else {
+            $categories_str[] = $c->name;
+          }
+        }
+        foreach ( $ingredients as $ingredient ) {
+          $ingredient_text = $ingredient['title']->name;
+          if ( $ingredient['number'] ) {
+            $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
+          }
+          $ingredients_str[] = $ingredient_text;
+        }
+        echo "<tr>";
+        echo "<td style=\"font-size:0.75em\">{$i}</td>";
+        echo "<td style=\"font-size:0.9em\">{$dinner->post_title}</td>";
+        echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
+        echo "</tr>";
+        $i++;
+      }
+      echo "</table>";
+    }
   } else {
     // Не удалось подобрать ужины
+    if ( $is_test ) {
+      echo "<p>Не удалось подобрать ужины</p>";
+      echo "<p>Цель: {$target_rus}</p>";
+      echo "<p>Разбег калорий от " . ($dinner_max_calories - 50) . " до " . ($dinner_max_calories + 50) . "</p>";
+    }
     return;
-    // echo "<p>Не удалось подобрать ужины</p>";
-    // echo "<p>Цель: {$target_rus}</p>";
-    // echo "<p>Разбег калорий от " . ($dinner_max_calories - 50) . " до " . ($dinner_max_calories + 50) . "</p>";
   }
 
-  // echo "<br>";
+  if ( $is_test ) {
+    echo "<br>";
+  }
 
   $args_snack_1 = [
     'post_type'   => 'dish',
@@ -854,59 +900,63 @@ function questionnaire_send( $args ) {
 
   if ( $snacks_1 ) {
     $snacks_1_count = count( $snacks_1 );
-    // echo "<h3>Перекусы 1" . ( $snacks_1_count < 21 ? ' (уникальных подобралось ' . $snacks_1_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
-    // echo "<table style=\"width:100%\">";
     $snacks_1 = fill_array( $snacks_1 );
-    // $i = 1;
-    // echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
-    // foreach ( $snacks_1 as $snack_1 ) {
-    //   $ccal = get_field( 'calories', $snack_1->ID );
-    //   $targets = get_field( 'target', $snack_1->ID );
-    //   $categories = get_field( 'categories', $snack_1->ID );
-    //   $ingredients = get_field( 'ingredients', $snack_1->ID );
-    //   $recipe = get_field( 'text', $snack_1->ID );
-    //   $ingredients_str = [];
-    //   $targets_str = [];
-    //   foreach ( $targets as $t ) {
-    //     if ( $t->slug === $target_slug ) {
-    //       $targets_str[] = "<b>{$t->name}</b>";
-    //     } else {
-    //       $targets_str[] = $t->name;
-    //     }
-    //   }
-    //   $categories_str = [];
-    //   foreach ( $categories as $c ) {
-    //     if ( $target === 'weight-gain' && $c->slug === 'krupa' ) {
-    //       $categories_str[] = "<span style=\"color:green\"><b>$c->name</b></span>";
-    //     } else {
-    //       $categories_str[] = $c->name;
-    //     }
-    //   }
-    //   foreach ( $ingredients as $ingredient ) {
-    //     $ingredient_text = $ingredient['title']->name;
-    //     if ( $ingredient['number'] ) {
-    //       $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
-    //     }
-    //     $ingredients_str[] = $ingredient_text;
-    //   }
-    //   echo "<tr>";
-    //   echo "<td style=\"font-size:0.75em\">{$i}</td>";
-    //   echo "<td style=\"font-size:0.9em\">{$snack_1->post_title}</td>";
-    //   echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
-    //   echo "</tr>";
-    //   $i++;
-    // }
-    // echo "</table>";
+    if ( $is_test ) {
+      echo "<h3>Перекусы 1" . ( $snacks_1_count < 21 ? ' (уникальных подобралось ' . $snacks_1_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
+      echo "<table style=\"width:100%\">";
+      $i = 1;
+      echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
+      foreach ( $snacks_1 as $snack_1 ) {
+        $ccal = get_field( 'calories', $snack_1->ID );
+        $targets = get_field( 'target', $snack_1->ID );
+        $categories = get_field( 'categories', $snack_1->ID );
+        $ingredients = get_field( 'ingredients', $snack_1->ID );
+        $recipe = get_field( 'text', $snack_1->ID );
+        $ingredients_str = [];
+        $targets_str = [];
+        foreach ( $targets as $t ) {
+          if ( $t->slug === $target_slug ) {
+            $targets_str[] = "<b>{$t->name}</b>";
+          } else {
+            $targets_str[] = $t->name;
+          }
+        }
+        $categories_str = [];
+        foreach ( $categories as $c ) {
+          if ( $target === 'weight-gain' && $c->slug === 'krupa' ) {
+            $categories_str[] = "<span style=\"color:green\"><b>$c->name</b></span>";
+          } else {
+            $categories_str[] = $c->name;
+          }
+        }
+        foreach ( $ingredients as $ingredient ) {
+          $ingredient_text = $ingredient['title']->name;
+          if ( $ingredient['number'] ) {
+            $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
+          }
+          $ingredients_str[] = $ingredient_text;
+        }
+        echo "<tr>";
+        echo "<td style=\"font-size:0.75em\">{$i}</td>";
+        echo "<td style=\"font-size:0.9em\">{$snack_1->post_title}</td>";
+        echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
+        echo "</tr>";
+        $i++;
+      }
+      echo "</table>";
+    }
   } else {
     // Не удалось подобрать перекусы 1
+    if ( $is_test ) {
+      echo "<p>Не удалось подобрать перекусы 1</p>";
+      echo "<p>Цель: {$target_rus}</p>";
+      echo "<p>Разбег калорий от " . ($dinner_max_calories - 100) . " до " . ($dinner_max_calories + 100) . "</p>";
+    }
     return;
-    // echo "<p>Не удалось подобрать перекусы 1</p>";
-    // echo "<p>Цель: {$target_rus}</p>";
-    // echo "<p>Разбег калорий от " . ($dinner_max_calories - 100) . " до " . ($dinner_max_calories + 100) . "</p>";
   }
 
   $args_snack_2 = [
@@ -954,77 +1004,85 @@ function questionnaire_send( $args ) {
       'field' => 'slug',
       'terms' => ['gejner-serious-mass']
     ];
-    // echo '<p>Цель набор веса, добавялем на второй перекус только гейнер</p>';
+    if ( $is_test ) {
+      echo '<p>Цель набор веса, добавялем на второй перекус только гейнер</p>';
+    }
   }
 
   $snacks_2 = get_posts( $args_snack_2 );
 
   if ( $snacks_2 ) {
     $snacks_2_count = count( $snacks_2 );
-    // echo "<h3>Перекусы 2" . ( $snacks_2_count < 21 ? ' (уникальных подобралось ' . $snacks_2_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
-    // echo "<table style=\"width:100%\">";
     $snacks_2 = fill_array( $snacks_2 );
-    // $i = 1;
-    // echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
-    // foreach ( $snacks_2 as $snack_2 ) {
-    //   $ccal = get_field( 'calories', $snack_2->ID );
-    //   $targets = get_field( 'target', $snack_2->ID );
-    //   $categories = get_field( 'categories', $snack_2->ID );
-    //   $ingredients = get_field( 'ingredients', $snack_2->ID );
-    //   $recipe = get_field( 'text', $snack_2->ID );
-    //   $ingredients_str = [];
-    //   $targets_str = [];
-    //   foreach ( $targets as $t ) {
-    //     if ( $t->slug === $target_slug ) {
-    //       $targets_str[] = "<b>{$t->name}</b>";
-    //     } else {
-    //       $targets_str[] = $t->name;
-    //     }
-    //   }
-    //   $categories_str = [];
-    //   foreach ( $categories as $c ) {
-    //     if ( $target === 'weight-gain' && $c->slug === 'krupa' ) {
-    //       $categories_str[] = "<span style=\"color:green\"><b>$c->name</b></span>";
-    //     } else {
-    //       $categories_str[] = $c->name;
-    //     }
-    //   }
-    //   foreach ( $ingredients as $ingredient ) {
-    //     $ingredient_text = $ingredient['title']->name;
-    //     if ( $ingredient['number'] ) {
-    //       $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
-    //     }
-    //     $ingredients_str[] = $ingredient_text;
-    //   }
-    //   echo "<tr>";
-    //   echo "<td style=\"font-size:0.75em\">{$i}</td>";
-    //   echo "<td style=\"font-size:0.9em\">{$snack_2->post_title}</td>";
-    //   echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
-    //   echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
-    //   echo "</tr>";
-    //   $i++;
-    // }
-    // echo "</table>";
+    if ( $is_test ) {
+      echo "<h3>Перекусы 2" . ( $snacks_2_count < 21 ? ' (уникальных подобралось ' . $snacks_2_count . ' шт, остальные копии)' : ' (копий не было)' ) . "</h3>";
+      echo "<table style=\"width:100%\">";
+      $i = 1;
+      echo '<tr style="text-align:left"><th>№</th><th>Название</th><th>Ккал</th><th>Цель</th><th>Категории</th><th>Ингредиенты</th><th>Рецепт</th></tr>';
+      foreach ( $snacks_2 as $snack_2 ) {
+        $ccal = get_field( 'calories', $snack_2->ID );
+        $targets = get_field( 'target', $snack_2->ID );
+        $categories = get_field( 'categories', $snack_2->ID );
+        $ingredients = get_field( 'ingredients', $snack_2->ID );
+        $recipe = get_field( 'text', $snack_2->ID );
+        $ingredients_str = [];
+        $targets_str = [];
+        foreach ( $targets as $t ) {
+          if ( $t->slug === $target_slug ) {
+            $targets_str[] = "<b>{$t->name}</b>";
+          } else {
+            $targets_str[] = $t->name;
+          }
+        }
+        $categories_str = [];
+        foreach ( $categories as $c ) {
+          if ( $target === 'weight-gain' && $c->slug === 'krupa' ) {
+            $categories_str[] = "<span style=\"color:green\"><b>$c->name</b></span>";
+          } else {
+            $categories_str[] = $c->name;
+          }
+        }
+        foreach ( $ingredients as $ingredient ) {
+          $ingredient_text = $ingredient['title']->name;
+          if ( $ingredient['number'] ) {
+            $ingredient_text .= ' (' . $ingredient['number'] . ' ' .  $ingredient['units']['label'] . ')';
+          }
+          $ingredients_str[] = $ingredient_text;
+        }
+        echo "<tr>";
+        echo "<td style=\"font-size:0.75em\">{$i}</td>";
+        echo "<td style=\"font-size:0.9em\">{$snack_2->post_title}</td>";
+        echo "<td style=\"font-size:0.75em\">{$ccal}</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $targets_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $categories_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">" . implode( ', ', $ingredients_str ) . "</td>";
+        echo "<td style=\"font-size:0.75em\">{$recipe}</td>";
+        echo "</tr>";
+        $i++;
+      }
+      echo "</table>";
+    }
   } else {
     // Не удалось подобрать перекусы 2
+    if ( $is_test ) {
+      echo "<p>Не удалось подобрать перекусы 2</p>";
+      echo "<p>Цель: {$target_rus}</p>";
+      echo "<p>Разбег калорий от " . ($dinner_max_calories - 100) . " до " . ($dinner_max_calories + 100) . "</p>";
+    }
     return;
-    // echo "<p>Не удалось подобрать перекусы 2</p>";
-    // echo "<p>Цель: {$target_rus}</p>";
-    // echo "<p>Разбег калорий от " . ($dinner_max_calories - 100) . " до " . ($dinner_max_calories + 100) . "</p>";
   }
-
-  // echo "<br>";
-
-  // echo "</div>";
+  if ( $is_test ) {
+    echo "<br>";
+    echo "</div>";
+  }
 
   if ( $carelas_index ) {
     $exclude_terms = array_merge( $exclude_terms, $carelas_exclude_terms );
   }
 
-  // return;
+  if ( $is_test ) {
+    return;
+  }
 
   // $response['categories'] = $exclude_terms;
   // $response['categories_breakfasts'] = $exclude_terms_breakfasts;
